@@ -7,11 +7,19 @@ using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using Sitecore.Data.Managers;
 using Fortis.Model.Fields;
+using System.Reflection;
+using System.Collections.Specialized;
+using System.Web.Configuration;
 
 namespace Fortis.Model
 {
 	internal static class Spawn
 	{
+		private static readonly string _configurationKey = "fortis";
+		private static readonly string _assemblyConfigurationKey = "assembly";
+		private static readonly NameValueCollection _configuration = (NameValueCollection)WebConfigurationManager.GetSection(_configurationKey);
+		private static string ModelAssembly { get { return _configuration[_assemblyConfigurationKey]; } }
+
 		private static Dictionary<string, Type> _templateMap;
 		internal static Dictionary<string, Type> TemplateMap
 		{
@@ -20,9 +28,23 @@ namespace Fortis.Model
 				if (_templateMap == null)
 				{
 					_templateMap = new Dictionary<string, Type>();
-					var assembly = System.Reflection.Assembly.GetCallingAssembly();
+					Assembly modelAssembly = null;
 
-					foreach (var t in assembly.GetTypes())
+					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+					{
+						if (assembly.FullName.Equals(ModelAssembly))
+						{
+							modelAssembly = assembly;
+							break;
+						}
+					}
+
+					if (modelAssembly == null)
+					{
+						throw new Exception("Forits | Unable to find model assembly: " + ModelAssembly);
+					}
+					
+					foreach (var t in modelAssembly.GetTypes())
 					{
 						foreach (TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof(TemplateMappingAttribute), false))
 						{
@@ -49,17 +71,31 @@ namespace Fortis.Model
 				if (_interfaceTemplateMap == null)
 				{
 					_interfaceTemplateMap = new Dictionary<Type, string>();
-					var assembly = System.Reflection.Assembly.GetCallingAssembly();
+					Assembly modelAssembly = null;
 
-					foreach (Type t in assembly.GetTypes())
+					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+					{
+						if (assembly.FullName.Equals(ModelAssembly))
+						{
+							modelAssembly = assembly;
+							break;
+						}
+					}
+
+					if (modelAssembly == null)
+					{
+						throw new Exception("Forits | Unable to find model assembly: " + ModelAssembly);
+					}
+
+					foreach (var t in modelAssembly.GetTypes())
 					{
 						foreach (TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof(TemplateMappingAttribute), false))
 						{
-							if (templateAttribute.Type == "InterfaceMap")
+							if (string.IsNullOrEmpty(templateAttribute.Type))
 							{
-								if (!_interfaceTemplateMap.Keys.Contains(t))
+								if (!_templateMap.Keys.Contains(templateAttribute.Id))
 								{
-									_interfaceTemplateMap.Add(t, templateAttribute.Id);
+									_templateMap.Add(templateAttribute.Id, t);
 								}
 							}
 						}
