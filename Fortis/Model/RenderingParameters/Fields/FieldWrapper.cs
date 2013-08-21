@@ -49,5 +49,10 @@ namespace Fortis.Model.RenderingParameters.Fields
 		{
 			return field.RawValue;
 		}
+
+        public string ToHtmlString()
+        {
+            return Render();
+        }
 	}
 }
