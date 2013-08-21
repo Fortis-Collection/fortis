@@ -1,6 +1,7 @@
 ﻿using System;
 using Sitecore.Data.Fields;
 using Sitecore.Web.UI.WebControls;
+using System.Web;
 
 namespace Fortis.Model.Fields
 {
@@ -69,5 +70,10 @@ namespace Fortis.Model.Fields
 		{
 			return field.RawValue;
 		}
-	}
+
+        public string ToHtmlString()
+        {
+            return Render();
+        }
+    }
 }
