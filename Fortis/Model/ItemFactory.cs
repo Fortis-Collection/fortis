@@ -1,15 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Sitecore.Configuration;
-using Sitecore.Data;
-using Sitecore.Data.Items;
-using Sitecore.Data.Managers;
-
-namespace Fortis.Model
+﻿namespace Fortis.Model
 {
+	using Fortis.Providers;
+	using Sitecore.Configuration;
+	using Sitecore.Data;
+	using Sitecore.Data.Items;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+
 	public class ItemFactory : IItemFactory
 	{
+		private readonly IItemContextProvider _itemProvider;
+
+		public ItemFactory(IItemContextProvider itemProvider)
+		{
+			_itemProvider = itemProvider;
+		}
+
 		public string GetTemplateID(Type type)
 		{
 			if (Spawn.InterfaceTemplateMap.ContainsKey(type))
@@ -110,9 +117,22 @@ namespace Fortis.Model
 
 		public T GetContextItem<T>() where T : IItemWrapper
 		{
-			var item = Sitecore.Context.Item;
+			var item = _itemProvider.PageItem;
 			var wrapper = Spawn.FromItem<T>(item);
+
 			return (T)((wrapper is T) ? wrapper : null);
+		}
+
+		public IRenderingModel<TPageItem, TRenderingItem> GetRenderingContextItems<TPageItem, TRenderingItem>()
+			where TPageItem : IItemWrapper
+			where TRenderingItem : IItemWrapper
+		{
+			var pageWrapper = Spawn.FromItem<TPageItem>(_itemProvider.PageItem);
+			var renderingWrapper = Spawn.FromItem<TRenderingItem>(_itemProvider.RenderingItem);
+			var validPageWrapper = (TPageItem)(pageWrapper is TPageItem ? pageWrapper : null);
+			var validRenderingWrapper = (TRenderingItem)(renderingWrapper is TRenderingItem ? renderingWrapper : null);
+
+			return new RenderingModel<TPageItem, TRenderingItem>(validPageWrapper, validRenderingWrapper);
 		}
 
 		public T GetContextItemsItem<T>(string key) where T : IItemWrapper
@@ -149,11 +169,9 @@ namespace Fortis.Model
 				}
 				catch { }
 
-				// TODO: Ensure item exists
 				object wrapper = null;
 				try
 				{
-					//var item = database.SelectSingleItem(pathOrId);
 					var item = SelectSingleItem(pathOrId, database);
 					wrapper = Spawn.FromItem<T>(item);
 				}

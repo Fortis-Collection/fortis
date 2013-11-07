@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Providers\IItemContextProvider.cs" />
+    <Compile Include="Model\IRenderingModel.cs" />
     <Compile Include="Model\Events\ItemCreated.cs" />
     <Compile Include="Model\Fields\BooleanFieldWrapper.cs" />
     <Compile Include="Model\Fields\DateTimeFieldWrapper.cs" />
@@ -64,6 +66,7 @@
     <Compile Include="Model\ItemWrapper.cs" />
     <Compile Include="Model\IWrapper.cs" />
     <Compile Include="Model\Pipelines\HttpRequestPipeline.cs" />
+    <Compile Include="Model\RenderingModel.cs" />
     <Compile Include="Model\RenderingParameters\Fields\BooleanFieldWrapper.cs" />
     <Compile Include="Model\RenderingParameters\Fields\FieldWrapper.cs" />
     <Compile Include="Model\RenderingParameters\Fields\LinkFieldWrapper.cs" />
