@@ -29,4 +29,23 @@ namespace Fortis.Model
 			get { return _renderingItem; }
 		}
 	}
+
+	public class RenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> : RenderingModel<TPageItem, TRenderingItem>, IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem>
+		where TPageItem : IItemWrapper
+		where TRenderingItem : IItemWrapper
+		where TRenderingParametersItem : IItemWrapper
+	{
+		private readonly TRenderingParametersItem _renderingParametersItem;
+
+		public RenderingModel(TPageItem pageItem, TRenderingItem renderingItem, TRenderingParametersItem renderingParametersItem)
+			: base(pageItem, renderingItem)
+		{
+			_renderingParametersItem = renderingParametersItem;
+		}
+
+		public TRenderingParametersItem RenderingParametersItem
+		{
+			get { return _renderingParametersItem; }
+		}
+	}
 }

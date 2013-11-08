@@ -1,19 +1,20 @@
-﻿using System;
+﻿using Fortis.Model.RenderingParameters.Fields;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 
-namespace Fortis.Model.RenderingParameters.Fields
+namespace Fortis.Model
 {
 	public class RenderingParameterWrapper : IRenderingParameterWrapper
 	{
-		protected NameValueCollection paramters = null;
+		protected Dictionary<string, string> _parameters = null;
 		protected Dictionary<string, FieldWrapper> _fields = new Dictionary<string, FieldWrapper>();
 
-		public RenderingParameterWrapper(string queryString)
+		public RenderingParameterWrapper(Dictionary<string, string> parameters)
 		{
-			paramters = Sitecore.Web.WebUtil.ParseUrlParameters(queryString);
+			_parameters = parameters;
 		}
 
 		protected FieldWrapper GetField(string key, string type)
@@ -26,28 +27,28 @@ namespace Fortis.Model.RenderingParameters.Fields
 					switch (type)
 					{
 						case "checkbox":
-							_fields[key] = new BooleanFieldWrapper(paramters[key]);
+							_fields[key] = new BooleanFieldWrapper(_parameters[key]);
 							break;
 						case "checklist":
 						case "treelist":
 						case "treelistex":
 						case "multilist":
-							_fields[key] = new ListFieldWrapper(paramters[key]);
+							_fields[key] = new ListFieldWrapper(_parameters[key]);
 							break;
 						case "droplink":
 						case "droptree":
 						case "general link":
-							_fields[key] = new LinkFieldWrapper(paramters[key]);
+							_fields[key] = new LinkFieldWrapper(_parameters[key]);
 							break;
 						case "single-line text":
 						case "multi-line text":
 						case "rich text":
 						case "droplist":
 						case "number":
-							_fields[key] = new TextFieldWrapper(paramters[key]);
+							_fields[key] = new TextFieldWrapper(_parameters[key]);
 							break;
 						default:
-							_fields[key] = new FieldWrapper(paramters[key]);
+							_fields[key] = new FieldWrapper(_parameters[key]);
 							break;
 					}
 				}

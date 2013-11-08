@@ -10,11 +10,11 @@
 
 	public class ItemFactory : IItemFactory
 	{
-		private readonly IItemContextProvider _itemProvider;
+		private readonly IContextProvider _contextProvider;
 
-		public ItemFactory(IItemContextProvider itemProvider)
+		public ItemFactory(IContextProvider contextProvider)
 		{
-			_itemProvider = itemProvider;
+			_contextProvider = contextProvider;
 		}
 
 		public string GetTemplateID(Type type)
@@ -117,7 +117,7 @@
 
 		public T GetContextItem<T>() where T : IItemWrapper
 		{
-			var item = _itemProvider.PageItem;
+			var item = _contextProvider.PageContextItem;
 			var wrapper = Spawn.FromItem<T>(item);
 
 			return (T)((wrapper is T) ? wrapper : null);
@@ -127,12 +127,27 @@
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper
 		{
-			var pageWrapper = Spawn.FromItem<TPageItem>(_itemProvider.PageItem);
-			var renderingWrapper = Spawn.FromItem<TRenderingItem>(_itemProvider.RenderingItem);
+			var pageWrapper = Spawn.FromItem<TPageItem>(_contextProvider.PageContextItem);
+			var renderingWrapper = Spawn.FromItem<TRenderingItem>(_contextProvider.RenderingContextItem);
 			var validPageWrapper = (TPageItem)(pageWrapper is TPageItem ? pageWrapper : null);
 			var validRenderingWrapper = (TRenderingItem)(renderingWrapper is TRenderingItem ? renderingWrapper : null);
 
 			return new RenderingModel<TPageItem, TRenderingItem>(validPageWrapper, validRenderingWrapper);
+		}
+
+		public IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>()
+			where TPageItem : IItemWrapper
+			where TRenderingItem : IItemWrapper
+			where TRenderingParametersItem : IItemWrapper
+		{
+			var pageWrapper = Spawn.FromItem<TPageItem>(_contextProvider.PageContextItem);
+			var renderingWrapper = Spawn.FromItem<TRenderingItem>(_contextProvider.RenderingContextItem);
+			var renderingParametersWrapper = Spawn.FromRenderingParameters<TRenderingParametersItem>(_contextProvider.RenderingItem, _contextProvider.RenderingParameters);
+			var validPageWrapper = (TPageItem)(pageWrapper is TPageItem ? pageWrapper : null);
+			var validRenderingWrapper = (TRenderingItem)(renderingWrapper is TRenderingItem ? renderingWrapper : null);
+			var validRenderingParametersWrapper = (TRenderingParametersItem)(renderingParametersWrapper is TRenderingParametersItem ? renderingParametersWrapper : null);
+
+			return new RenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem>(validPageWrapper, validRenderingWrapper, validRenderingParametersWrapper);
 		}
 
 		public T GetContextItemsItem<T>(string key) where T : IItemWrapper

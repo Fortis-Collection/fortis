@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace Fortis.Providers
 {
-	public interface IItemContextProvider
+	public interface IContextProvider
 	{
+		Item RenderingContextItem { get; }
+		Item PageContextItem { get; }
 		Item RenderingItem { get; }
-		Item PageItem { get; }
+		Dictionary<string, string> RenderingParameters { get; }
 	}
 }

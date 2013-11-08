@@ -9,4 +9,12 @@
 		TPageItem PageItem { get; }
 		TRenderingItem RenderingItem { get; }
 	}
+
+	public interface IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> : IRenderingModel<TPageItem, TRenderingItem>
+		where TPageItem : IItemWrapper
+		where TRenderingItem : IItemWrapper
+		where TRenderingParametersItem : IItemWrapper
+	{
+		TRenderingParametersItem RenderingParametersItem { get; }
+	}
 }
