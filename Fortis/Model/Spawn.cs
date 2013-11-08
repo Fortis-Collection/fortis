@@ -27,7 +27,6 @@ namespace Fortis.Model
 			{
 				if (_templateMap == null)
 				{
-					_templateMap = new Dictionary<string, Type>();
 					Assembly modelAssembly = null;
 
 					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -43,6 +42,8 @@ namespace Fortis.Model
 					{
 						throw new Exception("Forits | Unable to find model assembly: " + ModelAssembly);
 					}
+
+					_templateMap = new Dictionary<string, Type>();
 					
 					foreach (var t in modelAssembly.GetTypes())
 					{
@@ -70,7 +71,6 @@ namespace Fortis.Model
 			{
 				if (_interfaceTemplateMap == null)
 				{
-					_interfaceTemplateMap = new Dictionary<Type, string>();
 					Assembly modelAssembly = null;
 
 					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -86,6 +86,8 @@ namespace Fortis.Model
 					{
 						throw new Exception("Forits | Unable to find model assembly: " + ModelAssembly);
 					}
+
+					_interfaceTemplateMap = new Dictionary<Type, string>();
 
 					foreach (var t in modelAssembly.GetTypes())
 					{
@@ -121,16 +123,21 @@ namespace Fortis.Model
 				{
 					// Get type information
 					var type = TemplateMap[id];
-					// Get public constructors
-					var ctors = type.GetConstructors();
-					// Invoke the first public constructor with no parameters.
-					return (IItemWrapper)ctors[0].Invoke(new object[] { item });
+
+					return (IItemWrapper)Activator.CreateInstance(type, new object[] { item });
 				}
 
+				var wrapperType = typeof(T);
+
 				// Attempt to match the template of the type passed through to an inherited template.
-				if (typeof(T) != typeof(IItemWrapper))
+				if (wrapperType != typeof(IItemWrapper))
 				{
-					var typeTemplateId = InterfaceTemplateMap[typeof(T)];
+					if (!InterfaceTemplateMap.ContainsKey(wrapperType))
+					{
+						throw new Exception("Fortis | Unable to find template for " + wrapperType.FullName);
+					}
+
+					var typeTemplateId = InterfaceTemplateMap[wrapperType];
 
 					if (typeTemplateId != null)
 					{
@@ -140,10 +147,8 @@ namespace Fortis.Model
 						{
 							// Get type information
 							var type = TemplateMap[typeTemplateId];
-							// Get public constructors
-							var ctors = type.GetConstructors();
-							// Invoke the first public constructor with no parameters.
-							return (IItemWrapper)ctors[0].Invoke(new object[] { item });
+
+							return (IItemWrapper)Activator.CreateInstance(type, new object[] { item });
 						}
 					}
 				}

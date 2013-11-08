@@ -1,6 +1,7 @@
 ﻿using System;
 using Sitecore.Data.Fields;
 using Sitecore.Web.UI.WebControls;
+using System.Web;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
@@ -35,7 +36,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 			Value = value;
 		}
 
-		public virtual string Render()
+		public virtual IHtmlString Render()
 		{
 			throw new NotImplementedException();
 		}
@@ -52,7 +53,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 
         public string ToHtmlString()
         {
-            return Render();
+            return Render().ToString();
         }
 	}
 }
