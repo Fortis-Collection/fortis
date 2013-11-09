@@ -47,3 +47,4 @@ BuiltFiles_*
 _notes/
 _Lib/
 packages/*
+*.Fakes.*

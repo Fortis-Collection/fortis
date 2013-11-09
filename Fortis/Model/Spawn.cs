@@ -45,7 +45,7 @@ namespace Fortis.Model
 			}
 		}
 
-		private static Dictionary<string, Type> _templateMap;
+		private static Dictionary<string, Type> _templateMap = null;
 		internal static Dictionary<string, Type> TemplateMap
 		{
 			get
@@ -73,7 +73,7 @@ namespace Fortis.Model
 			}
 		}
 
-		private static Dictionary<Type, string> _interfaceTemplateMap;
+		private static Dictionary<Type, string> _interfaceTemplateMap = null;
 		internal static Dictionary<Type, string> InterfaceTemplateMap
 		{
 			get
@@ -86,11 +86,11 @@ namespace Fortis.Model
 					{
 						foreach (TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof(TemplateMappingAttribute), false))
 						{
-							if (string.IsNullOrEmpty(templateAttribute.Type))
+							if (string.Equals(templateAttribute.Type, "InterfaceMap"))
 							{
-								if (!_templateMap.Keys.Contains(templateAttribute.Id))
+								if (!_interfaceTemplateMap.Keys.Contains(t))
 								{
-									_templateMap.Add(templateAttribute.Id, t);
+									_interfaceTemplateMap.Add(t, templateAttribute.Id);
 								}
 							}
 						}
@@ -101,7 +101,7 @@ namespace Fortis.Model
 			}
 		}
 
-		private static Dictionary<string, Type> _renderingParametersTemplateMap;
+		private static Dictionary<string, Type> _renderingParametersTemplateMap = null;
 		internal static Dictionary<string, Type> RenderingParametersTemplateMap
 		{
 			get
