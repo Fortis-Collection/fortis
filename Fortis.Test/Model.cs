@@ -4,6 +4,7 @@
 	using Sitecore.Data.Items;
 	using Fortis.Model;
 	using Fortis.Model.Fields;
+using System.Collections.Generic;
 
 	#region Base Template
 
@@ -195,6 +196,26 @@
 		public TextFieldWrapper BaseTextField
 		{
 			get { throw new NotImplementedException(); }
+		}
+	}
+
+	#endregion
+
+	#region Rendering Parameters Template
+
+	[TemplateMapping("{59CD942B-E316-4ACD-B0A1-AAA19B3C8946}", "InterfaceRenderingParameter")]
+	public partial interface IScRenderingParametersTemplate : IRenderingParameterWrapper
+	{
+
+	}
+
+	[TemplateMapping("{59CD942B-E316-4ACD-B0A1-AAA19B3C8946}", "RenderingParameter")]
+	public partial class ScRenderingParametersTemplate : RenderingParameterWrapper, IScRenderingParametersTemplate
+	{
+		public ScRenderingParametersTemplate(Dictionary<string, string> parameters)
+			: base(parameters)
+		{
+			
 		}
 	}
 

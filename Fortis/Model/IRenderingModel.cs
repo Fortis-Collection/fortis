@@ -13,7 +13,7 @@
 	public interface IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> : IRenderingModel<TPageItem, TRenderingItem>
 		where TPageItem : IItemWrapper
 		where TRenderingItem : IItemWrapper
-		where TRenderingParametersItem : IItemWrapper
+		where TRenderingParametersItem : IRenderingParameterWrapper
 	{
 		TRenderingParametersItem RenderingParametersItem { get; }
 	}

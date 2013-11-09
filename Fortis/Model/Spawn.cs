@@ -135,6 +135,7 @@ namespace Fortis.Model
 		}
 
 		internal static IItemWrapper FromItem<T>(Item item)
+			where T : IItemWrapper
 		{
 			if (item != null)
 			{
@@ -186,6 +187,7 @@ namespace Fortis.Model
 		}
 
 		internal static IEnumerable<T> FromItems<T>(IEnumerable<Item> items)
+			where T : IItemWrapper
 		{
 			foreach (var item in items)
 			{
@@ -199,6 +201,7 @@ namespace Fortis.Model
 		}
 
 		internal static IRenderingParameterWrapper FromRenderingParameters<T>(Item renderingItem, Dictionary<string, string> parameters)
+			where T : IRenderingParameterWrapper
 		{
 			if (renderingItem != null)
 			{

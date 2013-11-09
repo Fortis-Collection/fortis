@@ -33,7 +33,7 @@ namespace Fortis.Model
 	public class RenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> : RenderingModel<TPageItem, TRenderingItem>, IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem>
 		where TPageItem : IItemWrapper
 		where TRenderingItem : IItemWrapper
-		where TRenderingParametersItem : IItemWrapper
+		where TRenderingParametersItem : IRenderingParameterWrapper
 	{
 		private readonly TRenderingParametersItem _renderingParametersItem;
 

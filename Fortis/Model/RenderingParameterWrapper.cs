@@ -60,5 +60,10 @@ namespace Fortis.Model
 
 			return (FieldWrapper)_fields[key];
 		}
+
+		public object Original
+		{
+			get { return _parameters; }
+		}
 	}
 }

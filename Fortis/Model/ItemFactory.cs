@@ -138,7 +138,7 @@
 		public IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>()
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper
-			where TRenderingParametersItem : IItemWrapper
+			where TRenderingParametersItem : IRenderingParameterWrapper
 		{
 			var pageWrapper = Spawn.FromItem<TPageItem>(_contextProvider.PageContextItem);
 			var renderingWrapper = Spawn.FromItem<TRenderingItem>(_contextProvider.RenderingContextItem);

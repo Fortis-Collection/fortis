@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Fortis.Model
 {
-	public interface IRenderingParameterWrapper
+	public interface IRenderingParameterWrapper : IWrapper
 	{
 
 	}

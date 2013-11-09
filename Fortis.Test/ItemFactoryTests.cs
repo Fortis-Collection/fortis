@@ -37,20 +37,30 @@
 
 		private Item CreateTestItem(string id = null, string name = "Test Item", string templateId = null, FieldCollection fields = null)
 		{
-			return new ShimItem()
+			Item item = new ShimItem()
 			{
 				NameGet = () => name ?? "Test Item",
 				IDGet = () => new Sitecore.Data.ID(id ?? new Guid().ToString()),
 				TemplateIDGet = () => new Sitecore.Data.ID(templateId ?? new Guid().ToString()),
 				FieldsGet = () => fields ?? CreateTestFields(),
 			};
+
+			new ShimBaseItem(item)
+			{
+				ItemGetString = fieldName => item.Fields[fieldName].Value
+			};
+
+			return item;
 		}
 
-		private FieldCollection CreateTestFields()
+		private FieldCollection CreateTestFields(List<Field> fields = null)
 		{
-			var fields = new List<Field>();
+			if (fields == null)
+			{
+				fields = new List<Field>();
 
-			fields.Add(CreateTestTextField());
+				fields.Add(CreateTestTextField());
+			}
 
 			return new ShimFieldCollection()
 			{
@@ -149,13 +159,29 @@
 		}
 
 		[Test]
-		[Ignore("Needs writing")]
 		public void CorrectDirectTemplatesForRenderingContext()
 		{
 			using (ShimsContext.Create())
 			{
-				var tId = "{02F5002C-325E-4E5A-9C93-A97724ED3400}";
-				var testItem = CreateTestItem(templateId: tId);
+				// Rendering Item
+				var scRenderingTemplateType = typeof(IScRenderingParametersTemplate);
+				var renderingTemplateAttribute = (TemplateMappingAttribute)scRenderingTemplateType.GetCustomAttributes(typeof(TemplateMappingAttribute), false).First();
+				var renderingTemplateId = renderingTemplateAttribute.Id;
+
+				Field parametersTemplateField = new ShimField()
+				{
+					NameGet = () => "Parameters Template",
+					ValueGet = () => renderingTemplateId,
+				};
+
+				var testRenderingItem = CreateTestItem(fields: CreateTestFields(new List<Field>() { parametersTemplateField }));
+
+				// Context Item
+
+				var scBaseTemplateType = typeof(IScTemplate);
+				var templateAttribute = (TemplateMappingAttribute)scBaseTemplateType.GetCustomAttributes(typeof(TemplateMappingAttribute), false).First();
+				var templateId = templateAttribute.Id;
+				var testItem = CreateTestItem(templateId: templateId);
 
 				Template templateItem = new ShimTemplate()
 				{
@@ -170,13 +196,15 @@
 
 				contextProvider.Setup(c => c.PageContextItem).Returns(testItem);
 				contextProvider.Setup(c => c.RenderingContextItem).Returns(testItem);
-				contextProvider.Setup(c => c.RenderingItem).Returns(testItem);
+				contextProvider.Setup(c => c.RenderingItem).Returns(testRenderingItem);
 				contextProvider.Setup(c => c.RenderingParameters).Returns(new Dictionary<string, string>());
 
 				var itemFactory = new ItemFactory(contextProvider.Object);
-				var wrappedItem = itemFactory.GetContextItem<IScTemplate>();
+				var renderingModel = itemFactory.GetRenderingContextItems<IScTemplate, IScTemplate, IScRenderingParametersTemplate>();
 
-				Assert.IsNotNull(wrappedItem);
+				Assert.IsNotNull(renderingModel.PageItem);
+				Assert.IsNotNull(renderingModel.RenderingItem);
+				Assert.IsNotNull(renderingModel.RenderingParametersItem);
 			}
 		}
 

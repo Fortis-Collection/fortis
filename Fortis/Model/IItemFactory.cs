@@ -20,7 +20,7 @@ namespace Fortis.Model
 		IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>()
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper
-			where TRenderingParametersItem : IItemWrapper;
+			where TRenderingParametersItem : IRenderingParameterWrapper;
 		T GetContextItemsItem<T>(string key) where T : IItemWrapper;
 		T Create<T>(IItemWrapper parent, string itemName) where T : IItemWrapper;
 		T Create<T>(string parentPathOrId, string itemName) where T : IItemWrapper;
