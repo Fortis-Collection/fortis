@@ -4,7 +4,7 @@
 	using Sitecore.Data.Items;
 	using Fortis.Model;
 	using Fortis.Model.Fields;
-using System.Collections.Generic;
+	using System.Collections.Generic;
 
 	#region Base Template
 
