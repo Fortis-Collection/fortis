@@ -29,7 +29,7 @@
 			{
 				var renderingParameters = new Dictionary<string, string>();
 
-				foreach (var parameter in RenderingParameters)
+				foreach (var parameter in RenderingContext.Current.Rendering.Parameters)
 				{
 					if (!renderingParameters.ContainsKey(parameter.Key))
 					{
