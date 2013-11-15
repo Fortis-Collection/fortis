@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Sitecore.Collections;
+using Sitecore.Data;
 using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using Sitecore.Data.Managers;
@@ -20,14 +20,14 @@ namespace Fortis.Model
 		private static readonly NameValueCollection _configuration = (NameValueCollection)WebConfigurationManager.GetSection(_configurationKey);
 		private static string ModelAssembly { get { return _configuration[_assemblyConfigurationKey]; } }
 
-		private static Dictionary<string, Type> _templateMap;
-		internal static Dictionary<string, Type> TemplateMap
+		private static Dictionary<Guid, Type> _templateMap;
+		internal static Dictionary<Guid, Type> TemplateMap
 		{
 			get
 			{
 				if (_templateMap == null)
 				{
-					_templateMap = new Dictionary<string, Type>();
+					_templateMap = new Dictionary<Guid, Type>();
 					Assembly modelAssembly = null;
 
 					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -63,14 +63,14 @@ namespace Fortis.Model
 			}
 		}
 
-		private static Dictionary<Type, string> _interfaceTemplateMap;
-		internal static Dictionary<Type, string> InterfaceTemplateMap
+		private static Dictionary<Type, Guid> _interfaceTemplateMap;
+		internal static Dictionary<Type, Guid> InterfaceTemplateMap
 		{
 			get
 			{
 				if (_interfaceTemplateMap == null)
 				{
-					_interfaceTemplateMap = new Dictionary<Type, string>();
+					_interfaceTemplateMap = new Dictionary<Type, Guid>();
 					Assembly modelAssembly = null;
 
 					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -116,7 +116,7 @@ namespace Fortis.Model
 			if (item != null)
 			{
 				// Attempt to exact match the item against a template in the model
-				var id = item.TemplateID.ToString();
+				var id = item.TemplateID.Guid;
 				if (TemplateMap.Keys.Contains(id))
 				{
 					// Get type information
@@ -130,13 +130,13 @@ namespace Fortis.Model
 				// Attempt to match the template of the type passed through to an inherited template.
 				if (typeof(T) != typeof(IItemWrapper))
 				{
-					var typeTemplateId = InterfaceTemplateMap[typeof(T)];
-
-					if (typeTemplateId != null)
+					if (InterfaceTemplateMap.ContainsKey(typeof(T)))
 					{
+						var typeTemplateId = InterfaceTemplateMap[typeof(T)];
+
 						var itemTemplate = TemplateManager.GetTemplate(item);
 
-						if (Sitecore.Data.ID.IsID(typeTemplateId) && itemTemplate.DescendsFrom(Sitecore.Data.ID.Parse(typeTemplateId)))
+						if (itemTemplate.DescendsFrom(new ID(typeTemplateId)))
 						{
 							// Get type information
 							var type = TemplateMap[typeTemplateId];
