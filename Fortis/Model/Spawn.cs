@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Sitecore.Collections;
+using Sitecore.Data;
 using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using Sitecore.Data.Managers;
@@ -15,29 +15,21 @@ namespace Fortis.Model
 {
 	internal static class Spawn
 	{
-		private static readonly string _configurationKey = "fortis";
-		private static readonly string _assemblyConfigurationKey = "assembly";
-		private static readonly NameValueCollection _configuration = (NameValueCollection)WebConfigurationManager.GetSection(_configurationKey);
-		private static string ModelAssembly { get { return _configuration[_assemblyConfigurationKey]; } }
+		private const string CONFIGURATION_KEY = "fortis";
+		private const string ASSEMBLY_CONFIGURATION_KEY = "assembly";
+		private static readonly NameValueCollection _configuration = (NameValueCollection)WebConfigurationManager.GetSection(CONFIGURATION_KEY);
+		private static string ModelAssembly { get { return _configuration[ASSEMBLY_CONFIGURATION_KEY]; } }
 
-		private static Dictionary<string, Type> _templateMap;
-		internal static Dictionary<string, Type> TemplateMap
+		private static Dictionary<Guid, Type> _templateMap;
+		internal static Dictionary<Guid, Type> TemplateMap
 		{
 			get
 			{
 				if (_templateMap == null)
 				{
-					_templateMap = new Dictionary<string, Type>();
-					Assembly modelAssembly = null;
+					_templateMap = new Dictionary<Guid, Type>();
 
-					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-					{
-						if (assembly.FullName.Equals(ModelAssembly))
-						{
-							modelAssembly = assembly;
-							break;
-						}
-					}
+					var modelAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(assembly => assembly.FullName.Equals(ModelAssembly));
 
 					if (modelAssembly == null)
 					{
@@ -50,7 +42,7 @@ namespace Fortis.Model
 						{
 							if (string.IsNullOrEmpty(templateAttribute.Type))
 							{
-								if (!_templateMap.Keys.Contains(templateAttribute.Id))
+								if (!_templateMap.ContainsKey(templateAttribute.Id))
 								{
 									_templateMap.Add(templateAttribute.Id, t);
 								}
@@ -63,24 +55,15 @@ namespace Fortis.Model
 			}
 		}
 
-		private static Dictionary<Type, string> _interfaceTemplateMap;
-		internal static Dictionary<Type, string> InterfaceTemplateMap
+		private static Dictionary<Type, Guid> _interfaceTemplateMap;
+		internal static Dictionary<Type, Guid> InterfaceTemplateMap
 		{
 			get
 			{
 				if (_interfaceTemplateMap == null)
 				{
-					_interfaceTemplateMap = new Dictionary<Type, string>();
-					Assembly modelAssembly = null;
-
-					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-					{
-						if (assembly.FullName.Equals(ModelAssembly))
-						{
-							modelAssembly = assembly;
-							break;
-						}
-					}
+					_interfaceTemplateMap = new Dictionary<Type, Guid>();
+					var modelAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(assembly => assembly.FullName.Equals(ModelAssembly));
 
 					if (modelAssembly == null)
 					{
@@ -93,7 +76,7 @@ namespace Fortis.Model
 						{
 							if (string.IsNullOrEmpty(templateAttribute.Type))
 							{
-								if (!_templateMap.Keys.Contains(templateAttribute.Id))
+								if (!_templateMap.ContainsKey(templateAttribute.Id))
 								{
 									_templateMap.Add(templateAttribute.Id, t);
 								}
@@ -116,8 +99,8 @@ namespace Fortis.Model
 			if (item != null)
 			{
 				// Attempt to exact match the item against a template in the model
-				var id = item.TemplateID.ToString();
-				if (TemplateMap.Keys.Contains(id))
+				var id = item.TemplateID.Guid;
+				if (TemplateMap.ContainsKey(id))
 				{
 					// Get type information
 					var type = TemplateMap[id];
@@ -130,13 +113,13 @@ namespace Fortis.Model
 				// Attempt to match the template of the type passed through to an inherited template.
 				if (typeof(T) != typeof(IItemWrapper))
 				{
-					var typeTemplateId = InterfaceTemplateMap[typeof(T)];
-
-					if (typeTemplateId != null)
+					if (InterfaceTemplateMap.ContainsKey(typeof(T)))
 					{
+						var typeTemplateId = InterfaceTemplateMap[typeof(T)];
+
 						var itemTemplate = TemplateManager.GetTemplate(item);
 
-						if (Sitecore.Data.ID.IsID(typeTemplateId) && itemTemplate.DescendsFrom(Sitecore.Data.ID.Parse(typeTemplateId)))
+						if (itemTemplate.DescendsFrom(new ID(typeTemplateId)))
 						{
 							// Get type information
 							var type = TemplateMap[typeTemplateId];
@@ -161,15 +144,7 @@ namespace Fortis.Model
 
 		internal static IEnumerable<T> FromItems<T>(IEnumerable<Item> items)
 		{
-			foreach (var item in items)
-			{
-				var wrappedItem = (T)FromItem<T>(item);
-
-				if (wrappedItem != null)
-				{
-					yield return wrappedItem;
-				}
-			}
+			return items.Select(item => (T)FromItem<T>(item)).Where(wrappedItem => wrappedItem != null);
 		}
 
 		internal static IEnumerable<IFieldWrapper> FromFields(FieldCollection fields)
@@ -182,10 +157,7 @@ namespace Fortis.Model
 
 		internal static IEnumerable<IFieldWrapper> FromFields(FieldChangeList fields)
 		{
-			foreach (Field field in fields)
-			{
-				yield return FromField(field);
-			}
+			return from Field field in fields select FromField(field);
 		}
 
 		internal static IFieldWrapper FromField(Field field)

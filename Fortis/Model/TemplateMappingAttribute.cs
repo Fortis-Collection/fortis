@@ -1,21 +1,21 @@
-﻿namespace Fortis.Model
-{
-	public class TemplateMappingAttribute : System.Attribute
-	{
-		public readonly string id;
+﻿using System;
 
-		public string Id { get; set; }
-		public string Type { get; set; }
+namespace Fortis.Model
+{
+	public class TemplateMappingAttribute : Attribute
+	{
+		public Guid Id { get; private set; }
+		public string Type { get; private set; }
 
 		public TemplateMappingAttribute(string id)
 		{
-			this.Id = id;
+			Id = new Guid(id);
 		}
 
 		public TemplateMappingAttribute(string id, string type)
 			: this(id)
 		{
-			this.Type = type;
+			Type = type;
 		}
 	}
 }

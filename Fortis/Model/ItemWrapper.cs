@@ -11,7 +11,7 @@ namespace Fortis.Model
 	public class ItemWrapper : IItemWrapper, IDisposable
 	{
 		private Item _item;
-		private Dictionary<string, IFieldWrapper> _fields;
+		private readonly Dictionary<string, IFieldWrapper> _fields;
 
 		protected Item Item
 		{
@@ -43,9 +43,9 @@ namespace Fortis.Model
 			get { return Item.Paths.FullPath; }
 		}
 
-		public string ItemID
+		public Guid ItemID
 		{
-			get { return Item.ID.ToString(); }
+			get { return Item.ID.Guid; }
 		}
 
 		public string ItemShortID
@@ -83,7 +83,7 @@ namespace Fortis.Model
 		{
 			key = key.ToLower();
 
-			if (!Fields.Keys.Contains(key))
+			if (!Fields.ContainsKey(key))
 			{
 				try
 				{
