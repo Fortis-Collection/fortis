@@ -25,7 +25,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 						{
 							if (templateAttribute.Type == "RenderingParameter")
 							{
-								if (!_templateMap.Keys.Contains(templateAttribute.Id))
+								if (!_templateMap.ContainsKey(templateAttribute.Id))
 								{
 									_templateMap.Add(templateAttribute.Id, t);
 								}
@@ -53,7 +53,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 
 		private IRenderingParameterWrapper SpawnTypeFromItem(Guid id, string queryString)
 		{
-			if (TemplateMap.Keys.Contains(id))
+			if (TemplateMap.ContainsKey(id))
 			{
 				// Get type information
 				var type = TemplateMap[id];
