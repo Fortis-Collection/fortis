@@ -4,22 +4,19 @@ using System.Linq;
 using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Data.Items;
-using Sitecore.Data.Managers;
 
 namespace Fortis.Model
 {
 	public class ItemFactory : IItemFactory
 	{
-		public string GetTemplateID(Type type)
+		public Guid GetTemplateID(Type type)
 		{
-			if (Spawn.InterfaceTemplateMap.ContainsKey(type))
-			{
-				return Spawn.InterfaceTemplateMap[type];
-			}
-			return string.Empty;
+			return Spawn.InterfaceTemplateMap.ContainsKey(type) 
+				? Spawn.InterfaceTemplateMap[type] 
+				: Guid.Empty;
 		}
 
-		public Type GetInterfaceType(string templateId)
+		public Type GetInterfaceType(Guid templateId)
 		{
 			if (Spawn.TemplateMap.ContainsKey(templateId))
 			{
@@ -40,65 +37,6 @@ namespace Fortis.Model
 			{
 				wrapper.Publish(children);
 			}
-		}
-
-		protected virtual Item GetItem(string pathOrId)
-		{
-			return GetItem(pathOrId, Sitecore.Context.Database);
-		}
-
-		protected virtual Item GetItem(string pathOrId, Database database)
-		{
-			return database.GetItem(pathOrId);
-		}
-
-		protected virtual Item SelectSingleItem(string pathOrId)
-		{
-			return SelectSingleItem(pathOrId, Sitecore.Context.Database);
-		}
-
-		protected virtual Item SelectSingleItem(string pathOrId, Database database)
-		{
-			return database.SelectSingleItem(pathOrId);
-		}
-
-		private IEnumerable<T> FilterWrapperTypes<T>(IEnumerable<IItemWrapper> wrappers)
-		{
-			foreach (IItemWrapper wrapper in wrappers)
-			{
-				if (wrapper is T)
-				{
-					yield return (T)wrapper;
-				}
-			}
-		}
-
-		public T Create<T>(IItemWrapper parent, string itemName) where T : IItemWrapper
-		{
-			return Create<T>(parent.ItemLocation, itemName);
-		}
-
-		public T Create<T>(string parentPathOrId, string itemName) where T : IItemWrapper
-		{
-			object newItemObject = null;
-			var type = typeof(T);
-
-			if (Spawn.InterfaceTemplateMap.Keys.Contains(type))
-			{
-				var templateId = Spawn.InterfaceTemplateMap[type];
-				var database = Sitecore.Configuration.Factory.GetDatabase("master");
-				var parent = GetItem(parentPathOrId, database);
-
-				if (parent != null)
-				{
-					TemplateItem newItemTemplate = GetItem(templateId, database);
-					var newItem = parent.Add(itemName, newItemTemplate);
-
-					newItemObject = Spawn.FromItem<T>(newItem);
-				}
-			}
-
-			return (T)newItemObject;
 		}
 
 		public T GetSiteHome<T>() where T : IItemWrapper
@@ -127,14 +65,62 @@ namespace Fortis.Model
 			return (T)((wrapper is T) ? wrapper : null);
 		}
 
-		public T Select<T>(string path) where T : IItemWrapper
+		#region Create
+
+		public T Create<T>(IItemWrapper parent, string itemName) where T : IItemWrapper
 		{
-			return Select<T>(path, Sitecore.Context.Database);
+			return Create<T>(parent.ItemID, itemName);
 		}
 
-		public T Select<T>(string path, string database) where T : IItemWrapper
+		public T Create<T>(string parentPath, string itemName) where T : IItemWrapper
 		{
-			return Select<T>(path, Factory.GetDatabase(database));
+			var database = Factory.GetDatabase("master");
+			var parentItem = GetItem(parentPath, database);
+
+			return Create<T>(parentItem, itemName);
+		}
+
+		public T Create<T>(Guid parentId, string itemName) where T : IItemWrapper
+		{
+			var database = Factory.GetDatabase("master");
+			var parentItem = GetItem(parentId, database);
+
+			return Create<T>(parentItem, itemName);
+		}
+
+		private T Create<T>(Item parentItem, string itemName) where T : IItemWrapper
+		{
+			object newItemObject = null;
+			var type = typeof(T);
+
+			if (Spawn.InterfaceTemplateMap.ContainsKey(type))
+			{
+				var templateId = Spawn.InterfaceTemplateMap[type];
+
+				if (parentItem != null)
+				{
+					TemplateItem newItemTemplate = GetItem(templateId, parentItem.Database);
+					var newItem = parentItem.Add(itemName, newItemTemplate);
+
+					newItemObject = Spawn.FromItem<T>(newItem);
+				}
+			}
+
+			return (T)newItemObject;
+		}
+
+		#endregion
+
+		#region Select
+
+		public T Select<T>(string path, string database = null) where T : IItemWrapper
+		{
+			return Select<T>(path, database == null ? Sitecore.Context.Database : Factory.GetDatabase(database));
+		}
+
+		public T Select<T>(Guid id, string database = null) where T : IItemWrapper
+		{
+			return SpawnFromItem<T>(SelectSingleItem(id, database == null ? Sitecore.Context.Database : Factory.GetDatabase(database)));
 		}
 
 		protected virtual T Select<T>(string path, Database database) where T : IItemWrapper
@@ -145,35 +131,28 @@ namespace Fortis.Model
 
 				try
 				{
-					pathOrId = Sitecore.Data.ID.Parse(path).ToString();
+					pathOrId = ID.Parse(path).ToString();
 				}
 				catch { }
 
-				// TODO: Ensure item exists
-				object wrapper = null;
-				try
+				var item = SelectSingleItem(pathOrId, database);
+
+				if (item != null)
 				{
-					//var item = database.SelectSingleItem(pathOrId);
-					var item = SelectSingleItem(pathOrId, database);
-					wrapper = Spawn.FromItem<T>(item);
+					return SpawnFromItem<T>(item);
 				}
-				catch { }
-				return (T)((wrapper is T) ? wrapper : null);
 			}
-			else
-			{
-				return default(T);
-			}
+
+			return default(T);
 		}
 
-		public IEnumerable<T> SelectAll<T>(string path) where T : IItemWrapper
-		{
-			return SelectAll<T>(Sitecore.Context.Database, path);
-		}
+		#endregion
 
-		public IEnumerable<T> SelectAll<T>(string path, string database) where T : IItemWrapper
+		#region SelectAll
+
+		public IEnumerable<T> SelectAll<T>(string path, string database = null) where T : IItemWrapper
 		{
-			return SelectAll<T>(Factory.GetDatabase(database), path);
+			return SelectAll<T>(database == null ? Sitecore.Context.Database : Factory.GetDatabase(database), path);
 		}
 
 		protected virtual IEnumerable<T> SelectAll<T>(Database database, string path) where T : IItemWrapper
@@ -183,66 +162,71 @@ namespace Fortis.Model
 				var items = database.SelectItems(path);
 				return FilterWrapperTypes<T>(Spawn.FromItems(items));
 			}
-			else
-			{
-				return Enumerable.Empty<T>();
-			}
+
+			return Enumerable.Empty<T>();
 		}
 
-		public T SelectChild<T>(IItemWrapper item) where T : IItemWrapper
+		#endregion
+
+		#region SelectChild
+
+		public T SelectFirstChild<T>(IItemWrapper item) where T : IItemWrapper
 		{
-			return SelectChild<T>(item.ItemLocation);
+			return SelectFirstChild<T>(item.ItemID);
 		}
 
-		public T SelectChild<T>(string path) where T : IItemWrapper
-		{
-			var children = SelectChildren<T>(path);
-			IItemWrapper firstChild = null;
-
-			if (children.Count() > 0)
-			{
-				firstChild = children.First();
-			}
-
-			return (T)((firstChild is T) ? firstChild : null);
-		}
-
-		public T SelectChildRecursive<T>(string path) where T : IItemWrapper
+		public T SelectFirstChild<T>(string path) where T : IItemWrapper
 		{
 			var children = SelectChildren<T>(path);
 
-			foreach (IItemWrapper item in children)
-			{
-				if (item is T)
-				{
-					return (T)item;
-				}
+			return children.FirstOrDefault();
+		}
 
-				if (item.HasChildren)
-				{
-					var innerChildren = SelectChildrenRecursive<T>(item);
+		public T SelectFirstChild<T>(Guid id) where T : IItemWrapper
+		{
+			var children = SelectChildren<T>(id);
 
-					foreach (IItemWrapper innerChild in innerChildren)
-					{
-						return (T)innerChild;
-					}
-				}
-			}
+			return children.FirstOrDefault();
+		}
 
-			return default(T);
+		public T SelectFirstChildRecursive<T>(string path) where T : IItemWrapper
+		{
+			var item = GetItem(path);
+
+			return SelectChildrenRecursive<T>(item).FirstOrDefault();
+		}
+
+		public T SelectFirstChildRecursive<T>(Guid id) where T : IItemWrapper
+		{
+			var item = GetItem(id);
+
+			return SelectChildrenRecursive<T>(item).FirstOrDefault();
 		}
 
 		public IEnumerable<T> SelectChildren<T>(IItemWrapper item) where T : IItemWrapper
 		{
-			return SelectChildren<T>(item.ItemLocation);
+			return SelectChildren<T>(item.ItemID);
 		}
 
 		public IEnumerable<T> SelectChildren<T>(string path) where T : IItemWrapper
 		{
+			return SelectChildren<T>(SelectSingleItem(path));
+		}
+
+		public IEnumerable<T> SelectChildren<T>(Guid id) where T : IItemWrapper
+		{
+			return SelectChildren<T>(SelectSingleItem(id));
+		}
+
+		public IEnumerable<T> SelectChildrenRecursive<T>(IItemWrapper wrapper) where T : IItemWrapper
+		{
+			return SelectChildrenRecursive<T>(((Item)wrapper.Original));
+		}
+
+		protected IEnumerable<T> SelectChildren<T>(Item item) where T : IItemWrapper
+		{
 			try
 			{
-				var item = SelectSingleItem(path);
-
 				return FilterWrapperTypes<T>(Spawn.FromItems(item.Children.AsEnumerable()));
 			}
 			catch
@@ -251,67 +235,110 @@ namespace Fortis.Model
 			}
 		}
 
-		public IEnumerable<T> SelectChildrenRecursive<T>(IItemWrapper wrapper) where T : IItemWrapper
+		protected IEnumerable<T> SelectChildrenRecursive<T>(Item item) where T : IItemWrapper
 		{
-			var children = SelectChildren<IItemWrapper>(wrapper);
-
-			foreach (IItemWrapper item in children)
+			try
 			{
-				if (item is T)
-				{
-					yield return (T)item;
-				}
-
-				if (item.HasChildren)
-				{
-					var innerChildren = SelectChildrenRecursive<T>(item);
-
-					foreach (IItemWrapper innerChild in innerChildren)
-					{
-						yield return (T)innerChild;
-					}
-				}
+				return FilterWrapperTypes<T>(Spawn.FromItems(item.Axes.GetDescendants()));
+			}
+			catch
+			{
+				return Enumerable.Empty<T>();
 			}
 		}
+
+		#endregion
 
 		public T SelectSibling<T>(IItemWrapper wrapper) where T : IItemWrapper
 		{
 			var parent = wrapper.Parent<IItemWrapper>();
 
-			if (parent != null)
-			{
-				return SelectChild<T>(parent);
-			}
-
-			return default(T);
+			return parent != null 
+				? SelectFirstChild<T>(parent) 
+				: default(T);
 		}
 
 		public IEnumerable<T> SelectSiblings<T>(IItemWrapper wrapper) where T : IItemWrapper
 		{
 			var parent = wrapper.Parent<IItemWrapper>();
 
-			if (parent != null)
-			{
-				return SelectChildren<T>(parent);
-			}
-			else
-			{
-				return Enumerable.Empty<T>();
-			}
+			return parent != null 
+				? SelectChildren<T>(parent)
+				: Enumerable.Empty<T>();
 		}
 
 		public T GetRenderingDataSource<T>(System.Web.UI.Control control) where T : IItemWrapper
 		{
 			if (control.Parent is Sitecore.Web.UI.WebControls.Sublayout)
 			{
-				string dataSourcePath = ((Sitecore.Web.UI.WebControls.Sublayout)control.Parent).DataSource;
+				var dataSourcePath = ((Sitecore.Web.UI.WebControls.Sublayout)control.Parent).DataSource;
 				if (dataSourcePath.Length > 0)
 				{
-					return this.Select<T>(dataSourcePath);
+					return Select<T>(dataSourcePath);
 				}
 			}
 
-			return this.GetContextItem<T>();
+			return GetContextItem<T>();
 		}
+
+		#region private
+
+		protected virtual Item GetItem(string path)
+		{
+			return GetItem(path, Sitecore.Context.Database);
+		}
+
+		protected virtual Item GetItem(Guid id)
+		{
+			return GetItem(id, Sitecore.Context.Database);
+		}
+
+		protected virtual Item GetItem(string path, Database database)
+		{
+			return database.GetItem(path);
+		}
+
+		protected virtual Item GetItem(Guid id, Database database)
+		{
+			return database.GetItem(new ID(id));
+		}
+
+		protected virtual Item SelectSingleItem(string path)
+		{
+			return SelectSingleItem(path, Sitecore.Context.Database);
+		}
+
+		protected virtual Item SelectSingleItem(Guid id)
+		{
+			return SelectSingleItem(id, Sitecore.Context.Database);
+		}
+
+		protected virtual Item SelectSingleItem(string path, Database database)
+		{
+			return database.SelectSingleItem(path);
+		}
+
+		protected virtual Item SelectSingleItem(Guid id, Database database)
+		{
+			return database.GetItem(new ID(id));
+		}
+
+		private static IEnumerable<T> FilterWrapperTypes<T>(IEnumerable<IItemWrapper> wrappers)
+		{
+			return wrappers.Where(wrapper => wrapper != null).OfType<T>();
+		}
+		
+		protected virtual T SpawnFromItem<T>(Item item) where T : IItemWrapper
+		{
+			object wrapper = null;
+			try
+			{
+				wrapper = Spawn.FromItem<T>(item);
+			}
+			catch { }
+			return (T)((wrapper is T) ? wrapper : null);
+		}
+
+		#endregion
 	}
 }

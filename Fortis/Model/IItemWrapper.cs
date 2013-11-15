@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Fortis.Model
 {
@@ -7,7 +8,7 @@ namespace Fortis.Model
 		string DatabaseName { get; }
 		string LanguageName { get; }
 		string ItemLocation { get; }
-		string ItemID { get; }
+		Guid ItemID { get; }
 		string ItemShortID { get; }
 		string ItemName { get; }
 		bool HasChildren { get; }

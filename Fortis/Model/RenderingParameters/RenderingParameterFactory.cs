@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web.UI;
 using Sitecore.Data.Items;
+using Sitecore.Web.UI.WebControls;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
 	public class RenderingParameterFactory : IRenderingParameterFactory
 	{
-		private Dictionary<string, Type> _templateMap = null;
-
-		private Dictionary<string, Type> TemplateMap
+		private Dictionary<Guid, Type> _templateMap;
+		private Dictionary<Guid, Type> TemplateMap
 		{
 			get
 			{
 				if (_templateMap == null)
 				{
-					_templateMap = new Dictionary<string, Type>();
+					_templateMap = new Dictionary<Guid, Type>();
 					var assembly = System.Reflection.Assembly.GetCallingAssembly();
 					foreach (Type t in assembly.GetTypes())
 					{
@@ -25,7 +24,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 						{
 							if (templateAttribute.Type == "RenderingParameter")
 							{
-								if (!_templateMap.Keys.Contains(templateAttribute.Id))
+								if (!_templateMap.ContainsKey(templateAttribute.Id))
 								{
 									_templateMap.Add(templateAttribute.Id, t);
 								}
@@ -40,20 +39,12 @@ namespace Fortis.Model.RenderingParameters.Fields
 		private Item GetRenderingByPath(string path)
 		{
 			var items = Sitecore.Context.Database.SelectItems("/sitecore/layout//*");
-			foreach (var item in items)
-			{
-				if (item["Path"].Equals(path, StringComparison.InvariantCultureIgnoreCase))
-				{
-					return item;
-				}
-			}
-
-			return null;
+			return items.FirstOrDefault(item => item["Path"].Equals(path, StringComparison.InvariantCultureIgnoreCase));
 		}
 
-		private IRenderingParameterWrapper SpawnTypeFromItem(string id, string queryString)
+		private IRenderingParameterWrapper SpawnTypeFromItem(Guid id, string queryString)
 		{
-			if (TemplateMap.Keys.Contains(id))
+			if (TemplateMap.ContainsKey(id))
 			{
 				// Get type information
 				var type = TemplateMap[id];
@@ -65,23 +56,23 @@ namespace Fortis.Model.RenderingParameters.Fields
 			return new RenderingParameterWrapper(queryString);
 		}
 
-		private IEnumerable<T> FilterWrapperTypes<T>(IEnumerable<IItemWrapper> wrappers)
-		{
-			return (IEnumerable<T>)(wrappers.Where(w => w is T));
-		}
-
 		public T GetParameters<T>(Control control) where T : IRenderingParameterWrapper
 		{
-			if (control.Parent is Sitecore.Web.UI.WebControls.Sublayout)
+			var parent = control.Parent as Sublayout;
+			if (parent != null)
 			{
-				string queryString = ((Sitecore.Web.UI.WebControls.Sublayout)control.Parent).Parameters;
-				string path = ((Sitecore.Web.UI.WebControls.Sublayout)control.Parent).Path;
+				var queryString = parent.Parameters;
+				var path = parent.Path;
 				//string renderingId = ((Sitecore.Web.UI.WebControls.Sublayout)control.Parent).RenderingID;
 				var renderingItem = GetRenderingByPath(path); //Sitecore.Context.Database.GetItem(renderingId);
 				if (renderingItem != null)
 				{
-					var wrapper = SpawnTypeFromItem(renderingItem["Parameters Template"], queryString);
-					return (T)((wrapper is T) ? wrapper : default(T));
+					Guid parametersTemplateId;
+					if (Guid.TryParse(renderingItem["Parameters Template"], out parametersTemplateId))
+					{
+						var wrapper = SpawnTypeFromItem(parametersTemplateId, queryString);
+						return (T) ((wrapper is T) ? wrapper : default(T));
+					}
 				}
 			}
 
