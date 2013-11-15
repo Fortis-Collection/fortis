@@ -19,11 +19,11 @@ namespace Fortis.Model
 		T Select<T>(string path, string database = null) where T : IItemWrapper;
 		T Select<T>(Guid id, string database = null) where T : IItemWrapper;
 		IEnumerable<T> SelectAll<T>(string path, string database = null) where T : IItemWrapper;
-		T SelectChild<T>(IItemWrapper item) where T : IItemWrapper;
-		T SelectChild<T>(string path) where T : IItemWrapper;
-		T SelectChild<T>(Guid id) where T : IItemWrapper;
-		T SelectChildRecursive<T>(string path) where T : IItemWrapper;
-		T SelectChildRecursive<T>(Guid id) where T : IItemWrapper;
+		T SelectFirstChild<T>(IItemWrapper item) where T : IItemWrapper;
+		T SelectFirstChild<T>(string path) where T : IItemWrapper;
+		T SelectFirstChild<T>(Guid id) where T : IItemWrapper;
+		T SelectFirstChildRecursive<T>(string path) where T : IItemWrapper;
+		T SelectFirstChildRecursive<T>(Guid id) where T : IItemWrapper;
 		IEnumerable<T> SelectChildren<T>(IItemWrapper item) where T : IItemWrapper;
 		IEnumerable<T> SelectChildren<T>(string path) where T : IItemWrapper;
 		IEnumerable<T> SelectChildren<T>(Guid id) where T : IItemWrapper;

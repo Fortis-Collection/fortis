@@ -170,33 +170,33 @@ namespace Fortis.Model
 
 		#region SelectChild
 
-		public T SelectChild<T>(IItemWrapper item) where T : IItemWrapper
+		public T SelectFirstChild<T>(IItemWrapper item) where T : IItemWrapper
 		{
-			return SelectChild<T>(item.ItemID);
+			return SelectFirstChild<T>(item.ItemID);
 		}
 
-		public T SelectChild<T>(string path) where T : IItemWrapper
+		public T SelectFirstChild<T>(string path) where T : IItemWrapper
 		{
 			var children = SelectChildren<T>(path);
 
 			return children.FirstOrDefault();
 		}
 
-		public T SelectChild<T>(Guid id) where T : IItemWrapper
+		public T SelectFirstChild<T>(Guid id) where T : IItemWrapper
 		{
 			var children = SelectChildren<T>(id);
 
 			return children.FirstOrDefault();
 		}
 
-		public T SelectChildRecursive<T>(string path) where T : IItemWrapper
+		public T SelectFirstChildRecursive<T>(string path) where T : IItemWrapper
 		{
 			var item = GetItem(path);
 
 			return SelectChildrenRecursive<T>(item).FirstOrDefault();
 		}
 
-		public T SelectChildRecursive<T>(Guid id) where T : IItemWrapper
+		public T SelectFirstChildRecursive<T>(Guid id) where T : IItemWrapper
 		{
 			var item = GetItem(id);
 
@@ -254,7 +254,7 @@ namespace Fortis.Model
 			var parent = wrapper.Parent<IItemWrapper>();
 
 			return parent != null 
-				? SelectChild<T>(parent) 
+				? SelectFirstChild<T>(parent) 
 				: default(T);
 		}
 
