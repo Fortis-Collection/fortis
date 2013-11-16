@@ -51,14 +51,14 @@ namespace Fortis.Model.Fields
 			_field = field;
 		}
 
-		public virtual string Render()
+		public virtual IHtmlString Render()
 		{
-			return FieldRenderer.Render(_field.Item, _field.Key);
+			return new HtmlString(FieldRenderer.Render(_field.Item, _field.Key));
 		}
 
-		public virtual string Render(string parameters)
+		public virtual IHtmlString Render(string parameters)
 		{
-			return FieldRenderer.Render(_field.Item, _field.Key, parameters);
+			return new HtmlString(FieldRenderer.Render(_field.Item, _field.Key, parameters));
 		}
 
 		public override string ToString()
@@ -73,7 +73,7 @@ namespace Fortis.Model.Fields
 
         public string ToHtmlString()
         {
-            return Render();
+            return Render().ToString();
         }
     }
 }

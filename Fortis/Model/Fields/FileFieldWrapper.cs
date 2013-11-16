@@ -1,6 +1,7 @@
 ﻿using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using Sitecore.Resources.Media;
+using System.Web;
 
 namespace Fortis.Model.Fields
 {
@@ -16,13 +17,16 @@ namespace Fortis.Model.Fields
 		{
 		}
 
-		public override string Render()
+		public override IHtmlString Render()
 		{
+			var returnValue = string.Empty;
+
 			if (MediaItem != null)
 			{
-				return "/" + MediaManager.GetMediaUrl(MediaItem);
+				returnValue = "/" + MediaManager.GetMediaUrl(MediaItem);
 			}
-			return string.Empty;
+
+			return new HtmlString(returnValue);
 		}
 	}
 }

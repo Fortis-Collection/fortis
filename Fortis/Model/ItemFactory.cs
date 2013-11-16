@@ -1,15 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Sitecore.Configuration;
-using Sitecore.Data;
-using Sitecore.Data.Items;
-using Sitecore.Data.Managers;
-
-namespace Fortis.Model
+﻿namespace Fortis.Model
 {
+	using Fortis.Providers;
+	using Sitecore.Configuration;
+	using Sitecore.Data;
+	using Sitecore.Data.Items;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+
 	public class ItemFactory : IItemFactory
 	{
+		private readonly IContextProvider _contextProvider;
+
+		public ItemFactory(IContextProvider contextProvider)
+		{
+			_contextProvider = contextProvider;
+		}
+
 		public Guid GetTemplateID(Type type)
 		{
 			if (Spawn.InterfaceTemplateMap.ContainsKey(type))
@@ -135,9 +142,37 @@ namespace Fortis.Model
 
 		public T GetContextItem<T>() where T : IItemWrapper
 		{
-			var item = Sitecore.Context.Item;
+			var item = _contextProvider.PageContextItem;
 			var wrapper = Spawn.FromItem<T>(item);
+
 			return (T)((wrapper is T) ? wrapper : null);
+		}
+
+		public IRenderingModel<TPageItem, TRenderingItem> GetRenderingContextItems<TPageItem, TRenderingItem>()
+			where TPageItem : IItemWrapper
+			where TRenderingItem : IItemWrapper
+		{
+			var pageWrapper = Spawn.FromItem<TPageItem>(_contextProvider.PageContextItem);
+			var renderingWrapper = Spawn.FromItem<TRenderingItem>(_contextProvider.RenderingContextItem);
+			var validPageWrapper = (TPageItem)(pageWrapper is TPageItem ? pageWrapper : null);
+			var validRenderingWrapper = (TRenderingItem)(renderingWrapper is TRenderingItem ? renderingWrapper : null);
+
+			return new RenderingModel<TPageItem, TRenderingItem>(validPageWrapper, validRenderingWrapper);
+		}
+
+		public IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>()
+			where TPageItem : IItemWrapper
+			where TRenderingItem : IItemWrapper
+			where TRenderingParametersItem : IRenderingParameterWrapper
+		{
+			var pageWrapper = Spawn.FromItem<TPageItem>(_contextProvider.PageContextItem);
+			var renderingWrapper = Spawn.FromItem<TRenderingItem>(_contextProvider.RenderingContextItem);
+			var renderingParametersWrapper = Spawn.FromRenderingParameters<TRenderingParametersItem>(_contextProvider.RenderingItem, _contextProvider.RenderingParameters);
+			var validPageWrapper = (TPageItem)(pageWrapper is TPageItem ? pageWrapper : null);
+			var validRenderingWrapper = (TRenderingItem)(renderingWrapper is TRenderingItem ? renderingWrapper : null);
+			var validRenderingParametersWrapper = (TRenderingParametersItem)(renderingParametersWrapper is TRenderingParametersItem ? renderingParametersWrapper : null);
+
+			return new RenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem>(validPageWrapper, validRenderingWrapper, validRenderingParametersWrapper);
 		}
 
 		public T GetContextItemsItem<T>(string key) where T : IItemWrapper
@@ -184,11 +219,9 @@ namespace Fortis.Model
 				}
 				catch { }
 
-				// TODO: Ensure item exists
 				object wrapper = null;
 				try
 				{
-					//var item = database.SelectSingleItem(pathOrId);
 					var item = SelectSingleItem(pathOrId, database);
 					wrapper = Spawn.FromItem<T>(item);
 				}

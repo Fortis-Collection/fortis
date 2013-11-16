@@ -17,10 +17,35 @@ namespace Fortis.Model
 	{
 		private static readonly string _configurationKey = "fortis";
 		private static readonly string _assemblyConfigurationKey = "assembly";
+		private static Assembly _modelAssembly;
 		private static readonly NameValueCollection _configuration = (NameValueCollection)WebConfigurationManager.GetSection(_configurationKey);
-		private static string ModelAssembly { get { return _configuration[_assemblyConfigurationKey]; } }
+		private static string ModelAssemblyName { get { return _configuration[_assemblyConfigurationKey]; } }
+		private static Assembly ModelAssembly
+		{
+			get
+			{
+				if (_modelAssembly == null)
+				{
+					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+					{
+						if (assembly.FullName.Equals(ModelAssemblyName))
+						{
+							_modelAssembly = assembly;
+							break;
+						}
+					}
 
-		private static Dictionary<Guid, Type> _templateMap;
+					if (_modelAssembly == null)
+					{
+						throw new Exception("Forits | Unable to find model assembly: " + ModelAssemblyName);
+					}
+				}
+
+				return _modelAssembly;
+			}
+		}
+
+		private static Dictionary<Guid, Type> _templateMap = null;
 		internal static Dictionary<Guid, Type> TemplateMap
 		{
 			get
@@ -28,23 +53,8 @@ namespace Fortis.Model
 				if (_templateMap == null)
 				{
 					_templateMap = new Dictionary<Guid, Type>();
-					Assembly modelAssembly = null;
-
-					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-					{
-						if (assembly.FullName.Equals(ModelAssembly))
-						{
-							modelAssembly = assembly;
-							break;
-						}
-					}
-
-					if (modelAssembly == null)
-					{
-						throw new Exception("Forits | Unable to find model assembly: " + ModelAssembly);
-					}
 					
-					foreach (var t in modelAssembly.GetTypes())
+					foreach (var t in ModelAssembly.GetTypes())
 					{
 						foreach (TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof(TemplateMappingAttribute), false))
 						{
@@ -71,31 +81,16 @@ namespace Fortis.Model
 				if (_interfaceTemplateMap == null)
 				{
 					_interfaceTemplateMap = new Dictionary<Type, Guid>();
-					Assembly modelAssembly = null;
 
-					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-					{
-						if (assembly.FullName.Equals(ModelAssembly))
-						{
-							modelAssembly = assembly;
-							break;
-						}
-					}
-
-					if (modelAssembly == null)
-					{
-						throw new Exception("Forits | Unable to find model assembly: " + ModelAssembly);
-					}
-
-					foreach (var t in modelAssembly.GetTypes())
+					foreach (var t in ModelAssembly.GetTypes())
 					{
 						foreach (TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof(TemplateMappingAttribute), false))
 						{
-							if (string.IsNullOrEmpty(templateAttribute.Type))
+							if (string.Equals(templateAttribute.Type, "InterfaceMap"))
 							{
-								if (!_templateMap.Keys.Contains(templateAttribute.Id))
+								if (!_interfaceTemplateMap.Keys.Contains(t))
 								{
-									_templateMap.Add(templateAttribute.Id, t);
+									_interfaceTemplateMap.Add(t, templateAttribute.Id);
 								}
 							}
 						}
@@ -106,12 +101,41 @@ namespace Fortis.Model
 			}
 		}
 
+		private static Dictionary<Guid, Type> _renderingParametersTemplateMap = null;
+		internal static Dictionary<Guid, Type> RenderingParametersTemplateMap
+		{
+			get
+			{
+				if (_renderingParametersTemplateMap == null)
+				{
+					_renderingParametersTemplateMap = new Dictionary<Guid, Type>();
+
+					foreach (var t in ModelAssembly.GetTypes())
+					{
+						foreach (TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof(TemplateMappingAttribute), false))
+						{
+							if (templateAttribute.Type == "RenderingParameter")
+							{
+								if (!_renderingParametersTemplateMap.Keys.Contains(templateAttribute.Id))
+								{
+									_renderingParametersTemplateMap.Add(templateAttribute.Id, t);
+								}
+							}
+						}
+					}
+				}
+
+				return _renderingParametersTemplateMap;
+			}
+		}
+
 		internal static IItemWrapper FromItem(Item item)
 		{
 			return FromItem<IItemWrapper>(item);
 		}
 
 		internal static IItemWrapper FromItem<T>(Item item)
+			where T : IItemWrapper
 		{
 			if (item != null)
 			{
@@ -121,30 +145,29 @@ namespace Fortis.Model
 				{
 					// Get type information
 					var type = TemplateMap[id];
-					// Get public constructors
-					var ctors = type.GetConstructors();
-					// Invoke the first public constructor with no parameters.
-					return (IItemWrapper)ctors[0].Invoke(new object[] { item });
+
+					return (IItemWrapper)Activator.CreateInstance(type, new object[] { item });
 				}
 
+				var wrapperType = typeof(T);
+
 				// Attempt to match the template of the type passed through to an inherited template.
-				if (typeof(T) != typeof(IItemWrapper))
+				if (wrapperType != typeof(IItemWrapper))
 				{
-					if (InterfaceTemplateMap.ContainsKey(typeof(T)))
+					if (!InterfaceTemplateMap.ContainsKey(wrapperType))
 					{
-						var typeTemplateId = InterfaceTemplateMap[typeof(T)];
+						throw new Exception("Fortis | Unable to find template for " + wrapperType.FullName);
+					}
 
-						var itemTemplate = TemplateManager.GetTemplate(item);
+					var typeTemplateId = InterfaceTemplateMap[wrapperType];
+					var itemTemplate = TemplateManager.GetTemplate(item);
 
-						if (itemTemplate.DescendsFrom(new ID(typeTemplateId)))
-						{
-							// Get type information
-							var type = TemplateMap[typeTemplateId];
-							// Get public constructors
-							var ctors = type.GetConstructors();
-							// Invoke the first public constructor with no parameters.
-							return (IItemWrapper)ctors[0].Invoke(new object[] { item });
-						}
+					if (itemTemplate.DescendsFrom(new ID(typeTemplateId)))
+					{
+						// Get type information
+						var type = TemplateMap[typeTemplateId];
+
+						return (IItemWrapper)Activator.CreateInstance(type, new object[] { item });
 					}
 				}
 
@@ -160,6 +183,7 @@ namespace Fortis.Model
 		}
 
 		internal static IEnumerable<T> FromItems<T>(IEnumerable<Item> items)
+			where T : IItemWrapper
 		{
 			foreach (var item in items)
 			{
@@ -170,6 +194,30 @@ namespace Fortis.Model
 					yield return wrappedItem;
 				}
 			}
+		}
+
+		internal static IRenderingParameterWrapper FromRenderingParameters<T>(Item renderingItem, Dictionary<string, string> parameters)
+			where T : IRenderingParameterWrapper
+		{
+			if (renderingItem != null)
+			{
+				var id = renderingItem["Parameters Template"];
+				ID templateId = null;
+
+				if (ID.TryParse(id, out templateId))
+				{
+					if (!RenderingParametersTemplateMap.ContainsKey(templateId.Guid))
+					{
+						throw new Exception("Fortis | Unable to find rendering parameters template " + id + " for " + renderingItem.Name);
+					}
+
+					var type = RenderingParametersTemplateMap[templateId.Guid];
+
+					return (IRenderingParameterWrapper)Activator.CreateInstance(type, new object[] { parameters });
+				}
+			}
+
+			return null;
 		}
 
 		internal static IEnumerable<IFieldWrapper> FromFields(FieldCollection fields)
