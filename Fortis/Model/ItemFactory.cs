@@ -10,16 +10,16 @@ namespace Fortis.Model
 {
 	public class ItemFactory : IItemFactory
 	{
-		public string GetTemplateID(Type type)
+		public Guid GetTemplateID(Type type)
 		{
 			if (Spawn.InterfaceTemplateMap.ContainsKey(type))
 			{
 				return Spawn.InterfaceTemplateMap[type];
 			}
-			return string.Empty;
+			return Guid.Empty;
 		}
 
-		public Type GetInterfaceType(string templateId)
+		public Type GetInterfaceType(Guid templateId)
 		{
 			if (Spawn.TemplateMap.ContainsKey(templateId))
 			{
@@ -42,24 +42,35 @@ namespace Fortis.Model
 			}
 		}
 
-		protected virtual Item GetItem(string pathOrId)
+		protected virtual Item GetItem(string path, Database database = null)
 		{
-			return GetItem(pathOrId, Sitecore.Context.Database);
+			return (database ?? Sitecore.Context.Database).GetItem(path);
 		}
 
-		protected virtual Item GetItem(string pathOrId, Database database)
+		protected virtual Item GetItem(Guid id, Database database = null)
 		{
-			return database.GetItem(pathOrId);
+			return (database ?? Sitecore.Context.Database).GetItem(new ID(id));
 		}
 
-		protected virtual Item SelectSingleItem(string pathOrId)
+		protected virtual Item SelectSingleItem(string path)
 		{
-			return SelectSingleItem(pathOrId, Sitecore.Context.Database);
+			return SelectSingleItem(path, Sitecore.Context.Database);
 		}
 
-		protected virtual Item SelectSingleItem(string pathOrId, Database database)
+		protected virtual Item SelectSingleItem(string path, Database database)
 		{
-			return database.SelectSingleItem(pathOrId);
+			return database.SelectSingleItem(path);
+		}
+
+		protected virtual T SpawnFromItem<T>(Item item) where T : IItemWrapper
+		{
+			object wrapper = null;
+			try
+			{
+				wrapper = Spawn.FromItem<T>(item);
+			}
+			catch { }
+			return (T)((wrapper is T) ? wrapper : null);
 		}
 
 		private IEnumerable<T> FilterWrapperTypes<T>(IEnumerable<IItemWrapper> wrappers)
@@ -75,24 +86,38 @@ namespace Fortis.Model
 
 		public T Create<T>(IItemWrapper parent, string itemName) where T : IItemWrapper
 		{
-			return Create<T>(parent.ItemLocation, itemName);
+			return Create<T>(parent.ItemID, itemName);
 		}
 
-		public T Create<T>(string parentPathOrId, string itemName) where T : IItemWrapper
+		public T Create<T>(string parentPath, string itemName) where T : IItemWrapper
+		{
+			var database = Factory.GetDatabase("master");
+			var parentItem = GetItem(parentPath, database);
+
+			return Create<T>(parentItem, itemName);
+		}
+
+		public T Create<T>(Guid parentId, string itemName) where T : IItemWrapper
+		{
+			var database = Factory.GetDatabase("master");
+			var parentItem = GetItem(parentId, database);
+
+			return Create<T>(parentItem, itemName);
+		}
+
+		private T Create<T>(Item parentItem, string itemName) where T : IItemWrapper
 		{
 			object newItemObject = null;
 			var type = typeof(T);
 
-			if (Spawn.InterfaceTemplateMap.Keys.Contains(type))
+			if (Spawn.InterfaceTemplateMap.ContainsKey(type))
 			{
 				var templateId = Spawn.InterfaceTemplateMap[type];
-				var database = Sitecore.Configuration.Factory.GetDatabase("master");
-				var parent = GetItem(parentPathOrId, database);
 
-				if (parent != null)
+				if (parentItem != null)
 				{
-					TemplateItem newItemTemplate = GetItem(templateId, database);
-					var newItem = parent.Add(itemName, newItemTemplate);
+					TemplateItem newItemTemplate = GetItem(templateId, parentItem.Database);
+					var newItem = parentItem.Add(itemName, newItemTemplate);
 
 					newItemObject = Spawn.FromItem<T>(newItem);
 				}
@@ -132,9 +157,19 @@ namespace Fortis.Model
 			return Select<T>(path, Sitecore.Context.Database);
 		}
 
+		public T Select<T>(Guid id) where T : IItemWrapper
+		{
+			return SpawnFromItem<T>(GetItem(id));
+		}
+
 		public T Select<T>(string path, string database) where T : IItemWrapper
 		{
 			return Select<T>(path, Factory.GetDatabase(database));
+		}
+
+		public T Select<T>(Guid id, string database) where T : IItemWrapper
+		{
+			return SpawnFromItem<T>(GetItem(id, Factory.GetDatabase(database)));
 		}
 
 		protected virtual T Select<T>(string path, Database database) where T : IItemWrapper
@@ -191,26 +226,35 @@ namespace Fortis.Model
 
 		public T SelectChild<T>(IItemWrapper item) where T : IItemWrapper
 		{
-			return SelectChild<T>(item.ItemLocation);
+			return SelectChild<T>(item.ItemID);
 		}
 
 		public T SelectChild<T>(string path) where T : IItemWrapper
 		{
 			var children = SelectChildren<T>(path);
-			IItemWrapper firstChild = null;
 
-			if (children.Count() > 0)
-			{
-				firstChild = children.First();
-			}
+			return children.FirstOrDefault();
+		}
 
-			return (T)((firstChild is T) ? firstChild : null);
+		public T SelectChild<T>(Guid id) where T : IItemWrapper
+		{
+			var children = SelectChildren<T>(id);
+
+			return children.FirstOrDefault();
 		}
 
 		public T SelectChildRecursive<T>(string path) where T : IItemWrapper
 		{
-			var children = SelectChildren<T>(path);
+			return SelectChildRecursive<T>(SelectChildren<T>(path));
+		}
 
+		public T SelectChildRecursive<T>(Guid id) where T : IItemWrapper
+		{
+			return SelectChildRecursive<T>(SelectChildren<T>(id));
+		}
+
+		protected T SelectChildRecursive<T>(IEnumerable<T> children) where T : IItemWrapper
+		{
 			foreach (IItemWrapper item in children)
 			{
 				if (item is T)
@@ -234,15 +278,23 @@ namespace Fortis.Model
 
 		public IEnumerable<T> SelectChildren<T>(IItemWrapper item) where T : IItemWrapper
 		{
-			return SelectChildren<T>(item.ItemLocation);
+			return SelectChildren<T>(item.ItemID);
 		}
 
 		public IEnumerable<T> SelectChildren<T>(string path) where T : IItemWrapper
 		{
+			return SelectChildren<T>(SelectSingleItem(path));
+		}
+
+		public IEnumerable<T> SelectChildren<T>(Guid id) where T : IItemWrapper
+		{
+			return SelectChildren<T>(GetItem(id));
+		}
+
+		protected IEnumerable<T> SelectChildren<T>(Item item) where T : IItemWrapper
+		{
 			try
 			{
-				var item = SelectSingleItem(path);
-
 				return FilterWrapperTypes<T>(Spawn.FromItems(item.Children.AsEnumerable()));
 			}
 			catch

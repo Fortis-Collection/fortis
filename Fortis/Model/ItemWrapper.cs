@@ -43,9 +43,9 @@ namespace Fortis.Model
 			get { return Item.Paths.FullPath; }
 		}
 
-		public string ItemID
+		public Guid ItemID
 		{
-			get { return Item.ID.ToString(); }
+			get { return Item.ID.Guid; }
 		}
 
 		public string ItemShortID
