@@ -35,13 +35,13 @@
 			// Clean any test objects used
 		}
 
-		private Item CreateTestItem(string id = null, string name = "Test Item", string templateId = null, FieldCollection fields = null)
+		private Item CreateTestItem(string id = null, string name = "Test Item", Guid templateId = default(Guid), FieldCollection fields = null)
 		{
 			Item item = new ShimItem()
 			{
 				NameGet = () => name ?? "Test Item",
 				IDGet = () => new Sitecore.Data.ID(id ?? new Guid().ToString()),
-				TemplateIDGet = () => new Sitecore.Data.ID(templateId ?? new Guid().ToString()),
+				TemplateIDGet = () => new Sitecore.Data.ID(templateId),
 				FieldsGet = () => fields ?? CreateTestFields(),
 			};
 
@@ -84,7 +84,7 @@
 		{
 			using (ShimsContext.Create())
 			{
-				var templateId = "{02F5002C-325E-4E5A-9C93-A97724ED3400}";
+				var templateId = new Guid("{02F5002C-325E-4E5A-9C93-A97724ED3400}");
 				var testItem = CreateTestItem(templateId: templateId);
 				var contextProvider = new Mock<IContextProvider>();
 
@@ -102,7 +102,7 @@
 		{
 			using (ShimsContext.Create())
 			{
-				var templateId = "{AF49395C-74BB-4ACF-8E01-F2B5BEECA8FE}";
+				var templateId = new Guid("{AF49395C-74BB-4ACF-8E01-F2B5BEECA8FE}");
 				var testItem = CreateTestItem(templateId: templateId);
 				var contextProvider = new Mock<IContextProvider>();
 
@@ -171,7 +171,7 @@
 				Field parametersTemplateField = new ShimField()
 				{
 					NameGet = () => "Parameters Template",
-					ValueGet = () => renderingTemplateId,
+					ValueGet = () => renderingTemplateId.ToString(),
 				};
 
 				var testRenderingItem = CreateTestItem(fields: CreateTestFields(new List<Field>() { parametersTemplateField }));
@@ -214,7 +214,7 @@
 		{
 			using (ShimsContext.Create())
 			{
-				var tId = "{02F5002C-325E-4E5A-9C93-A97724ED3400}";
+				var tId = new Guid("{02F5002C-325E-4E5A-9C93-A97724ED3400}");
 				var testItem = CreateTestItem(templateId: tId);
 
 				Template templateItem = new ShimTemplate()

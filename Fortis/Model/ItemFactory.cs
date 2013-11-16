@@ -17,7 +17,7 @@
 			_contextProvider = contextProvider;
 		}
 
-		public string GetTemplateID(Type type)
+		public Guid GetTemplateID(Type type)
 		{
 			if (Spawn.InterfaceTemplateMap.ContainsKey(type))
 			{

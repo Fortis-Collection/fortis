@@ -45,14 +45,14 @@ namespace Fortis.Model
 			}
 		}
 
-		private static Dictionary<string, Type> _templateMap = null;
-		internal static Dictionary<string, Type> TemplateMap
+		private static Dictionary<Guid, Type> _templateMap = null;
+		internal static Dictionary<Guid, Type> TemplateMap
 		{
 			get
 			{
 				if (_templateMap == null)
 				{
-					_templateMap = new Dictionary<string, Type>();
+					_templateMap = new Dictionary<Guid, Type>();
 					
 					foreach (var t in ModelAssembly.GetTypes())
 					{
@@ -101,14 +101,14 @@ namespace Fortis.Model
 			}
 		}
 
-		private static Dictionary<string, Type> _renderingParametersTemplateMap = null;
-		internal static Dictionary<string, Type> RenderingParametersTemplateMap
+		private static Dictionary<Guid, Type> _renderingParametersTemplateMap = null;
+		internal static Dictionary<Guid, Type> RenderingParametersTemplateMap
 		{
 			get
 			{
 				if (_renderingParametersTemplateMap == null)
 				{
-					_renderingParametersTemplateMap = new Dictionary<string, Type>();
+					_renderingParametersTemplateMap = new Dictionary<Guid, Type>();
 
 					foreach (var t in ModelAssembly.GetTypes())
 					{
@@ -160,16 +160,14 @@ namespace Fortis.Model
 					}
 
 					var typeTemplateId = InterfaceTemplateMap[wrapperType];
+					var itemTemplate = TemplateManager.GetTemplate(item);
 
-						var itemTemplate = TemplateManager.GetTemplate(item);
+					if (itemTemplate.DescendsFrom(new ID(typeTemplateId)))
+					{
+						// Get type information
+						var type = TemplateMap[typeTemplateId];
 
-						if (itemTemplate.DescendsFrom(new ID(typeTemplateId)))
-						{
-							// Get type information
-							var type = TemplateMap[typeTemplateId];
-
-							return (IItemWrapper)Activator.CreateInstance(type, new object[] { item });
-						}
+						return (IItemWrapper)Activator.CreateInstance(type, new object[] { item });
 					}
 				}
 
@@ -204,15 +202,19 @@ namespace Fortis.Model
 			if (renderingItem != null)
 			{
 				var id = renderingItem["Parameters Template"];
+				ID templateId = null;
 
-				if (!RenderingParametersTemplateMap.ContainsKey(id))
+				if (ID.TryParse(id, out templateId))
 				{
-					throw new Exception("Fortis | Unable to find rendering parameters template " + id + " for " + renderingItem.Name);
+					if (!RenderingParametersTemplateMap.ContainsKey(templateId.Guid))
+					{
+						throw new Exception("Fortis | Unable to find rendering parameters template " + id + " for " + renderingItem.Name);
+					}
+
+					var type = RenderingParametersTemplateMap[templateId.Guid];
+
+					return (IRenderingParameterWrapper)Activator.CreateInstance(type, new object[] { parameters });
 				}
-
-				var type = RenderingParametersTemplateMap[id];
-
-				return (IRenderingParameterWrapper)Activator.CreateInstance(type, new object[] { parameters });
 			}
 
 			return null;
