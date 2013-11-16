@@ -50,7 +50,7 @@ namespace Fortis.Model
 						{
 							if (string.IsNullOrEmpty(templateAttribute.Type))
 							{
-								if (!_templateMap.Keys.Contains(templateAttribute.Id))
+								if (!_templateMap.ContainsKey(templateAttribute.Id))
 								{
 									_templateMap.Add(templateAttribute.Id, t);
 								}
@@ -93,7 +93,7 @@ namespace Fortis.Model
 						{
 							if (string.IsNullOrEmpty(templateAttribute.Type))
 							{
-								if (!_templateMap.Keys.Contains(templateAttribute.Id))
+								if (!_templateMap.ContainsKey(templateAttribute.Id))
 								{
 									_templateMap.Add(templateAttribute.Id, t);
 								}
@@ -117,7 +117,7 @@ namespace Fortis.Model
 			{
 				// Attempt to exact match the item against a template in the model
 				var id = item.TemplateID.Guid;
-				if (TemplateMap.Keys.Contains(id))
+				if (TemplateMap.ContainsKey(id))
 				{
 					// Get type information
 					var type = TemplateMap[id];

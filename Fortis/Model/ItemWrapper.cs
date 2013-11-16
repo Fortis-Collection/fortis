@@ -83,7 +83,7 @@ namespace Fortis.Model
 		{
 			key = key.ToLower();
 
-			if (!Fields.Keys.Contains(key))
+			if (!Fields.ContainsKey(key))
 			{
 				try
 				{
