@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Sitecore.Data.Fields;
+using System.Web;
 
 namespace Fortis.Model.Fields
 {
@@ -23,12 +24,12 @@ namespace Fortis.Model.Fields
 		{
 		}
 
-		public string Render(bool includeTime)
+		public IHtmlString Render(bool includeTime)
 		{
 			return Render(includeTime ? Sitecore.Context.Language.CultureInfo.DateTimeFormat.FullDateTimePattern : Sitecore.Context.Language.CultureInfo.DateTimeFormat.ShortDatePattern);
 		}
 
-		public override string Render(string dateTimeFormat)
+		public override IHtmlString Render(string dateTimeFormat)
 		{
 			return base.Render("format=" + dateTimeFormat);
 		}

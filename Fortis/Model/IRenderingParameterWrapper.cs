@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Fortis.Model.RenderingParameters
+namespace Fortis.Model
 {
-	public interface IRenderingParameterWrapper
+	public interface IRenderingParameterWrapper : IWrapper
 	{
 
 	}

@@ -5,7 +5,7 @@ using System.Text;
 using System.Web.UI;
 using Sitecore.Data.Items;
 
-namespace Fortis.Model.RenderingParameters.Fields
+namespace Fortis.Model
 {
 	public class RenderingParameterFactory : IRenderingParameterFactory
 	{
@@ -62,7 +62,19 @@ namespace Fortis.Model.RenderingParameters.Fields
 				// Invoke the first public constructor with no parameters.
 				return (IRenderingParameterWrapper)ctors[0].Invoke(new object[] { queryString });
 			}
-			return new RenderingParameterWrapper(queryString);
+
+			var parameters = new Dictionary<string, string>();
+			var queryStringParameters = Sitecore.Web.WebUtil.ParseUrlParameters(queryString);
+
+			foreach (var parameterKey in queryStringParameters.AllKeys)
+			{
+				if (!parameters.ContainsKey(parameterKey))
+				{
+					parameters.Add(parameterKey, queryStringParameters[parameterKey]);
+				}
+			}
+
+			return new RenderingParameterWrapper(parameters);
 		}
 
 		private IEnumerable<T> FilterWrapperTypes<T>(IEnumerable<IItemWrapper> wrappers)
@@ -76,8 +88,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 			{
 				string queryString = ((Sitecore.Web.UI.WebControls.Sublayout)control.Parent).Parameters;
 				string path = ((Sitecore.Web.UI.WebControls.Sublayout)control.Parent).Path;
-				//string renderingId = ((Sitecore.Web.UI.WebControls.Sublayout)control.Parent).RenderingID;
-				var renderingItem = GetRenderingByPath(path); //Sitecore.Context.Database.GetItem(renderingId);
+				var renderingItem = GetRenderingByPath(path);
 				if (renderingItem != null)
 				{
 					Guid parametersTemplateId;

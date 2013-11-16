@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Providers\IContextProvider.cs" />
+    <Compile Include="Model\IRenderingModel.cs" />
     <Compile Include="Model\Events\ItemCreated.cs" />
     <Compile Include="Model\Fields\BooleanFieldWrapper.cs" />
     <Compile Include="Model\Fields\DateTimeFieldWrapper.cs" />
@@ -64,15 +66,16 @@
     <Compile Include="Model\ItemWrapper.cs" />
     <Compile Include="Model\IWrapper.cs" />
     <Compile Include="Model\Pipelines\HttpRequestPipeline.cs" />
+    <Compile Include="Model\RenderingModel.cs" />
     <Compile Include="Model\RenderingParameters\Fields\BooleanFieldWrapper.cs" />
     <Compile Include="Model\RenderingParameters\Fields\FieldWrapper.cs" />
     <Compile Include="Model\RenderingParameters\Fields\LinkFieldWrapper.cs" />
     <Compile Include="Model\RenderingParameters\Fields\ListFieldWrapper.cs" />
     <Compile Include="Model\RenderingParameters\Fields\TextFieldWrapper.cs" />
-    <Compile Include="Model\RenderingParameters\IRenderingParameterFactory.cs" />
-    <Compile Include="Model\RenderingParameters\IRenderingParameterWrapper.cs" />
-    <Compile Include="Model\RenderingParameters\RenderingParameterFactory.cs" />
-    <Compile Include="Model\RenderingParameters\RenderingParameterWrapper.cs" />
+    <Compile Include="Model\IRenderingParameterFactory.cs" />
+    <Compile Include="Model\IRenderingParameterWrapper.cs" />
+    <Compile Include="Model\RenderingParameterFactory.cs" />
+    <Compile Include="Model\RenderingParameterWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Spawn.cs" />
     <Compile Include="Model\TemplateMappingAttribute.cs" />
