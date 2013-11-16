@@ -9,15 +9,15 @@ namespace Fortis.Model
 {
 	public class RenderingParameterFactory : IRenderingParameterFactory
 	{
-		private Dictionary<string, Type> _templateMap = null;
+		private Dictionary<Guid, Type> _templateMap = null;
 
-		private Dictionary<string, Type> TemplateMap
+		private Dictionary<Guid, Type> TemplateMap
 		{
 			get
 			{
 				if (_templateMap == null)
 				{
-					_templateMap = new Dictionary<string, Type>();
+					_templateMap = new Dictionary<Guid, Type>();
 					var assembly = System.Reflection.Assembly.GetCallingAssembly();
 					foreach (Type t in assembly.GetTypes())
 					{
@@ -51,7 +51,7 @@ namespace Fortis.Model
 			return null;
 		}
 
-		private IRenderingParameterWrapper SpawnTypeFromItem(string id, string queryString)
+		private IRenderingParameterWrapper SpawnTypeFromItem(Guid id, string queryString)
 		{
 			if (TemplateMap.Keys.Contains(id))
 			{
@@ -91,8 +91,12 @@ namespace Fortis.Model
 				var renderingItem = GetRenderingByPath(path);
 				if (renderingItem != null)
 				{
-					var wrapper = SpawnTypeFromItem(renderingItem["Parameters Template"], queryString);
-					return (T)((wrapper is T) ? wrapper : default(T));
+					Guid parametersTemplateId;
+					if (Guid.TryParse(renderingItem["Parameters Template"], out parametersTemplateId))
+					{
+						var wrapper = SpawnTypeFromItem(parametersTemplateId, queryString);
+						return (T)((wrapper is T) ? wrapper : default(T));
+					}
 				}
 			}
 

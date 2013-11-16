@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Sitecore.Collections;
+using Sitecore.Data;
 using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using Sitecore.Data.Managers;
@@ -73,14 +73,14 @@ namespace Fortis.Model
 			}
 		}
 
-		private static Dictionary<Type, string> _interfaceTemplateMap = null;
-		internal static Dictionary<Type, string> InterfaceTemplateMap
+		private static Dictionary<Type, Guid> _interfaceTemplateMap;
+		internal static Dictionary<Type, Guid> InterfaceTemplateMap
 		{
 			get
 			{
 				if (_interfaceTemplateMap == null)
 				{
-					_interfaceTemplateMap = new Dictionary<Type, string>();
+					_interfaceTemplateMap = new Dictionary<Type, Guid>();
 
 					foreach (var t in ModelAssembly.GetTypes())
 					{
@@ -140,7 +140,7 @@ namespace Fortis.Model
 			if (item != null)
 			{
 				// Attempt to exact match the item against a template in the model
-				var id = item.TemplateID.ToString();
+				var id = item.TemplateID.Guid;
 				if (TemplateMap.Keys.Contains(id))
 				{
 					// Get type information
@@ -161,11 +161,9 @@ namespace Fortis.Model
 
 					var typeTemplateId = InterfaceTemplateMap[wrapperType];
 
-					if (typeTemplateId != null)
-					{
 						var itemTemplate = TemplateManager.GetTemplate(item);
 
-						if (Sitecore.Data.ID.IsID(typeTemplateId) && itemTemplate.DescendsFrom(Sitecore.Data.ID.Parse(typeTemplateId)))
+						if (itemTemplate.DescendsFrom(new ID(typeTemplateId)))
 						{
 							// Get type information
 							var type = TemplateMap[typeTemplateId];
