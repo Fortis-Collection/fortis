@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis", "Fortis\Fortis.csproj", "{48D2AA0D-B38B-4AA2-BE58-6F9C226B8D19}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.Mvc", "Fortis.Mvc\Fortis.Mvc.csproj", "{56BC76C2-BE7A-429B-B1F5-F965EE0CB663}"
@@ -15,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{39923E
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.Test", "Fortis.Test\Fortis.Test.csproj", "{085736F5-A9B7-49B0-8A6C-AEEDE7F3CC59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.Search", "Fortis.Search\Fortis.Search.csproj", "{F1C384BC-9E9D-4653-BEFB-0B5FC0862C63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +42,10 @@ Global
 		{085736F5-A9B7-49B0-8A6C-AEEDE7F3CC59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{085736F5-A9B7-49B0-8A6C-AEEDE7F3CC59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{085736F5-A9B7-49B0-8A6C-AEEDE7F3CC59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1C384BC-9E9D-4653-BEFB-0B5FC0862C63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1C384BC-9E9D-4653-BEFB-0B5FC0862C63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1C384BC-9E9D-4653-BEFB-0B5FC0862C63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1C384BC-9E9D-4653-BEFB-0B5FC0862C63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

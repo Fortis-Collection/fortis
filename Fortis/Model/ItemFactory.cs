@@ -2,13 +2,15 @@
 {
 	using Fortis.Providers;
 	using Sitecore.Configuration;
+	using Sitecore.ContentSearch;
+	using Sitecore.ContentSearch.SearchTypes;
 	using Sitecore.Data;
 	using Sitecore.Data.Items;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 
-	public class ItemFactory : IItemFactory
+	public partial class ItemFactory : IItemFactory
 	{
 		private readonly IContextProvider _contextProvider;
 
@@ -397,6 +399,17 @@
 			}
 
 			return this.GetContextItem<T>();
+		}
+
+		// Search
+		public T RetrieveAll<T>(string searchterm)
+		{
+			using (var context = ContentSearchManager.GetIndex("").CreateSearchContext())
+			{
+				IQueryable<SearchResultItem> searchQuery = context.GetQueryable<SearchResultItem>().Where(item => item.TemplateName.Equals(""));
+			}
+
+			throw new NotImplementedException();
 		}
 	}
 }

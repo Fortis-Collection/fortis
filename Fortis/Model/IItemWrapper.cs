@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Fortis.Model
 {
-	public interface IItemWrapper : IWrapper
+	public partial interface IItemWrapper : IWrapper
 	{
 		string DatabaseName { get; }
 		string LanguageName { get; }

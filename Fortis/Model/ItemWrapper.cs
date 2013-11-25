@@ -8,7 +8,7 @@ using Fortis.Model.Fields;
 
 namespace Fortis.Model
 {
-	public class ItemWrapper : IItemWrapper, IDisposable
+	public partial class ItemWrapper : IItemWrapper, IDisposable
 	{
 		private Item _item;
 		private Dictionary<string, IFieldWrapper> _fields;

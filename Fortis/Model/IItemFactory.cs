@@ -4,7 +4,7 @@ using System.Web.UI;
 
 namespace Fortis.Model
 {
-	public interface IItemFactory
+	public partial interface IItemFactory
 	{
 		Guid GetTemplateID(Type type);
 		Type GetInterfaceType(Guid templateId);
