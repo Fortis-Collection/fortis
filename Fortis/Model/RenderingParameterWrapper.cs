@@ -19,8 +19,7 @@ namespace Fortis.Model
 
 		protected FieldWrapper GetField(string key, string type)
 		{
-			key = key.ToLower();
-			if (!_fields.Keys.Contains(key))
+			if (!_fields.ContainsKey(key))
 			{
 				try
 				{
