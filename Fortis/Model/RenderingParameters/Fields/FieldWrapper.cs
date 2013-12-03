@@ -9,17 +9,17 @@ namespace Fortis.Model.RenderingParameters.Fields
 	{
 		protected string Value;
 
-		public bool Modified
+		public virtual bool Modified
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public object Original
+		public virtual object Original
 		{
 			get { return Value; }
 		}
 
-		public string RawValue
+		public virtual string RawValue
 		{
 			get
 			{
@@ -51,7 +51,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 			return field.RawValue;
 		}
 
-        public string ToHtmlString()
+		public virtual string ToHtmlString()
         {
             return Render().ToString();
         }

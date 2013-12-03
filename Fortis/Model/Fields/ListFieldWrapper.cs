@@ -11,7 +11,7 @@ namespace Fortis.Model.Fields
 		{
 		}
 
-		public IEnumerable<T> GetItems<T>() where T : IItemWrapper
+		public virtual IEnumerable<T> GetItems<T>() where T : IItemWrapper
 		{
 			var listField = (MultilistField)Field;
 
@@ -29,7 +29,7 @@ namespace Fortis.Model.Fields
 			}
 		}
 
-        public IEnumerator<IItemWrapper> GetEnumerator()
+		public virtual IEnumerator<IItemWrapper> GetEnumerator()
 		{
 			return GetItems<IItemWrapper>().GetEnumerator();
 		}

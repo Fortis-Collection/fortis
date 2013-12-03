@@ -5,7 +5,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 {
 	public class BooleanFieldWrapper : FieldWrapper
 	{
-		public new bool Value
+		public new virtual bool Value
 		{
 			get { return RawValue.Equals("1"); }
 			set { throw new NotImplementedException(); }
