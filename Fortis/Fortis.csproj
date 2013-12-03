@@ -44,6 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Fields\IBooleanFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IDateTimeFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IFileFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IGeneralLinkFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IImageFieldWrapper.cs" />
+    <Compile Include="Model\Fields\ILinkFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IListFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IRichTextFieldWrapper.cs" />
+    <Compile Include="Model\Fields\ITextFieldWrapper.cs" />
     <Compile Include="Providers\IContextProvider.cs" />
     <Compile Include="Model\IRenderingModel.cs" />
     <Compile Include="Model\Events\ItemCreated.cs" />

@@ -11,15 +11,15 @@
 	[TemplateMapping("{AF49395C-74BB-4ACF-8E01-F2B5BEECA8FE}", "InterfaceMap")]
 	public partial interface IScBaseTemplate : IItemWrapper
 	{
-		BooleanFieldWrapper BaseBooleanField { get; }
-		DateTimeFieldWrapper BaseDateTimeField { get; }
-		FileFieldWrapper BaseFileField { get; }
-		GeneralLinkFieldWrapper BaseGeneralLinkField { get; }
-		ImageFieldWrapper BaseImageField { get; }
-		LinkFieldWrapper BaseLinkField { get; }
-		ListFieldWrapper BaseListField { get; }
-		RichTextFieldWrapper BaseRichTextField { get; }
-		TextFieldWrapper BaseTextField { get; }
+		IBooleanFieldWrapper BaseBooleanField { get; }
+		IDateTimeFieldWrapper BaseDateTimeField { get; }
+		IFileFieldWrapper BaseFileField { get; }
+		IGeneralLinkFieldWrapper BaseGeneralLinkField { get; }
+		IImageFieldWrapper BaseImageField { get; }
+		ILinkFieldWrapper BaseLinkField { get; }
+		IListFieldWrapper BaseListField { get; }
+		IRichTextFieldWrapper BaseRichTextField { get; }
+		ITextFieldWrapper BaseTextField { get; }
 	}
 
 	[TemplateMapping("{AF49395C-74BB-4ACF-8E01-F2B5BEECA8FE}")]
@@ -33,47 +33,47 @@
 			_item = item;
 		}
 
-		public TextFieldWrapper BaseTextField
+		public ITextFieldWrapper BaseTextField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public BooleanFieldWrapper BaseBooleanField
+		public IBooleanFieldWrapper BaseBooleanField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public DateTimeFieldWrapper BaseDateTimeField
+		public IDateTimeFieldWrapper BaseDateTimeField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public FileFieldWrapper BaseFileField
+		public IFileFieldWrapper BaseFileField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public GeneralLinkFieldWrapper BaseGeneralLinkField
+		public IGeneralLinkFieldWrapper BaseGeneralLinkField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public ImageFieldWrapper BaseImageField
+		public IImageFieldWrapper BaseImageField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public LinkFieldWrapper BaseLinkField
+		public ILinkFieldWrapper BaseLinkField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public ListFieldWrapper BaseListField
+		public IListFieldWrapper BaseListField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public RichTextFieldWrapper BaseRichTextField
+		public IRichTextFieldWrapper BaseRichTextField
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -86,15 +86,15 @@
 	[TemplateMapping("{02F5002C-325E-4E5A-9C93-A97724ED3400}", "InterfaceMap")]
 	public partial interface IScTemplate : IItemWrapper, IScBaseTemplate
 	{
-		BooleanFieldWrapper BooleanField { get; }
-		DateTimeFieldWrapper DateTimeField { get; }
-		FileFieldWrapper FileField { get; }
-		GeneralLinkFieldWrapper GeneralLinkField { get; }
-		ImageFieldWrapper ImageField { get; }
-		LinkFieldWrapper LinkField { get; }
-		ListFieldWrapper ListField { get; }
-		RichTextFieldWrapper RichTextField { get; }
-		TextFieldWrapper TextField { get; }
+		IBooleanFieldWrapper BooleanField { get; }
+		IDateTimeFieldWrapper DateTimeField { get; }
+		IFileFieldWrapper FileField { get; }
+		IGeneralLinkFieldWrapper GeneralLinkField { get; }
+		IImageFieldWrapper ImageField { get; }
+		ILinkFieldWrapper LinkField { get; }
+		IListFieldWrapper ListField { get; }
+		IRichTextFieldWrapper RichTextField { get; }
+		ITextFieldWrapper TextField { get; }
 	}
 
 	[TemplateMapping("{02F5002C-325E-4E5A-9C93-A97724ED3400}")]
@@ -108,92 +108,92 @@
 			_item = item;
 		}
 
-		public BooleanFieldWrapper BooleanField
+		public IBooleanFieldWrapper BooleanField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public DateTimeFieldWrapper DateTimeField
+		public IDateTimeFieldWrapper DateTimeField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public FileFieldWrapper FileField
+		public IFileFieldWrapper FileField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public GeneralLinkFieldWrapper GeneralLinkField
+		public IGeneralLinkFieldWrapper GeneralLinkField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public ImageFieldWrapper ImageField
+		public IImageFieldWrapper ImageField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public LinkFieldWrapper LinkField
+		public ILinkFieldWrapper LinkField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public ListFieldWrapper ListField
+		public IListFieldWrapper ListField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public RichTextFieldWrapper RichTextField
+		public IRichTextFieldWrapper RichTextField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public TextFieldWrapper TextField
+		public ITextFieldWrapper TextField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public BooleanFieldWrapper BaseBooleanField
+		public IBooleanFieldWrapper BaseBooleanField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public DateTimeFieldWrapper BaseDateTimeField
+		public IDateTimeFieldWrapper BaseDateTimeField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public FileFieldWrapper BaseFileField
+		public IFileFieldWrapper BaseFileField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public GeneralLinkFieldWrapper BaseGeneralLinkField
+		public IGeneralLinkFieldWrapper BaseGeneralLinkField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public ImageFieldWrapper BaseImageField
+		public IImageFieldWrapper BaseImageField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public LinkFieldWrapper BaseLinkField
+		public ILinkFieldWrapper BaseLinkField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public ListFieldWrapper BaseListField
+		public IListFieldWrapper BaseListField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public RichTextFieldWrapper BaseRichTextField
+		public IRichTextFieldWrapper BaseRichTextField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public TextFieldWrapper BaseTextField
+		public ITextFieldWrapper BaseTextField
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -225,15 +225,15 @@
 
 	public partial interface IScUnmappedTemplate : IItemWrapper, IScBaseTemplate
 	{
-		BooleanFieldWrapper BooleanField { get; }
-		DateTimeFieldWrapper DateTimeField { get; }
-		FileFieldWrapper FileField { get; }
-		GeneralLinkFieldWrapper GeneralLinkField { get; }
-		ImageFieldWrapper ImageField { get; }
-		LinkFieldWrapper LinkField { get; }
-		ListFieldWrapper ListField { get; }
-		RichTextFieldWrapper RichTextField { get; }
-		TextFieldWrapper TextField { get; }
+		IBooleanFieldWrapper BooleanField { get; }
+		IDateTimeFieldWrapper DateTimeField { get; }
+		IFileFieldWrapper FileField { get; }
+		IGeneralLinkFieldWrapper GeneralLinkField { get; }
+		IImageFieldWrapper ImageField { get; }
+		ILinkFieldWrapper LinkField { get; }
+		IListFieldWrapper ListField { get; }
+		IRichTextFieldWrapper RichTextField { get; }
+		ITextFieldWrapper TextField { get; }
 	}
 
 	public partial class ScUnmappedTemplateTemplate : ItemWrapper, IScUnmappedTemplate
@@ -246,92 +246,92 @@
 			_item = item;
 		}
 
-		public BooleanFieldWrapper BooleanField
+		public IBooleanFieldWrapper BooleanField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public DateTimeFieldWrapper DateTimeField
+		public IDateTimeFieldWrapper DateTimeField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public FileFieldWrapper FileField
+		public IFileFieldWrapper FileField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public GeneralLinkFieldWrapper GeneralLinkField
+		public IGeneralLinkFieldWrapper GeneralLinkField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public ImageFieldWrapper ImageField
+		public IImageFieldWrapper ImageField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public LinkFieldWrapper LinkField
+		public ILinkFieldWrapper LinkField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public ListFieldWrapper ListField
+		public IListFieldWrapper ListField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public RichTextFieldWrapper RichTextField
+		public IRichTextFieldWrapper RichTextField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public TextFieldWrapper TextField
+		public ITextFieldWrapper TextField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public BooleanFieldWrapper BaseBooleanField
+		public IBooleanFieldWrapper BaseBooleanField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public DateTimeFieldWrapper BaseDateTimeField
+		public IDateTimeFieldWrapper BaseDateTimeField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public FileFieldWrapper BaseFileField
+		public IFileFieldWrapper BaseFileField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public GeneralLinkFieldWrapper BaseGeneralLinkField
+		public IGeneralLinkFieldWrapper BaseGeneralLinkField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public ImageFieldWrapper BaseImageField
+		public IImageFieldWrapper BaseImageField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public LinkFieldWrapper BaseLinkField
+		public ILinkFieldWrapper BaseLinkField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public ListFieldWrapper BaseListField
+		public IListFieldWrapper BaseListField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public RichTextFieldWrapper BaseRichTextField
+		public IRichTextFieldWrapper BaseRichTextField
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public TextFieldWrapper BaseTextField
+		public ITextFieldWrapper BaseTextField
 		{
 			get { throw new NotImplementedException(); }
 		}

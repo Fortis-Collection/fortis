@@ -1,12 +1,13 @@
-﻿using Sitecore.Data.Fields;
+﻿using System;
+using Sitecore.Data.Fields;
 
 namespace Fortis.Model.Fields
 {
-	public class GeneralLinkFieldWrapper : LinkFieldWrapper
+	public class GeneralLinkFieldWrapper : LinkFieldWrapper, IGeneralLinkFieldWrapper
 	{
 		protected LinkField LinkField
 		{
-			get { return (Sitecore.Data.Fields.LinkField)Field; }
+			get { return Field; }
 		}
 
 		public string AlternateText
@@ -34,7 +35,7 @@ namespace Fortis.Model.Fields
 			get { return LinkField.Class; }
 		}
 
-		public override string URL
+		public override string Url
 		{
 			get
 			{
@@ -70,7 +71,7 @@ namespace Fortis.Model.Fields
 
 		public static implicit operator string(GeneralLinkFieldWrapper field)
 		{
-			return field.URL;
+			return field.Url;
 		}
 	}
 }
