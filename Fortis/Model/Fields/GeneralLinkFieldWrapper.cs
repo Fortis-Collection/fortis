@@ -9,27 +9,27 @@ namespace Fortis.Model.Fields
 			get { return (Sitecore.Data.Fields.LinkField)Field; }
 		}
 
-		public string AlternateText
+		public virtual string AlternateText
 		{
 			get { return LinkField.Title; }
 		}
 
-		public string Description
+		public virtual string Description
 		{
 			get { return LinkField.Text; }
 		}
 
-		public bool IsInternal
+		public virtual bool IsInternal
 		{
 			get { return LinkField.IsInternal; }
 		}
 
-		public bool IsMediaLink
+		public virtual bool IsMediaLink
 		{
 			get { return LinkField.IsMediaLink; }
 		}
 
-		public string Styles
+		public virtual string Styles
 		{
 			get { return LinkField.Class; }
 		}

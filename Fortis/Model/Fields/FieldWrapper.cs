@@ -15,17 +15,17 @@ namespace Fortis.Model.Fields
 			get { return _field; }
 		}
 
-		public bool Modified
+		public virtual bool Modified
 		{
 			get { return _modified; }
 		}
 
-		public object Original
+		public virtual object Original
 		{
 			get { return _field; }
 		}
 
-		public string RawValue
+		public virtual string RawValue
 		{
 			get
 			{
@@ -71,7 +71,7 @@ namespace Fortis.Model.Fields
 			return field.RawValue;
 		}
 
-        public string ToHtmlString()
+		public virtual string ToHtmlString()
         {
             return Render().ToString();
         }

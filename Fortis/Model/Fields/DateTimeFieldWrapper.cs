@@ -14,7 +14,7 @@ namespace Fortis.Model.Fields
 			get { return (Sitecore.Data.Fields.DateField)Field; }
 		}
 
-		public DateTime Value
+		public virtual DateTime Value
 		{
 			get { return DateField.DateTime; }
 		}
@@ -24,7 +24,7 @@ namespace Fortis.Model.Fields
 		{
 		}
 
-		public IHtmlString Render(bool includeTime)
+		public virtual IHtmlString Render(bool includeTime)
 		{
 			return Render(includeTime ? Sitecore.Context.Language.CultureInfo.DateTimeFormat.FullDateTimePattern : Sitecore.Context.Language.CultureInfo.DateTimeFormat.ShortDatePattern);
 		}

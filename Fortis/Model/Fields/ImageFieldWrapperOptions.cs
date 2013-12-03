@@ -9,17 +9,17 @@ namespace Fortis.Model.Fields
 	{
 		private int[] _cornerRadii;
 
-		public int Width { get; set; }
-		public int Height { get; set; }
-		public bool Crop { get; set; }
-		public int CornerRadius
+		public virtual int Width { get; set; }
+		public virtual int Height { get; set; }
+		public virtual bool Crop { get; set; }
+		public virtual int CornerRadius
 		{
 			set
 			{
 				_cornerRadii = new int[] { value };
 			}
 		}
-		public int[] CornerRadii
+		public virtual int[] CornerRadii
 		{
 			get
 			{

@@ -23,47 +23,47 @@ namespace Fortis.Model
 			get { return _fields; }
 		}
 
-		public object Original
+		public virtual object Original
 		{
 			get { return _item; }
 		}
 
-		public string DatabaseName
+		public virtual string DatabaseName
 		{
 			get { return Item.Database.Name; }
 		}
 
-		public string LanguageName
+		public virtual string LanguageName
 		{
 			get { return Item.Language.Name; }
 		}
 
-		public string ItemLocation
+		public virtual string ItemLocation
 		{
 			get { return Item.Paths.FullPath; }
 		}
 
-		public Guid ItemID
+		public virtual Guid ItemID
 		{
 			get { return Item.ID.Guid; }
 		}
 
-		public string ItemShortID
+		public virtual string ItemShortID
 		{
 			get { return Item.ID.ToShortID().ToString(); }
 		}
 
-		public string ItemName
+		public virtual string ItemName
 		{
 			get { return Item.Name; }
 		}
 
-		public int ChildCount
+		public virtual int ChildCount
 		{
 			get { return Item.Children.Count; }
 		}
 
-		public bool HasChildren
+		public virtual bool HasChildren
 		{
 			get { return Item.HasChildren; }
 		}
@@ -140,7 +140,7 @@ namespace Fortis.Model
 			return (FieldWrapper)Fields[key];
 		}
 
-		public void Save()
+		public virtual void Save()
 		{
 			if (_item.Editing.IsEditing)
 			{
@@ -148,17 +148,17 @@ namespace Fortis.Model
 			}
 		}
 
-		public void Delete()
+		public virtual void Delete()
 		{
 			_item.Delete();
 		}
 
-		public void Publish()
+		public virtual void Publish()
 		{
 			Publish(false);
 		}
 
-		public void Publish(bool children)
+		public virtual void Publish(bool children)
 		{
 			var publishOptions = new PublishOptions(Factory.GetDatabase("master"), Factory.GetDatabase("web"), PublishMode.SingleItem, Item.Language, DateTime.Now);
 			var publisher = new Publisher(publishOptions);

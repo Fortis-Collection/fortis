@@ -43,7 +43,7 @@ namespace Fortis.Model.Fields
 
 		}
 
-		public string Render(LinkFieldWrapperOptions options)
+		public virtual string Render(LinkFieldWrapperOptions options)
 		{
 			var fieldRenderer = new FieldRenderer();
 

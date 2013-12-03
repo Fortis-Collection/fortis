@@ -15,12 +15,12 @@ namespace Fortis.Model.Fields
 		{
 		}
 
-		public string GetSourceURI()
+		public virtual string GetSourceURI()
 		{
 			return GetSourceURI(false);
 		}
 
-		public string GetSourceURI(bool absolute)
+		public virtual string GetSourceURI(bool absolute)
 		{
 			if (Field.Value.Length == 0)
 			{
@@ -32,7 +32,7 @@ namespace Fortis.Model.Fields
 			}
 		}
 
-		public string Render(ImageFieldWrapperOptions options)
+		public virtual string Render(ImageFieldWrapperOptions options)
 		{
 			string param = "";
 

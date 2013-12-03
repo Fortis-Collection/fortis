@@ -5,7 +5,7 @@ namespace Fortis.Model.Fields
 {
 	public class BooleanFieldWrapper : FieldWrapper
 	{
-		public bool Value
+		public virtual bool Value
 		{
 			get { return RawValue.Equals("1"); }
 			set { RawValue = value ? "1" : ""; }

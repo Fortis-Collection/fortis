@@ -19,12 +19,12 @@ namespace Fortis.Model
 			_renderingItem = renderingItem;
 		}
 
-		public TPageItem PageItem
+		public virtual TPageItem PageItem
 		{
 			get { return _pageItem; }
 		}
 
-		public TRenderingItem RenderingItem
+		public virtual TRenderingItem RenderingItem
 		{
 			get { return _renderingItem; }
 		}
@@ -43,7 +43,7 @@ namespace Fortis.Model
 			_renderingParametersItem = renderingParametersItem;
 		}
 
-		public TRenderingParametersItem RenderingParametersItem
+		public virtual TRenderingParametersItem RenderingParametersItem
 		{
 			get { return _renderingParametersItem; }
 		}
