@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Sitecore.Data.Fields;
 using Sitecore.Web.UI.WebControls;
 
 namespace Fortis.Model.Fields
 {
-	public class LinkFieldWrapper : FieldWrapper
+	public class LinkFieldWrapper : FieldWrapper, ILinkFieldWrapper
 	{
 		private IItemWrapper _target;
 
@@ -24,7 +21,7 @@ namespace Fortis.Model.Fields
 			}
 		}
 
-		public virtual string URL
+		public virtual string Url
 		{
 			get
 			{
@@ -79,7 +76,12 @@ namespace Fortis.Model.Fields
 
 		public static implicit operator string(LinkFieldWrapper field)
 		{
-			return field.URL;
+			return field.Url;
+		}
+
+		public string Value
+		{
+			get { return Url; }
 		}
 	}
 }

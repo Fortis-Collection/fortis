@@ -7,7 +7,7 @@ namespace Fortis.Model.Fields
 {
 	public class LinkFieldWrapperOptions
 	{
-		public string HTML { get; set; }
-		public string CSS { get; set; }
+		public virtual string HTML { get; set; }
+		public virtual string CSS { get; set; }
 	}
 }

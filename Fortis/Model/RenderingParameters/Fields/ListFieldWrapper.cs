@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using Sitecore.Data.Fields;
+using Fortis.Model.Fields;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
-	public class ListFieldWrapper : FieldWrapper, IEnumerable<IItemWrapper>
+	public class ListFieldWrapper : FieldWrapper, IListFieldWrapper
 	{
 		public ListFieldWrapper(string value)
 			: base(value)
@@ -13,7 +14,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 
 		public IEnumerable<T> GetItems<T>() where T : IItemWrapper
 		{
-			var list = Value.Split('|');
+			var list = _value.Split('|');
 
 			foreach (var id in list)
 			{
@@ -37,6 +38,23 @@ namespace Fortis.Model.RenderingParameters.Fields
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
+		}
+
+		public IEnumerable<Guid> Value
+		{
+			get
+			{
+				var list = base._value.Split('|'); 
+
+				foreach (var id in list)
+				{
+					Guid guid;
+					if (Guid.TryParse(id, out guid))
+					{
+						yield return guid;
+					}
+				}
+			}
 		}
 	}
 }
