@@ -400,16 +400,5 @@
 
 			return this.GetContextItem<T>();
 		}
-
-		// Search
-		public T RetrieveAll<T>(string searchterm)
-		{
-			using (var context = ContentSearchManager.GetIndex("").CreateSearchContext())
-			{
-				IQueryable<SearchResultItem> searchQuery = context.GetQueryable<SearchResultItem>().Where(item => item.TemplateName.Equals(""));
-			}
-
-			throw new NotImplementedException();
-		}
 	}
 }

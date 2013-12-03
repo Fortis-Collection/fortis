@@ -38,10 +38,10 @@ namespace Fortis.Model.Fields
 		}
 
 		public LinkFieldWrapper(Field field)
-			: base(field)
-		{
+			: base(field) { }
 
-		}
+		public LinkFieldWrapper(string key, ref ItemWrapper item, string value = null)
+			: base(key, ref item, value) { }
 
 		public string Render(LinkFieldWrapperOptions options)
 		{

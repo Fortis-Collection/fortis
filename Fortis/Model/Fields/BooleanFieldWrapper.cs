@@ -12,9 +12,10 @@ namespace Fortis.Model.Fields
 		}
 
 		public BooleanFieldWrapper(Field field)
-			: base(field)
-		{
-		}
+			: base(field) { }
+
+		public BooleanFieldWrapper(string key, ref ItemWrapper item, string value = null)
+			: base(key, ref item, value) { }
 
 		public static implicit operator bool(BooleanFieldWrapper field)
 		{

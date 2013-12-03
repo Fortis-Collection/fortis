@@ -36,7 +36,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 			Value = value;
 		}
 
-		public virtual IHtmlString Render()
+		public virtual IHtmlString Render(string parameters = null, bool editing = false)
 		{
 			throw new NotImplementedException();
 		}

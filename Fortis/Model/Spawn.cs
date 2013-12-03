@@ -236,8 +236,70 @@ namespace Fortis.Model
 			}
 		}
 
+		internal static bool IsCompatibleTemplate<T>(Guid templateId) where T : IItemWrapper
+		{
+			return IsCompatibleTemplate(templateId, typeof(T));
+		}
+
+		internal static bool IsCompatibleTemplate(Guid templateId, Type template)
+		{
+			// template Type must at least implement IItemWrapper
+			if (template != typeof(IItemWrapper))
+			{
+				// TODO: Implement
+			}
+
+			return true;
+		}
+
+		internal static bool IsCompatibleFieldType<T>(string fieldType) where T : FieldWrapper
+		{
+			return IsCompatibleFieldType(fieldType, typeof(T));
+		}
+
+		internal static bool IsCompatibleFieldType(string scFieldType, Type fieldType)
+		{
+			switch (scFieldType.ToLower())
+			{
+				case "checkbox":
+					return fieldType == typeof(BooleanFieldWrapper);
+				case "image":
+					return fieldType == typeof(ImageFieldWrapper);
+				case "date":
+				case "datetime":
+					return fieldType == typeof(DateTimeFieldWrapper);
+				case "checklist":
+				case "treelist":
+				case "treelistex":
+				case "multilist":
+					return fieldType == typeof(ListFieldWrapper);
+				case "file":
+					return fieldType == typeof(FileFieldWrapper);
+				case "droplink":
+				case "droptree":
+					return fieldType == typeof(LinkFieldWrapper);
+				case "general link":
+					return fieldType == typeof(GeneralLinkFieldWrapper);
+				case "text":
+				case "single-line text":
+				case "multi-line text":
+				case "number":
+				case "droplist":
+					return fieldType == typeof(TextFieldWrapper);
+				case "rich text":
+					return fieldType == typeof(RichTextFieldWrapper);
+				default:
+					return false;
+			}
+		}
+
 		internal static IFieldWrapper FromField(Field field)
 		{
+			if (field == null)
+			{
+				return null;
+			}
+
 			switch (field.Type.ToLower())
 			{
 				case "checkbox":

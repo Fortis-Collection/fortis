@@ -10,7 +10,7 @@ namespace Fortis.Model
 	{
 		string RawValue { get; set; }
 		bool Modified { get; }
-		IHtmlString Render();
+		IHtmlString Render(string parameters = null, bool editing = true);
 		string ToString();
 	}
 }

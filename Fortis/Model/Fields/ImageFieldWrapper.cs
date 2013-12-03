@@ -11,9 +11,10 @@ namespace Fortis.Model.Fields
 	public class ImageFieldWrapper : FieldWrapper
 	{
 		public ImageFieldWrapper(Field field)
-			: base(field)
-		{
-		}
+			: base(field) { }
+
+		public ImageFieldWrapper(string key, ref ItemWrapper item, string value = null)
+			: base(key, ref item, value) { }
 
 		public string GetSourceURI()
 		{

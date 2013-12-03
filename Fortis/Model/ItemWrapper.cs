@@ -13,9 +13,43 @@ namespace Fortis.Model
 		private Item _item;
 		private Dictionary<string, IFieldWrapper> _fields;
 
-		protected Item Item
+		public ItemWrapper() : this(null)
 		{
-			get { return _item; }
+
+		}
+
+		public ItemWrapper(Item item)
+		{
+			_item = item;
+			_fields = new Dictionary<string, IFieldWrapper>();
+		}
+
+		public ItemWrapper(Guid id) : this(null)
+		{
+			_itemId = id;
+		}
+
+		internal Item Item
+		{
+			get
+			{
+				if (_item == null && _itemId != default(Guid))
+				{
+					_item = Sitecore.Context.Database.GetItem(new Sitecore.Data.ID(_itemId));
+
+					if (_item == null)
+					{
+						throw new Exception("Fortis: Item with ID of " + _itemId + " not found in " + Sitecore.Context.Database.Name);
+					}
+
+					if (!Spawn.IsCompatibleTemplate(_item.TemplateID.Guid, this.GetType()))
+					{
+						throw new Exception("Fortis: Item " + _itemId + " of template " + _item.TemplateID.Guid + " is not compatible with " + this.GetType());
+					}
+				}
+
+				return _item;
+			}
 		}
 
 		protected Dictionary<string, IFieldWrapper> Fields
@@ -43,9 +77,12 @@ namespace Fortis.Model
 			get { return Item.Paths.FullPath; }
 		}
 
+		private Guid _itemId = default(Guid);
+
 		public Guid ItemID
 		{
-			get { return Item.ID.Guid; }
+			get { return Item == null ? _itemId : Item.ID.Guid; }
+			set { _itemId = value; }
 		}
 
 		public string ItemShortID
@@ -73,10 +110,28 @@ namespace Fortis.Model
 			get { return Item.Name; }
 		}
 
-		public ItemWrapper(Item item)
+		protected T GetField<T>(string key, string lazyValue = null) where T : IFieldWrapper
 		{
-			_item = item;
-			_fields = new Dictionary<string, IFieldWrapper>();
+			if (!Fields.ContainsKey(key))
+			{
+				var typeOfT = typeof(T);
+				object[] constructorArgs;
+
+				if (lazyValue == null)
+				{
+					var scField = Item.Fields[key];
+
+					constructorArgs = new object[] { scField };
+				}
+				else
+				{
+					constructorArgs = new object[] { key, this, lazyValue };
+				}
+
+				Fields[key] = (IFieldWrapper)Activator.CreateInstance(typeOfT, constructorArgs);
+			}
+
+			return (T)Fields[key];
 		}
 
 		protected FieldWrapper GetField(string key)
@@ -87,70 +142,28 @@ namespace Fortis.Model
 			{
 				try
 				{
-					var scField = Item.Fields[key];
-
-					switch (scField.Type.ToLower())
-					{
-						case "checkbox":
-							Fields[key] = new BooleanFieldWrapper(scField);
-							break;
-						case "image":
-							Fields[key] = new ImageFieldWrapper(scField);
-							break;
-						case "date":
-						case "datetime":
-							Fields[key] = new DateTimeFieldWrapper(scField);
-							break;
-						case "checklist":
-						case "treelist":
-						case "treelistex":
-						case "multilist":
-							Fields[key] = new ListFieldWrapper(scField);
-							break;
-						case "file":
-							Fields[key] = new FileFieldWrapper(scField);
-							break;
-						case "droplink":
-						case "droptree":
-							Fields[key] = new LinkFieldWrapper(scField);
-							break;
-						case "general link":
-							Fields[key] = new GeneralLinkFieldWrapper(scField);
-							break;
-						case "text":
-						case "single-line text":
-						case "multi-line text":
-						case "number":
-						case "droplist":
-							Fields[key] = new TextFieldWrapper(scField);
-							break;
-						case "rich text":
-							Fields[key] = new RichTextFieldWrapper(scField);
-							break;
-						default:
-							Fields[key] = null;
-							break;
-					}
+					Spawn.FromField(Item.Fields[key]);
 				}
-				catch
+				catch(Exception ex)
 				{
-					// Todo: Log error
+					Sitecore.Diagnostics.Log.Error("Fortis: Unable to spawn field with key " + key, ex, this);
 				}
 			}
+
 			return (FieldWrapper)Fields[key];
 		}
 
 		public void Save()
 		{
-			if (_item.Editing.IsEditing)
+			if (Item.Editing.IsEditing)
 			{
-				_item.Editing.EndEdit();
+				Item.Editing.EndEdit();
 			}
 		}
 
 		public void Delete()
 		{
-			_item.Delete();
+			Item.Delete();
 		}
 
 		public void Publish()

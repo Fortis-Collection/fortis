@@ -13,11 +13,12 @@ namespace Fortis.Model.Fields
 		}
 
 		public FileFieldWrapper(Field field)
-			: base(field)
-		{
-		}
+			: base(field) { }
 
-		public override IHtmlString Render()
+		public FileFieldWrapper(string key, ref ItemWrapper item, string value = null)
+			: base(key, ref item, value) { }
+
+		public override IHtmlString Render(string parameters = null, bool editing = false)
 		{
 			var returnValue = string.Empty;
 
@@ -26,7 +27,7 @@ namespace Fortis.Model.Fields
 				returnValue = "/" + MediaManager.GetMediaUrl(MediaItem);
 			}
 
-			return new HtmlString(returnValue);
+			return new HtmlString(returnValue);	
 		}
 	}
 }
