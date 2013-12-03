@@ -3,7 +3,7 @@ using Sitecore.Data.Fields;
 
 namespace Fortis.Model.Fields
 {
-	public class BooleanFieldWrapper : FieldWrapper
+	public class BooleanFieldWrapper : FieldWrapper, IBooleanFieldWrapper
 	{
 		public bool Value
 		{
