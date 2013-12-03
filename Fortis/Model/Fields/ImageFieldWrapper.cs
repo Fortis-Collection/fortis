@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Sitecore.Data.Fields;
 using Sitecore.Resources.Media;
 using Sitecore.Web.UI.WebControls;
 
 namespace Fortis.Model.Fields
 {
-	public class ImageFieldWrapper : FieldWrapper
+	public class ImageFieldWrapper : FieldWrapper, IImageFieldWrapper
 	{
 		public ImageFieldWrapper(Field field)
 			: base(field) { }
@@ -16,12 +13,12 @@ namespace Fortis.Model.Fields
 		public ImageFieldWrapper(string key, ref ItemWrapper item, string value = null)
 			: base(key, ref item, value) { }
 
-		public string GetSourceURI()
+		public string GetSourceUri()
 		{
-			return GetSourceURI(false);
+			return GetSourceUri(false);
 		}
 
-		public string GetSourceURI(bool absolute)
+		public string GetSourceUri(bool absolute)
 		{
 			if (Field.Value.Length == 0)
 			{
@@ -69,7 +66,12 @@ namespace Fortis.Model.Fields
 
 		public static implicit operator string(ImageFieldWrapper field)
 		{
-			return field.GetSourceURI();
+			return field.GetSourceUri();
+		}
+
+		public string Value
+		{
+			get { return GetSourceUri(); }
 		}
 	}
 }

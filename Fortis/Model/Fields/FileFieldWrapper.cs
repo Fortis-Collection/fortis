@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Fortis.Model.Fields
 {
-	public class FileFieldWrapper : FieldWrapper
+	public class FileFieldWrapper : FieldWrapper, IFileFieldWrapper
 	{
 		protected Item MediaItem
 		{
@@ -28,6 +28,11 @@ namespace Fortis.Model.Fields
 			}
 
 			return new HtmlString(returnValue);	
+		}
+
+		public string Value
+		{
+			get { return Render().ToHtmlString(); }
 		}
 	}
 }

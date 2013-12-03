@@ -7,12 +7,16 @@ namespace Fortis.Model.Fields
 		public TextFieldWrapper(Field field)
 			: base(field) { }
 
+<<<<<<< HEAD
 		public TextFieldWrapper(string key, ref ItemWrapper item, string value = null)
 			: base(key, ref item, value) { }
+=======
+		}
 
 		public string Value
 		{
 			get { return ToHtmlString(); }
 		}
+>>>>>>> develop
 	}
 }

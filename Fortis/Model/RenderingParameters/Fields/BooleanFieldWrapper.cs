@@ -1,11 +1,11 @@
 ﻿using System;
-using Sitecore.Data.Fields;
+using Fortis.Model.Fields;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
-	public class BooleanFieldWrapper : FieldWrapper
+	public class BooleanFieldWrapper : FieldWrapper, IBooleanFieldWrapper
 	{
-		public new bool Value
+		public bool Value
 		{
 			get { return RawValue.Equals("1"); }
 			set { throw new NotImplementedException(); }

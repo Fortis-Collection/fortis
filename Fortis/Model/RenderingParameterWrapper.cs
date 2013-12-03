@@ -17,10 +17,9 @@ namespace Fortis.Model
 			_parameters = parameters;
 		}
 
-		protected FieldWrapper GetField(string key, string type)
+		protected IFieldWrapper GetField(string key, string type)
 		{
-			key = key.ToLower();
-			if (!_fields.Keys.Contains(key))
+			if (!_fields.ContainsKey(key))
 			{
 				try
 				{

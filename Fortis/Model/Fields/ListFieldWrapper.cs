@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Sitecore.Data.Fields;
 
 namespace Fortis.Model.Fields
 {
-	public class ListFieldWrapper : FieldWrapper, IEnumerable<IItemWrapper>
+	public class ListFieldWrapper : FieldWrapper, IListFieldWrapper
 	{
 		public ListFieldWrapper(Field field)
 			: base(field) { }
@@ -38,6 +39,23 @@ namespace Fortis.Model.Fields
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
+		}
+
+		public IEnumerable<Guid> Value
+		{
+			get
+			{
+				var listField = (MultilistField)Field;
+
+				foreach (var id in listField.Items)
+				{
+					Guid guid;
+					if (Guid.TryParse(id, out guid))
+					{
+						yield return guid;
+					}
+				}
+			}
 		}
 	}
 }

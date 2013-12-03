@@ -13,4 +13,9 @@ namespace Fortis.Model
 		IHtmlString Render(string parameters = null, bool editing = true);
 		string ToString();
 	}
+
+	public interface IFieldWrapper<T> : IFieldWrapper
+	{
+		T Value { get; }
+	}
 }

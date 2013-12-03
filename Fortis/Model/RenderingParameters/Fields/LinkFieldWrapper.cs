@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Sitecore.Data.Fields;
-using Sitecore.Web.UI.WebControls;
+using Fortis.Model.Fields;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
-	public class LinkFieldWrapper : FieldWrapper
+	public class LinkFieldWrapper : FieldWrapper, ILinkFieldWrapper
 	{
 		private IItemWrapper _target;
 
@@ -24,7 +20,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 			}
 		}
 
-		public virtual string URL
+		public virtual string Url
 		{
 			get
 			{
@@ -43,13 +39,18 @@ namespace Fortis.Model.RenderingParameters.Fields
 
 		}
 
+		public string Render(LinkFieldWrapperOptions options)
+		{
+			throw new NotImplementedException();
+		}
+
 		public virtual T GetTarget<T>() where T : IItemWrapper
 		{
-            var item = Sitecore.Context.Database.GetItem(Value);
+            var item = Sitecore.Context.Database.GetItem(_value);
             if (item != null)
             {
                 var wrapper = Spawn.FromItem<T>(item);
-                return (T)((wrapper is T) ? wrapper : null); ;
+                return (T)((wrapper is T) ? wrapper : null); 
             }
 
             return default(T);
@@ -57,7 +58,12 @@ namespace Fortis.Model.RenderingParameters.Fields
 
         public static implicit operator string(LinkFieldWrapper field)
 		{
-			return field.URL;
+			return field.Url;
+		}
+
+		public string Value
+		{
+			get { return Url; }
 		}
 	}
 }

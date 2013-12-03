@@ -7,7 +7,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 {
 	public class FieldWrapper : IFieldWrapper
 	{
-		protected string Value;
+		protected string _value;
 
 		public bool Modified
 		{
@@ -16,14 +16,14 @@ namespace Fortis.Model.RenderingParameters.Fields
 
 		public object Original
 		{
-			get { return Value; }
+			get { return _value; }
 		}
 
 		public string RawValue
 		{
 			get
 			{
-				return Value;
+				return _value;
 			}
 			set
 			{
@@ -33,7 +33,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 
 		public FieldWrapper(string value)
 		{
-			Value = value;
+			_value = value;
 		}
 
 		public virtual IHtmlString Render(string parameters = null, bool editing = false)

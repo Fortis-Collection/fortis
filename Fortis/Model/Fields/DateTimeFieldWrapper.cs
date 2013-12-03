@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Sitecore.Data.Fields;
 using System.Web;
 
 namespace Fortis.Model.Fields
 {
-	public class DateTimeFieldWrapper : FieldWrapper
+	public class DateTimeFieldWrapper : FieldWrapper, IDateTimeFieldWrapper
 	{
 		protected DateField DateField
 		{

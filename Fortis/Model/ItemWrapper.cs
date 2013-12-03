@@ -134,11 +134,11 @@ namespace Fortis.Model
 			return (T)Fields[key];
 		}
 
-		protected FieldWrapper GetField(string key)
+		protected IFieldWrapper GetField(string key)
 		{
 			key = key.ToLower();
 
-			if (!Fields.Keys.Contains(key))
+			if (!Fields.ContainsKey(key))
 			{
 				try
 				{
