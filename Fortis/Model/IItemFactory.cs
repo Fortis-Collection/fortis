@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Web.UI;
 
 namespace Fortis.Model
@@ -41,5 +43,7 @@ namespace Fortis.Model
 		T SelectSibling<T>(IItemWrapper wrapper) where T : IItemWrapper;
 		IEnumerable<T> SelectSiblings<T>(IItemWrapper wrapper) where T : IItemWrapper;
 		T GetRenderingDataSource<T>(Control control) where T : IItemWrapper;
+		IQueryable<T> Search<T>(string index) where T : IItemWrapper;
+		List<T> Search<T>(string index, Expression<Func<T, bool>> expression) where T : IItemWrapper;
 	}
 }

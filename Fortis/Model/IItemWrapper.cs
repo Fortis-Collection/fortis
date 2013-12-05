@@ -11,6 +11,7 @@ namespace Fortis.Model
 		Guid ItemID { get; }
 		string ItemShortID { get; }
 		string ItemName { get; }
+		Guid TemplateId { get; }
 		bool HasChildren { get; }
 		int ChildCount { get; }
 		string SearchTitle { get; }

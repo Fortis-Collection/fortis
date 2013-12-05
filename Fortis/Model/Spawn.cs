@@ -129,6 +129,30 @@ namespace Fortis.Model
 			}
 		}
 
+		internal static Type GetImplementation<T>() where T : IItemWrapper
+		{
+			var typeOfT = typeof(T);
+
+			if (!typeOfT.IsInterface)
+			{
+				throw new Exception("Fortis: An interface implementing IITemWrapper must be passed as the generic argument to get the corresponding implementation. " + typeOfT.Name + " is not an interface.");
+			}
+
+			if (!InterfaceTemplateMap.ContainsKey(typeOfT))
+			{
+				throw new Exception("Fortis: Type " + typeOfT.Name + " does not exist in interface template map");
+			}
+
+			var templateId = InterfaceTemplateMap[typeOfT];
+
+			if (!TemplateMap.ContainsKey(templateId))
+			{
+				throw new Exception("Fortis: Template ID " + templateId + " does not exist in template map");
+			}
+
+			return TemplateMap[templateId];
+		}
+
 		internal static IItemWrapper FromItem(Item item)
 		{
 			return FromItem<IItemWrapper>(item);

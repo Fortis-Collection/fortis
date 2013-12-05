@@ -5,6 +5,10 @@ using Sitecore.Configuration;
 using Sitecore.Data.Items;
 using Sitecore.Publishing;
 using Fortis.Model.Fields;
+using System.Runtime.CompilerServices;
+using Sitecore.ContentSearch;
+using System.ComponentModel;
+using Sitecore.ContentSearch.Converters;
 
 namespace Fortis.Model
 {
@@ -12,6 +16,7 @@ namespace Fortis.Model
 	{
 		private Item _item;
 		private Dictionary<string, IFieldWrapper> _fields;
+		private Dictionary<string, object> _lazyFields;
 
 		public ItemWrapper() : this(null)
 		{
@@ -22,11 +27,35 @@ namespace Fortis.Model
 		{
 			_item = item;
 			_fields = new Dictionary<string, IFieldWrapper>();
+			_lazyFields = new Dictionary<string, object>();
 		}
 
 		public ItemWrapper(Guid id) : this(null)
 		{
 			_itemId = id;
+		}
+
+		[IndexerName("LazyFields")]
+		public virtual string this[string key]
+		{
+			get
+			{
+				if (key == null)
+				{
+					throw new ArgumentNullException("key");
+				}
+
+				return _lazyFields.ContainsKey(key.ToLowerInvariant()) ? _lazyFields[key.ToLowerInvariant()].ToString() : null;
+			}
+			set
+			{
+				if (key == null)
+				{
+					throw new ArgumentNullException("key");
+				}
+
+				_lazyFields[key.ToLowerInvariant()] = value;
+			}
 		}
 
 		internal Item Item
@@ -79,10 +108,24 @@ namespace Fortis.Model
 
 		private Guid _itemId = default(Guid);
 
+		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_group")]
 		public Guid ItemID
 		{
 			get { return Item == null ? _itemId : Item.ID.Guid; }
 			set { _itemId = value; }
+		}
+
+		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_template")]
+		public Guid TemplateId
+		{
+			get
+			{
+				return Spawn.TemplateMap.FirstOrDefault(t => t.Value == this.GetType()).Key;
+			}
+			set
+			{
+
+			}
 		}
 
 		public string ItemShortID

@@ -9,6 +9,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+using System.Linq.Expressions;
 
 	public partial class ItemFactory : IItemFactory
 	{
@@ -399,6 +400,19 @@
 			}
 
 			return this.GetContextItem<T>();
+		}
+
+		public IQueryable<T> Search<T>(string index) where T : IItemWrapper
+		{
+			using (var searchContext = ContentSearchManager.GetIndex(index).CreateSearchContext())
+			{
+				var implementationType = Spawn.GetImplementation<T>();
+
+				var searchMethod = searchContext.GetType().GetMethods().FirstOrDefault(m => string.Equals(m.Name, "GetQueryable") && m.GetGenericArguments().Count().Equals(1));
+				var genericSearchMethod = searchMethod.MakeGenericMethod(implementationType);
+
+				return ((IQueryable<T>)genericSearchMethod.Invoke(searchContext, null)).Select(i => (T)i);
+			}
 		}
 	}
 }

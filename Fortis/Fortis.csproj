@@ -33,6 +33,10 @@
     <Reference Include="Sitecore.ContentSearch">
       <HintPath>..\_Lib\Sitecore.ContentSearch.dll</HintPath>
     </Reference>
+    <Reference Include="Sitecore.ContentSearch.Linq, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_Lib\Sitecore.ContentSearch.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="Sitecore.Kernel">
       <HintPath>..\_Lib\Sitecore.Kernel.dll</HintPath>
     </Reference>
