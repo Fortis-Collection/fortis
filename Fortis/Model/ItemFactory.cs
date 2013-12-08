@@ -1,15 +1,21 @@
 ﻿namespace Fortis.Model
 {
 	using Fortis.Providers;
+	using Fortis.Search;
 	using Sitecore.Configuration;
 	using Sitecore.ContentSearch;
+	using Sitecore.ContentSearch.Diagnostics;
+	using Sitecore.ContentSearch.Linq.Common;
+	using Sitecore.ContentSearch.LuceneProvider;
 	using Sitecore.ContentSearch.SearchTypes;
+	using Sitecore.ContentSearch.SolrProvider;
+	using Sitecore.ContentSearch.Utilities;
 	using Sitecore.Data;
 	using Sitecore.Data.Items;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-using System.Linq.Expressions;
+	using System.Linq.Expressions;
 
 	public partial class ItemFactory : IItemFactory
 	{
@@ -402,17 +408,79 @@ using System.Linq.Expressions;
 			return this.GetContextItem<T>();
 		}
 
-		public IQueryable<T> Search<T>(string index) where T : IItemWrapper
+		public IQueryable<T> Search<T>(IProviderSearchContext context, IExecutionContext executionContext = null) where T : IItemWrapper
 		{
-			using (var searchContext = ContentSearchManager.GetIndex(index).CreateSearchContext())
+			IQueryable<T> results = null;
+
+			#region Lucene
+
+			var luceneContext = context as LuceneSearchContext;
+
+			if (luceneContext != null)
 			{
-				var implementationType = Spawn.GetImplementation<T>();
-
-				var searchMethod = searchContext.GetType().GetMethods().FirstOrDefault(m => string.Equals(m.Name, "GetQueryable") && m.GetGenericArguments().Count().Equals(1));
-				var genericSearchMethod = searchMethod.MakeGenericMethod(implementationType);
-
-				return ((IQueryable<T>)genericSearchMethod.Invoke(searchContext, null)).Select(i => (T)i);
+				return GetLuceneQueryable<T>(luceneContext, executionContext);
 			}
+
+			#endregion
+
+			#region Solr
+
+			var solrContext = context as SolrSearchContext;
+
+			if (solrContext != null)
+			{
+				return GetSolrQueryable<T>(solrContext, executionContext);
+			}
+
+			#endregion
+
+			if (solrContext == null && luceneContext == null)
+			{
+				throw new Exception("Fortis: Unsupported search context");
+			}
+
+			if (results != null)
+			{
+				var templateId = Spawn.InterfaceTemplateMap[typeof(T)];
+
+				return results.Where(item => item.TemplateId == templateId);
+			}
+
+			return results;
+		}
+
+		public IQueryable<TResult> GetLuceneQueryable<TResult>(LuceneSearchContext context, IExecutionContext executionContext) where TResult : IItemWrapper
+		{
+			// once the hacks in the Hacks namespace are fixed (around update 2, I hear), the commented line below can be used instead of BugFixIndex
+			// in fact once Update 3? is released, this class may become largely irrelevant as interface support is coming natively
+			//var linqToLuceneIndex = (executionContext == null) ? new LinqToLuceneIndex<TResult>(context) : new LinqToLuceneIndex<TResult>(context, executionContext);
+			var linqToLuceneIndex = (executionContext == null)
+										? new CustomLinqToLuceneIndex<TResult>(context)
+										: new CustomLinqToLuceneIndex<TResult>(context, executionContext);
+
+			if (ContentSearchConfigurationSettings.EnableSearchDebug)
+			{
+				((IHasTraceWriter)linqToLuceneIndex).TraceWriter = new LoggingTraceWriter(SearchLog.Log);
+			}
+
+			return linqToLuceneIndex.GetQueryable();
+		}
+
+		public IQueryable<TResult> GetSolrQueryable<TResult>(SolrSearchContext context, IExecutionContext executionContext) where TResult : IItemWrapper
+		{
+			// once the hacks in the Hacks namespace are fixed (around update 2, I hear), the commented line below can be used instead of BugFixIndex
+			// in fact once Update 3? is released, this class may become largely irrelevant as interface support is coming natively
+			//var linqToSolrIndex = (executionContext == null) ? new LinqToSolrIndex<TResult>(context) : new LinqToSolrIndex<TResult>(context, executionContext);
+			var linqToSolrIndex = (executionContext == null)
+										? new CustomLinqToSolrIndex<TResult>(context)
+										: new CustomLinqToSolrIndex<TResult>(context, executionContext);
+
+			if (ContentSearchConfigurationSettings.EnableSearchDebug)
+			{
+				((IHasTraceWriter)linqToSolrIndex).TraceWriter = new LoggingTraceWriter(SearchLog.Log);
+			}
+
+			return linqToSolrIndex.GetQueryable();
 		}
 	}
 }

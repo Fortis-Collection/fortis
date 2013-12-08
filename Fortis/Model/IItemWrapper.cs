@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Sitecore.ContentSearch;
+using Sitecore.ContentSearch.Converters;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Fortis.Model
 {
@@ -8,9 +11,11 @@ namespace Fortis.Model
 		string DatabaseName { get; }
 		string LanguageName { get; }
 		string ItemLocation { get; }
+		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_group")]
 		Guid ItemID { get; }
 		string ItemShortID { get; }
 		string ItemName { get; }
+		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_template")]
 		Guid TemplateId { get; }
 		bool HasChildren { get; }
 		int ChildCount { get; }

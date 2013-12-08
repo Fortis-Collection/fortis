@@ -65,5 +65,20 @@ namespace Fortis.Model.RenderingParameters.Fields
 		{
 			get { return Url; }
 		}
+
+		public Guid ItemId
+		{
+			get
+			{
+				Guid id;
+
+				if (!Guid.TryParse(RawValue, out id))
+				{
+					throw new Exception("Fortis: Unable to convert raw value " + RawValue + " to GUID");
+				}
+
+				return id;
+			}
+		}
 	}
 }

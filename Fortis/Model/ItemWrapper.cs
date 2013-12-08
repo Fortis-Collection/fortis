@@ -35,6 +35,11 @@ namespace Fortis.Model
 			_itemId = id;
 		}
 
+		public ItemWrapper(Guid id, Dictionary<string, object> lazyFields) : this(id)
+		{
+			_lazyFields = lazyFields;
+		}
+
 		[IndexerName("LazyFields")]
 		public virtual string this[string key]
 		{
@@ -153,12 +158,19 @@ namespace Fortis.Model
 			get { return Item.Name; }
 		}
 
-		protected T GetField<T>(string key, string lazyValue = null) where T : IFieldWrapper
+		protected T GetField<T>(string key, string searchIndexKey = null) where T : IFieldWrapper
 		{
 			if (!Fields.ContainsKey(key))
 			{
+				string lazyValue = null;
 				var typeOfT = typeof(T);
 				object[] constructorArgs;
+
+				// Attempt to get lazy value
+				if (searchIndexKey != null && _lazyFields != null && _lazyFields.ContainsKey(searchIndexKey))
+				{
+					lazyValue = _lazyFields[searchIndexKey].ToString();
+				}
 
 				if (lazyValue == null)
 				{

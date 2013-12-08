@@ -37,6 +37,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_Lib\Sitecore.ContentSearch.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="Sitecore.ContentSearch.Linq.Lucene">
+      <HintPath>..\_Lib\Sitecore.ContentSearch.Linq.Lucene.dll</HintPath>
+    </Reference>
+    <Reference Include="Sitecore.ContentSearch.Linq.Solr">
+      <HintPath>..\_Lib\Sitecore.ContentSearch.Linq.Solr.dll</HintPath>
+    </Reference>
+    <Reference Include="Sitecore.ContentSearch.LuceneProvider">
+      <HintPath>..\_Lib\Sitecore.ContentSearch.LuceneProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="Sitecore.ContentSearch.SolrProvider">
+      <HintPath>..\_Lib\Sitecore.ContentSearch.SolrProvider.dll</HintPath>
+    </Reference>
     <Reference Include="Sitecore.Kernel">
       <HintPath>..\_Lib\Sitecore.Kernel.dll</HintPath>
     </Reference>
@@ -95,7 +107,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Spawn.cs" />
     <Compile Include="Model\TemplateMappingAttribute.cs" />
+    <Compile Include="Search\CustomExpressionParser.cs" />
+    <Compile Include="Search\CustomGenericQueryable.cs" />
+    <Compile Include="Search\CustomLinqToLuceneIndex.cs" />
+    <Compile Include="Search\CustomLinqToSolrIndex.cs" />
+    <Compile Include="Search\SearchExtensions.cs" />
+    <Compile Include="Search\SolrDocumentTypeMapper.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

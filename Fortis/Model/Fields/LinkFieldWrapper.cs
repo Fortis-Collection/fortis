@@ -1,6 +1,7 @@
 ﻿using System;
 using Sitecore.Data.Fields;
 using Sitecore.Web.UI.WebControls;
+using Sitecore.Data;
 
 namespace Fortis.Model.Fields
 {
@@ -18,6 +19,25 @@ namespace Fortis.Model.Fields
 				}
 
 				return _target;
+			}
+		}
+
+		public Guid ItemId
+		{
+			get
+			{
+				if (ShortID.IsShortID(RawValue))
+				{
+					return ShortID.Parse(RawValue).ToID().Guid;
+				}
+				else if (ID.IsID(RawValue))
+				{
+					return ID.Parse(RawValue).Guid;
+				}
+				else
+				{
+					return Guid.Parse(RawValue);
+				}
 			}
 		}
 
@@ -64,14 +84,28 @@ namespace Fortis.Model.Fields
 
 		public virtual T GetTarget<T>() where T : IItemWrapper
 		{
-            var item = Sitecore.Context.Database.GetItem(RawValue);
-            if (item != null)
-            {
-                var wrapper = Spawn.FromItem<T>(item);
-                return (T)((wrapper is T) ? wrapper : null); ;
-            }
+			if (ShortID.IsShortID(RawValue))
+			{
+				return GetTarget<T>(ShortID.Parse(RawValue).ToID());
+			}
+			else if (ID.IsID(RawValue))
+			{
+				return GetTarget<T>(ID.Parse(RawValue));
+			}
 
-            return default(T);
+			return default(T);
+		}
+
+		private T GetTarget<T>(ID id) where T : IItemWrapper
+		{
+			var item = Sitecore.Context.Database.GetItem(id);
+			if (item != null)
+			{
+				var wrapper = Spawn.FromItem<T>(item);
+				return (T)((wrapper is T) ? wrapper : null); ;
+			}
+
+			return default(T);
 		}
 
 		public static implicit operator string(LinkFieldWrapper field)
