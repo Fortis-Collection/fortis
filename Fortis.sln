@@ -18,8 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{39923E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.Test", "Fortis.Test\Fortis.Test.csproj", "{085736F5-A9B7-49B0-8A6C-AEEDE7F3CC59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.Search", "Fortis.Search\Fortis.Search.csproj", "{F1C384BC-9E9D-4653-BEFB-0B5FC0862C63}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,10 +40,6 @@ Global
 		{085736F5-A9B7-49B0-8A6C-AEEDE7F3CC59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{085736F5-A9B7-49B0-8A6C-AEEDE7F3CC59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{085736F5-A9B7-49B0-8A6C-AEEDE7F3CC59}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1C384BC-9E9D-4653-BEFB-0B5FC0862C63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1C384BC-9E9D-4653-BEFB-0B5FC0862C63}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1C384BC-9E9D-4653-BEFB-0B5FC0862C63}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1C384BC-9E9D-4653-BEFB-0B5FC0862C63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
