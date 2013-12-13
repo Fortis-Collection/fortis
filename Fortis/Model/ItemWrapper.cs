@@ -197,7 +197,7 @@ namespace Fortis.Model
 			{
 				try
 				{
-					Spawn.FromField(Item.Fields[key]);
+					Fields[key] = Spawn.FromField(Item.Fields[key]);
 				}
 				catch(Exception ex)
 				{
