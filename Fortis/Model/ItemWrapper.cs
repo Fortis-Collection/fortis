@@ -158,18 +158,18 @@ namespace Fortis.Model
 			get { return Item.Name; }
 		}
 
-		protected T GetField<T>(string key, string searchIndexKey = null) where T : IFieldWrapper
+		protected T GetField<T>(string key, string lazyFieldsKey = null) where T : IFieldWrapper
 		{
 			if (!Fields.ContainsKey(key))
 			{
-				string lazyValue = null;
+				object lazyValue = null;
 				var typeOfT = typeof(T);
 				object[] constructorArgs;
 
 				// Attempt to get lazy value
-				if (searchIndexKey != null && _lazyFields != null && _lazyFields.ContainsKey(searchIndexKey))
+				if (lazyFieldsKey != null && _lazyFields != null && _lazyFields.ContainsKey(lazyFieldsKey))
 				{
-					lazyValue = _lazyFields[searchIndexKey].ToString();
+					lazyValue = _lazyFields[lazyFieldsKey];
 				}
 
 				if (lazyValue == null)

@@ -22,7 +22,7 @@ namespace Fortis.Model.Fields
 			_field = field;
 		}
 
-		public FieldWrapper(string key, ref ItemWrapper item, string value = null)
+		public FieldWrapper(string key, ref ItemWrapper item, string value)
 		{
 			Sitecore.Diagnostics.Assert.ArgumentNotNull(key, "key");
 			Sitecore.Diagnostics.Assert.ArgumentNotNull(item, "item");
@@ -36,7 +36,7 @@ namespace Fortis.Model.Fields
 		{
 			get
 			{
-				if (_field == null && _item != null)
+				if (IsLazy && _item != null)
 				{
 					_field = _item.Item.Fields[_key];
 
@@ -108,5 +108,10 @@ namespace Fortis.Model.Fields
         {
             return Render().ToString();
         }
+
+		public bool IsLazy
+		{
+			get { return _field == null; }
+		}
     }
 }

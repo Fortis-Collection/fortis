@@ -16,10 +16,10 @@ namespace Fortis.Model
 		void Publish(IEnumerable<IItemWrapper> wrappers, bool children);
 		T GetSiteHome<T>() where T : IItemWrapper;
 		T GetContextItem<T>() where T : IItemWrapper;
-		IRenderingModel<TPageItem, TRenderingItem> GetRenderingContextItems<TPageItem, TRenderingItem>()
+		IRenderingModel<TPageItem, TRenderingItem> GetRenderingContextItems<TPageItem, TRenderingItem>(IItemFactory factory = null)
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper;
-		IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>()
+		IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>(IItemFactory factory = null)
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper
 			where TRenderingParametersItem : IRenderingParameterWrapper;

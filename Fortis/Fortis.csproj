@@ -63,6 +63,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\GuidExtensions.cs" />
+    <Compile Include="Extensions\IEnumerableExtenstions.cs" />
     <Compile Include="Model\Fields\IBooleanFieldWrapper.cs" />
     <Compile Include="Model\Fields\IDateTimeFieldWrapper.cs" />
     <Compile Include="Model\Fields\IFileFieldWrapper.cs" />
@@ -113,6 +115,7 @@
     <Compile Include="Search\CustomLinqToSolrIndex.cs" />
     <Compile Include="Search\SearchExtensions.cs" />
     <Compile Include="Search\SolrDocumentTypeMapper.cs" />
+    <Compile Include="SitecoreExtensions\IEnumerableExtensions.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

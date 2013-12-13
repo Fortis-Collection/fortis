@@ -10,13 +10,15 @@ namespace Fortis.Model
 		where TPageItem : IItemWrapper
 		where TRenderingItem : IItemWrapper
 	{
+		private readonly IItemFactory _itemFactory;
 		private readonly TPageItem _pageItem;
 		private readonly TRenderingItem _renderingItem;
 
-		public RenderingModel(TPageItem pageItem, TRenderingItem renderingItem)
+		public RenderingModel(TPageItem pageItem, TRenderingItem renderingItem, IItemFactory factory = null)
 		{
 			_pageItem = pageItem;
 			_renderingItem = renderingItem;
+			_itemFactory = factory;
 		}
 
 		public TPageItem PageItem
@@ -28,6 +30,8 @@ namespace Fortis.Model
 		{
 			get { return _renderingItem; }
 		}
+
+		public IItemFactory Factory { get { return _itemFactory; } }
 	}
 
 	public class RenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> : RenderingModel<TPageItem, TRenderingItem>, IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem>
@@ -37,8 +41,8 @@ namespace Fortis.Model
 	{
 		private readonly TRenderingParametersItem _renderingParametersItem;
 
-		public RenderingModel(TPageItem pageItem, TRenderingItem renderingItem, TRenderingParametersItem renderingParametersItem)
-			: base(pageItem, renderingItem)
+		public RenderingModel(TPageItem pageItem, TRenderingItem renderingItem, TRenderingParametersItem renderingParametersItem, IItemFactory factory = null)
+			: base(pageItem, renderingItem, factory)
 		{
 			_renderingParametersItem = renderingParametersItem;
 		}

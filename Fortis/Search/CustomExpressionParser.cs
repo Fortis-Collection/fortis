@@ -17,7 +17,7 @@ namespace Fortis.Search
 	/// <summary>
 	/// This class patches the default expression parser class to fix some bugs around interface queries
 	/// </summary>
-	public class CustomExpressionParser : Sitecore.ContentSearch.Linq.Parsing.ExpressionParser
+	public class CustomExpressionParser : ExpressionParser
 	{
 		public CustomExpressionParser(Type elementType, Type itemType, FieldNameTranslator fieldNameTranslator)
 			: base(elementType, itemType, fieldNameTranslator) { }

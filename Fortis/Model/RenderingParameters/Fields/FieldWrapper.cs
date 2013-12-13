@@ -55,5 +55,10 @@ namespace Fortis.Model.RenderingParameters.Fields
         {
             return Render().ToString();
         }
+
+		public bool IsLazy
+		{
+			get { return true; }
+		}
 	}
 }
