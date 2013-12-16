@@ -6,6 +6,8 @@ namespace Fortis.Model.Fields
 {
 	public class DateTimeFieldWrapper : FieldWrapper, IDateTimeFieldWrapper
 	{
+		private DateTime _dateTime;
+
 		protected DateField DateField
 		{
 			get { return (Sitecore.Data.Fields.DateField)Field; }
@@ -13,7 +15,7 @@ namespace Fortis.Model.Fields
 
 		public DateTime Value
 		{
-			get { return DateField.DateTime; }
+			get { return IsLazy ? _dateTime : DateField.DateTime; }
 		}
 
 		public DateTimeFieldWrapper(Field field)
@@ -21,6 +23,12 @@ namespace Fortis.Model.Fields
 
 		public DateTimeFieldWrapper(string key, ref ItemWrapper item, string value = null)
 			: base(key, ref item, value) { }
+
+		public DateTimeFieldWrapper(string key, ref ItemWrapper item, DateTime value)
+			: base(key, ref item, value.ToString())
+		{
+			_dateTime = value;
+		}
 
 		public IHtmlString Render(bool includeTime)
 		{
