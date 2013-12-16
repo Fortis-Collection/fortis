@@ -441,9 +441,18 @@
 
 			if (results != null)
 			{
-				var templateId = Spawn.InterfaceTemplateMap[typeof(T)];
+				var typeOfT = typeof(T);
 
-				return results.Where(item => item.TemplateId == templateId);
+				if (typeOfT != typeof(IItemWrapper))
+				{
+					var templateId = Spawn.InterfaceTemplateMap[typeof(T)];
+
+					return results.Where(item => item.TemplateId == templateId);
+				}
+				else
+				{
+					return results;
+				}
 			}
 
 			return results;

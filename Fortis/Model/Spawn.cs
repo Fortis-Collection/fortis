@@ -355,11 +355,14 @@ namespace Fortis.Model
 				case "text":
 				case "single-line text":
 				case "multi-line text":
-				case "number":
 				case "droplist":
 					return fieldType == typeof(TextFieldWrapper);
 				case "rich text":
 					return fieldType == typeof(RichTextFieldWrapper);
+				case "number":
+					return fieldType == typeof(NumberFieldWrapper);
+				case "integer":
+					return fieldType == typeof(IntegerFieldWrapper);
 				default:
 					return false;
 			}
@@ -396,11 +399,14 @@ namespace Fortis.Model
 				case "text":
 				case "single-line text":
 				case "multi-line text":
-				case "number":
 				case "droplist":
 					return new TextFieldWrapper(field);
 				case "rich text":
 					return new RichTextFieldWrapper(field);
+				case "number":
+					return new NumberFieldWrapper(field);
+				case "integer":
+					return new IntegerFieldWrapper(field);
 				default:
 					return null;
 			}

@@ -70,10 +70,14 @@
     <Compile Include="Model\Fields\IFileFieldWrapper.cs" />
     <Compile Include="Model\Fields\IGeneralLinkFieldWrapper.cs" />
     <Compile Include="Model\Fields\IImageFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IIntegerFieldWrapper.cs" />
     <Compile Include="Model\Fields\ILinkFieldWrapper.cs" />
     <Compile Include="Model\Fields\IListFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IntegerFieldWrapper.cs" />
+    <Compile Include="Model\Fields\INumberFieldWrapper.cs" />
     <Compile Include="Model\Fields\IRichTextFieldWrapper.cs" />
     <Compile Include="Model\Fields\ITextFieldWrapper.cs" />
+    <Compile Include="Model\Fields\NumberFieldWrapper.cs" />
     <Compile Include="Providers\IContextProvider.cs" />
     <Compile Include="Model\IRenderingModel.cs" />
     <Compile Include="Model\Events\ItemCreated.cs" />
