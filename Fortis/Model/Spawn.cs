@@ -233,12 +233,15 @@ namespace Fortis.Model
 						var typeTemplateId = InterfaceTemplateMap[wrapperType];
 						var itemTemplate = TemplateManager.GetTemplate(item);
 
-						if (itemTemplate.DescendsFrom(new ID(typeTemplateId)))
+						if (itemTemplate != null)
 						{
-							// Get type information
-							var type = TemplateMap[typeTemplateId];
+							if (itemTemplate.DescendsFrom(new ID(typeTemplateId)))
+							{
+								// Get type information
+								var type = TemplateMap[typeTemplateId];
 
-							return (IItemWrapper)Activator.CreateInstance(type, new object[] { item });
+								return (IItemWrapper)Activator.CreateInstance(type, new object[] { item });
+							}
 						}
 					}
 				}
