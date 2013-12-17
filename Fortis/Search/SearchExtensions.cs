@@ -7,27 +7,31 @@ namespace Fortis.Search
 {
 	public static class SearchExtensions
 	{
-		public static IQueryable<T> ContainsIdOr<T>(this IQueryable<T> queryable, string propertyName, IEnumerable<Guid> ids)
+		public static IQueryable<TSource> ContainsIdOr<TSource, TKey>(this IQueryable<TSource> queryable, Expression<Func<TSource, TKey>> keySelector, IEnumerable<Guid> ids)
 		{
-			return ContainsId(queryable, propertyName, ids, true);
+			return ContainsId(queryable, keySelector, ids, true);
 		}
 
-		public static IQueryable<T> ContainsIdAnd<T>(this IQueryable<T> queryable, string propertyName, IEnumerable<Guid> ids)
+		public static IQueryable<TSource> ContainsIdAnd<TSource, TKey>(this IQueryable<TSource> queryable, Expression<Func<TSource, TKey>> keySelector, IEnumerable<Guid> ids)
 		{
-			return ContainsId(queryable, propertyName, ids, true);
+			return ContainsId(queryable, keySelector, ids, false);
 		}
 
-		private static IQueryable<T> ContainsId<T>(IQueryable<T> queryable, string propertyName, IEnumerable<Guid> ids, bool or)
+		private static IQueryable<TSource> ContainsId<TSource, TKey>(IQueryable<TSource> queryable, Expression<Func<TSource, TKey>> keySelector, IEnumerable<Guid> ids, bool or)
 		{
+			if (!(keySelector.Body is MemberExpression))
+			{
+				throw new InvalidOperationException("Fortis: Expression must be a member expression");
+			}
+
 			var returnQueryable = queryable;
-			var typeofT = typeof(T);
+			var typeofT = typeof(TSource);
 			var parameter = Expression.Parameter(typeofT);
-			var property = Expression.Property(parameter, propertyName);
 			var constants = ids.Select(id => Expression.Constant(id));
-			var expressions = constants.Select(constant => Expression.Call(typeof(Enumerable), "Contains", new Type[] { typeof(Guid) }, property, constant));
+			var expressions = constants.Select(constant => Expression.Call(typeof(Enumerable), "Contains", new Type[] { typeof(Guid) }, keySelector.Body, constant));
 
 			var aggregateExpressiosn = expressions.Select(expression => (Expression)expression).Aggregate((x, y) => or ? Expression.OrElse(x, y) : Expression.AndAlso(x, y));
-			var lambda = Expression.Lambda<Func<T, bool>>(aggregateExpressiosn, parameter);
+			var lambda = Expression.Lambda<Func<TSource, bool>>(aggregateExpressiosn, parameter);
 
 			return returnQueryable.Where(lambda);
 		}
