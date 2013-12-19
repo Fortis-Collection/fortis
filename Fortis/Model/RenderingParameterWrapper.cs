@@ -32,6 +32,7 @@ namespace Fortis.Model
 						case "treelist":
 						case "treelistex":
 						case "multilist":
+						case "tags":
 							_fields[key] = new ListFieldWrapper(_parameters[key]);
 							break;
 						case "droplink":
