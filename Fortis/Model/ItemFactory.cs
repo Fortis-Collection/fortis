@@ -418,7 +418,7 @@
 
 			if (luceneContext != null)
 			{
-				return GetLuceneQueryable<T>(luceneContext, executionContext);
+				results = GetLuceneQueryable<T>(luceneContext, executionContext);
 			}
 
 			#endregion
@@ -429,7 +429,7 @@
 
 			if (solrContext != null)
 			{
-				return GetSolrQueryable<T>(solrContext, executionContext);
+				results = GetSolrQueryable<T>(solrContext, executionContext);
 			}
 
 			#endregion
@@ -443,9 +443,9 @@
 			{
 				var typeOfT = typeof(T);
 
-				if (typeOfT != typeof(IItemWrapper))
+				if (Spawn.InterfaceTemplateMap.ContainsKey(typeOfT))
 				{
-					var templateId = Spawn.InterfaceTemplateMap[typeof(T)];
+					var templateId = Spawn.InterfaceTemplateMap[typeOfT];
 
 					return results.Where(item => item.TemplateId == templateId);
 				}

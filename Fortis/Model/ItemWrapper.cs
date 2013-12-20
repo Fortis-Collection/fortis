@@ -96,14 +96,23 @@ namespace Fortis.Model
 			get { return _item; }
 		}
 
+		public bool IsLazy
+		{
+			get { return _item == null; }
+		}
+
 		public string DatabaseName
 		{
 			get { return Item.Database.Name; }
 		}
 
+		private string _languageName = null;
+
+		[IndexField("_language")]
 		public string LanguageName
 		{
-			get { return Item.Language.Name; }
+			get { return IsLazy && !string.IsNullOrEmpty(_languageName) ? _languageName : Item.Language.Name; }
+			set { _languageName = value; }
 		}
 
 		public string ItemLocation
@@ -116,21 +125,14 @@ namespace Fortis.Model
 		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_group")]
 		public Guid ItemID
 		{
-			get { return Item == null ? _itemId : Item.ID.Guid; }
+			get { return IsLazy && _itemId != default(Guid) ? _itemId : Item.ID.Guid; }
 			set { _itemId = value; }
 		}
 
 		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_template")]
 		public Guid TemplateId
 		{
-			get
-			{
-				return Spawn.TemplateMap.FirstOrDefault(t => t.Value == this.GetType()).Key;
-			}
-			set
-			{
-
-			}
+			get { return Spawn.TemplateMap.FirstOrDefault(t => t.Value == this.GetType()).Key; }
 		}
 
 		public string ItemShortID
@@ -138,9 +140,13 @@ namespace Fortis.Model
 			get { return Item.ID.ToShortID().ToString(); }
 		}
 
+		private string _itemName = null;
+
+		[IndexField("_name")]
 		public string ItemName
 		{
-			get { return Item.Name; }
+			get { return IsLazy && !string.IsNullOrEmpty(_itemName) ? _itemName : Item.Name; }
+			set { _itemName = value; }
 		}
 
 		public int ChildCount

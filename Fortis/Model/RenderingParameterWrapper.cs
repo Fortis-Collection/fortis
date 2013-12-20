@@ -30,8 +30,10 @@ namespace Fortis.Model
 							break;
 						case "checklist":
 						case "treelist":
+						case "treelist with search":
 						case "treelistex":
 						case "multilist":
+						case "multilist with search":
 						case "tags":
 							_fields[key] = new ListFieldWrapper(_parameters[key]);
 							break;

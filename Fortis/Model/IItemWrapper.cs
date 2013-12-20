@@ -8,6 +8,7 @@ namespace Fortis.Model
 {
 	public partial interface IItemWrapper : IWrapper
 	{
+		bool IsLazy { get; }
 		string DatabaseName { get; }
 		string LanguageName { get; }
 		string ItemLocation { get; }
