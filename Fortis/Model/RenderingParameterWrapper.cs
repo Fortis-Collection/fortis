@@ -21,12 +21,16 @@ namespace Fortis.Model
 		{
 			if (!_fields.ContainsKey(key))
 			{
+				var parameterValue = string.Empty;
+
+				_parameters.TryGetValue(key, out parameterValue);
+
 				try
 				{
 					switch (type)
 					{
 						case "checkbox":
-							_fields[key] = new BooleanFieldWrapper(_parameters[key]);
+							_fields[key] = new BooleanFieldWrapper(parameterValue);
 							break;
 						case "checklist":
 						case "treelist":
@@ -35,32 +39,51 @@ namespace Fortis.Model
 						case "multilist":
 						case "multilist with search":
 						case "tags":
-							_fields[key] = new ListFieldWrapper(_parameters[key]);
+							_fields[key] = new ListFieldWrapper(parameterValue);
 							break;
 						case "droplink":
 						case "droptree":
 						case "general link":
-							_fields[key] = new LinkFieldWrapper(_parameters[key]);
+							_fields[key] = new LinkFieldWrapper(parameterValue);
 							break;
 						case "single-line text":
 						case "multi-line text":
 						case "rich text":
 						case "droplist":
 						case "number":
-							_fields[key] = new TextFieldWrapper(_parameters[key]);
+							_fields[key] = new TextFieldWrapper(parameterValue);
 							break;
 						default:
-							_fields[key] = new FieldWrapper(_parameters[key]);
+							_fields[key] = new FieldWrapper(parameterValue);
 							break;
 					}
 				}
-				catch
+				catch (Exception ex)
 				{
-					// Todo: Log error
+					var paramKeys = new StringBuilder();
+
+					foreach (var param in _parameters)
+					{
+						paramKeys.AppendLine(param.Key);
+					}
+
+					throw new Exception("Fortis: An error occurred while mapping the field with key " + key
+										+ Environment.NewLine
+										+ Environment.NewLine
+										+ "Available parameters: "
+										+ Environment.NewLine
+										+ paramKeys.ToString(), ex);
 				}
 			}
 
-			return (FieldWrapper)_fields[key];
+			try
+			{
+				return (FieldWrapper)_fields[key];
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Fortis: An error occurred while mppaing the field with key " + key, ex);
+			}
 		}
 
 		public object Original

@@ -447,7 +447,7 @@
 				{
 					var templateId = Spawn.InterfaceTemplateMap[typeOfT];
 
-					return results.Where(item => item.TemplateIds.Contains(templateId));
+					return results.Where(item => item.TemplateIds.Contains(templateId) && item.LanguageName == Sitecore.Context.Language.Name && item.IsLatestVersion);
 				}
 				else
 				{

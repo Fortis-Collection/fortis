@@ -74,7 +74,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 
 				if (!Guid.TryParse(RawValue, out id))
 				{
-					throw new Exception("Fortis: Unable to convert raw value " + RawValue + " to GUID");
+					id = default(Guid);
 				}
 
 				return id;

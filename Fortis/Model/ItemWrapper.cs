@@ -155,22 +155,29 @@ namespace Fortis.Model
 			get { return Item.ID.ToShortID().ToString(); }
 		}
 
-		private string _itemName = null;
+		private string _name = null;
+
+		[IndexField("_name")]
+		public string Name
+		{
+			get { return IsLazy && !string.IsNullOrEmpty(_name) ? _name : Item.Name; }
+			set { _name = value; }
+		}
 
 		[IndexField("_name")]
 		public string ItemName
 		{
-			get { return IsLazy && !string.IsNullOrEmpty(_itemName) ? _itemName : Item.Name; }
-			set { _itemName = value; }
+			get { return Name; }
+			set { Name = value; }
 		}
 
-		private string _itemDisplayName = null;
+		private string _displayName = null;
 
 		[IndexField("__display_name")]
-		public string ItemDisplayName
+		public string DisplayName
 		{
-			get { return IsLazy && !string.IsNullOrEmpty(_itemDisplayName) ? _itemDisplayName : Item.DisplayName; }
-			set { _itemDisplayName = value; }
+			get { return IsLazy && !string.IsNullOrEmpty(_displayName) ? _displayName : Item.DisplayName; }
+			set { _displayName = value; }
 		}
 
 		[IndexField("_latestversion")]

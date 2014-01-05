@@ -17,9 +17,12 @@ namespace Fortis.Model
 		Guid ItemID { get; }
 		string ItemShortID { get; }
 		[IndexField("_name")]
+		[Obsolete("Use Name property instead")]
 		string ItemName { get; }
+		[IndexField("_name")]
+		string Name { get; }
 		[IndexField("__display_name")]
-		string ItemDisplayName { get; }
+		string DisplayName { get; }
 		[IndexField("_latestversion")]
 		bool IsLatestVersion { get; }
 		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_template")]
