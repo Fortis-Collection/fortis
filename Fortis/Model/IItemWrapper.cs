@@ -10,14 +10,22 @@ namespace Fortis.Model
 	{
 		bool IsLazy { get; }
 		string DatabaseName { get; }
+		[IndexField("_language")]
 		string LanguageName { get; }
 		string ItemLocation { get; }
 		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_group")]
 		Guid ItemID { get; }
 		string ItemShortID { get; }
+		[IndexField("_name")]
 		string ItemName { get; }
+		[IndexField("__display_name")]
+		string ItemDisplayName { get; }
+		[IndexField("_latestversion")]
+		bool IsLatestVersion { get; }
 		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_template")]
 		Guid TemplateId { get; }
+		[IndexField("_templates")]
+		IEnumerable<Guid> TemplateIds { get; }
 		bool HasChildren { get; }
 		int ChildCount { get; }
 		string SearchTitle { get; }

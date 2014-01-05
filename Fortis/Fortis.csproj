@@ -117,6 +117,7 @@
     <Compile Include="Search\CustomGenericQueryable.cs" />
     <Compile Include="Search\CustomLinqToLuceneIndex.cs" />
     <Compile Include="Search\CustomLinqToSolrIndex.cs" />
+    <Compile Include="Search\ComputedFields\InheritedTemplates.cs" />
     <Compile Include="Search\SearchExtensions.cs" />
     <Compile Include="Search\SolrDocumentTypeMapper.cs" />
     <Compile Include="SitecoreExtensions\IEnumerableExtensions.cs" />

@@ -135,6 +135,21 @@ namespace Fortis.Model
 			get { return Spawn.TemplateMap.FirstOrDefault(t => t.Value == this.GetType()).Key; }
 		}
 
+		[IndexField("_templates")]
+		public IEnumerable<Guid> TemplateIds
+		{
+			get
+			{
+				foreach (var template in Spawn.InterfaceTemplateMap)
+				{
+					if (template.Key.IsAssignableFrom(this.GetType()))
+					{
+						yield return template.Value;
+					}
+				}
+			}
+		}
+
 		public string ItemShortID
 		{
 			get { return Item.ID.ToShortID().ToString(); }
@@ -147,6 +162,21 @@ namespace Fortis.Model
 		{
 			get { return IsLazy && !string.IsNullOrEmpty(_itemName) ? _itemName : Item.Name; }
 			set { _itemName = value; }
+		}
+
+		private string _itemDisplayName = null;
+
+		[IndexField("__display_name")]
+		public string ItemDisplayName
+		{
+			get { return IsLazy && !string.IsNullOrEmpty(_itemDisplayName) ? _itemDisplayName : Item.DisplayName; }
+			set { _itemDisplayName = value; }
+		}
+
+		[IndexField("_latestversion")]
+		public bool IsLatestVersion
+		{
+			get { return Item.Versions.IsLatestVersion(); }
 		}
 
 		public int ChildCount

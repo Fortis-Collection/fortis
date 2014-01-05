@@ -447,7 +447,7 @@
 				{
 					var templateId = Spawn.InterfaceTemplateMap[typeOfT];
 
-					return results.Where(item => item.TemplateId == templateId);
+					return results.Where(item => item.TemplateIds.Contains(templateId));
 				}
 				else
 				{
