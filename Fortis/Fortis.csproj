@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\_Lib\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="Sitecore.ContentSearch">
       <HintPath>..\_Lib\Sitecore.ContentSearch.dll</HintPath>
     </Reference>
@@ -118,6 +121,7 @@
     <Compile Include="Search\CustomLinqToLuceneIndex.cs" />
     <Compile Include="Search\CustomLinqToSolrIndex.cs" />
     <Compile Include="Search\ComputedFields\InheritedTemplates.cs" />
+    <Compile Include="Search\LuceneDocumentTypeMapper.cs" />
     <Compile Include="Search\SearchExtensions.cs" />
     <Compile Include="Search\SolrDocumentTypeMapper.cs" />
     <Compile Include="SitecoreExtensions\IEnumerableExtensions.cs" />
