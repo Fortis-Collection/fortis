@@ -302,6 +302,46 @@ namespace Fortis.Model
 			_item = null;
 		}
 
+		public virtual IEnumerable<T> Children<T>(bool recursive = false) where T : IItemWrapper
+		{
+			if (Item.HasChildren)
+			{
+				if (recursive)
+				{
+					return ChildrenRecursive<T>(this);
+				}
+				else
+				{
+					return Spawn.FromItems<T>(Item.Children.AsEnumerable());
+				}
+			}
+
+			return Enumerable.Empty<T>();
+		}
+
+		protected virtual IEnumerable<T> ChildrenRecursive<T>(IItemWrapper wrapper) where T : IItemWrapper
+		{
+			var children = wrapper.Children<IItemWrapper>();
+
+			foreach (var child in children)
+			{
+				if (child is T)
+				{
+					yield return (T)child;
+				}
+
+				if (child.HasChildren)
+				{
+					var innerChildren = ChildrenRecursive<T>(child);
+
+					foreach (var innerChild in innerChildren)
+					{
+						yield return (T)innerChild;
+					}
+				}
+			}
+		}
+
 		public virtual T Parent<T>() where T : IItemWrapper
 		{
 			return Parent<T>(Item.Parent);

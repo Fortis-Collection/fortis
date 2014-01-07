@@ -414,5 +414,16 @@ namespace Fortis.Model
 					return null;
 			}
 		}
+
+		internal static IEnumerable<T> FilterWrapperTypes<T>(IEnumerable<IItemWrapper> wrappers)
+		{
+			foreach (IItemWrapper wrapper in wrappers)
+			{
+				if (wrapper is T)
+				{
+					yield return (T)wrapper;
+				}
+			}
+		}
 	}
 }
