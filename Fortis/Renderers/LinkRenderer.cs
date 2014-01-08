@@ -106,7 +106,7 @@ namespace Fortis.Renderers
 					FieldRendererBase.AddAttribute(tag, key, str7);
 				}
 			}
-			if (_css.Length > 0)
+			if (!string.IsNullOrWhiteSpace(_css))
 			{
 				FieldRendererBase.AddAttribute(tag, "class", _css);
 			}
