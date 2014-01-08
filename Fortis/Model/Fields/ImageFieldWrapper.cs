@@ -2,6 +2,7 @@
 using Sitecore.Data.Fields;
 using Sitecore.Resources.Media;
 using Sitecore.Web.UI.WebControls;
+using System.Web;
 
 namespace Fortis.Model.Fields
 {
@@ -30,28 +31,31 @@ namespace Fortis.Model.Fields
 			}
 		}
 
-		public string Render(ImageFieldWrapperOptions options)
+		public IHtmlString Render(ImageFieldWrapperOptions options)
 		{
 			string param = "";
 
-			param += (options.Width > 0) ? "&width=" + options.Width : string.Empty;
-			param += (options.Height > 0) ? "&height=" + options.Height : string.Empty;
-			param += (options.Crop) ? "&crop=1" : string.Empty;
+			if (options != null)
+			{
+				param += (options.Width > 0) ? "&width=" + options.Width : string.Empty;
+				param += (options.Height > 0) ? "&height=" + options.Height : string.Empty;
+				param += (options.Crop) ? "&crop=1" : string.Empty;
 
-			if (options.CornerRadii.Length > 0)
-			{
-				if (options.CornerRadii.Length == 4)
+				if (options.CornerRadii.Length > 0)
 				{
-					param += "&rc=" + options.CornerRadii[0] + "," + options.CornerRadii[1] + "," + options.CornerRadii[2] + "," + options.CornerRadii[3];
+					if (options.CornerRadii.Length == 4)
+					{
+						param += "&rc=" + options.CornerRadii[0] + "," + options.CornerRadii[1] + "," + options.CornerRadii[2] + "," + options.CornerRadii[3];
+					}
+					else if (options.CornerRadii.Length == 1 && options.CornerRadii[0] > 0)
+					{
+						param += "&rc=" + options.CornerRadii[0];
+					}
 				}
-				else if (options.CornerRadii.Length == 1 && options.CornerRadii[0] > 0)
+				if (param.StartsWith("&"))
 				{
-					param += "&rc=" + options.CornerRadii[0];
+					param = param.Substring(1);
 				}
-			}
-			if (param.StartsWith("&"))
-			{
-				param = param.Substring(1);
 			}
 
 			var fieldRenderer = new FieldRenderer();
@@ -61,7 +65,7 @@ namespace Fortis.Model.Fields
 
 			var result = fieldRenderer.RenderField();
 
-			return result.FirstPart + result.LastPart;
+			return new HtmlString(result.FirstPart + result.LastPart);
 		}
 
 		public static implicit operator string(ImageFieldWrapper field)

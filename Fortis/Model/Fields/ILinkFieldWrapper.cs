@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 namespace Fortis.Model.Fields
 {
@@ -6,7 +7,7 @@ namespace Fortis.Model.Fields
 	{
 		Guid ItemId { get; }
 		string Url { get; }
-		string Render(LinkFieldWrapperOptions options);
+		IHtmlString Render(LinkFieldWrapperOptions options);
 		T GetTarget<T>() where T : IItemWrapper;
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Fortis.Model.Fields;
+using System.Web;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
@@ -39,7 +40,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 
 		}
 
-		public string Render(LinkFieldWrapperOptions options)
+		public IHtmlString Render(LinkFieldWrapperOptions options)
 		{
 			throw new NotImplementedException();
 		}

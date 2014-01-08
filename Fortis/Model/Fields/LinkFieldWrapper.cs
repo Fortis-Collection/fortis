@@ -2,6 +2,7 @@
 using Sitecore.Data.Fields;
 using Sitecore.Web.UI.WebControls;
 using Sitecore.Data;
+using System.Web;
 
 namespace Fortis.Model.Fields
 {
@@ -60,18 +61,25 @@ namespace Fortis.Model.Fields
 		public LinkFieldWrapper(string key, ref ItemWrapper item, string value = null)
 			: base(key, ref item, value) { }
 
-		public string Render(LinkFieldWrapperOptions options)
+		public IHtmlString Render(LinkFieldWrapperOptions options)
 		{
 			var fieldRenderer = new FieldRenderer();
 
-			if (options.HTML.Length > 0)
+			if (options != null)
 			{
-				fieldRenderer.RenderParameters.Add("innerHTML", options.HTML);
-			}
+				if (!string.IsNullOrWhiteSpace(options.InnerHtml))
+				{
+					fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.InnerHtmlParameterName, options.InnerHtml);
+				}
 
-			if (options.CSS.Length > 0)
-			{
-				fieldRenderer.RenderParameters.Add("css", options.CSS);
+				if (!string.IsNullOrWhiteSpace(options.Css))
+				{
+					fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.CssParameterName, options.Css);
+				}
+
+				fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.OptionsParameterName, string.Empty);
+				fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.HrefDefaultParameterName, options.DisplayHrefByDefault);
+				fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.EditorCssParameterName, options.IncludeContentEditorCss);
 			}
 
 			fieldRenderer.Item = Field.Item;
@@ -79,7 +87,7 @@ namespace Fortis.Model.Fields
 
 			var result = fieldRenderer.RenderField();
 
-			return result.FirstPart + result.LastPart;
+			return new HtmlString(result.FirstPart + result.LastPart);
 		}
 
 		public virtual T GetTarget<T>() where T : IItemWrapper
