@@ -15,7 +15,7 @@ namespace Fortis.Model.Fields
 
 		public virtual string InnerHtml { get; set; }
 		public virtual string Css { get; set; }
-		public virtual string IncludeContentEditorCss { get; set; }
-		public virtual string DisplayHrefByDefault { get; set; }
+		public virtual bool IncludeContentEditorCss { get; set; }
+		public virtual bool DisplayHrefByDefault { get; set; }
 	}
 }
