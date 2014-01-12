@@ -21,17 +21,17 @@ namespace Fortis.Model
 			_itemFactory = factory;
 		}
 
-		public TPageItem PageItem
+		public virtual TPageItem PageItem
 		{
 			get { return _pageItem; }
 		}
 
-		public TRenderingItem RenderingItem
+		public virtual TRenderingItem RenderingItem
 		{
 			get { return _renderingItem; }
 		}
 
-		public IItemFactory Factory { get { return _itemFactory; } }
+		public virtual IItemFactory Factory { get { return _itemFactory; } }
 	}
 
 	public class RenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> : RenderingModel<TPageItem, TRenderingItem>, IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem>
@@ -47,7 +47,7 @@ namespace Fortis.Model
 			_renderingParametersItem = renderingParametersItem;
 		}
 
-		public TRenderingParametersItem RenderingParametersItem
+		public virtual TRenderingParametersItem RenderingParametersItem
 		{
 			get { return _renderingParametersItem; }
 		}
