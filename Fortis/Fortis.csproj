@@ -81,6 +81,7 @@
     <Compile Include="Model\Fields\IRichTextFieldWrapper.cs" />
     <Compile Include="Model\Fields\ITextFieldWrapper.cs" />
     <Compile Include="Model\Fields\NumberFieldWrapper.cs" />
+    <Compile Include="Model\RenderingParameters\Fields\IntegerFieldWrapper.cs" />
     <Compile Include="Pipelines\RenderField\LinkRenderer.cs" />
     <Compile Include="Providers\IContextProvider.cs" />
     <Compile Include="Model\IRenderingModel.cs" />
