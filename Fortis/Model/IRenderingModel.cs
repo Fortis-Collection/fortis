@@ -7,7 +7,9 @@
 		where TRenderingItem : IItemWrapper
 	{
 		TPageItem PageItem { get; }
+		IRenderingContext PageContext { get; }
 		TRenderingItem RenderingItem { get; }
+		IRenderingContext RenderingItemContext { get; }
 		IItemFactory Factory { get; }
 	}
 

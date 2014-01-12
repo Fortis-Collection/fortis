@@ -12,12 +12,16 @@ namespace Fortis.Model
 	{
 		private readonly IItemFactory _itemFactory;
 		private readonly TPageItem _pageItem;
+		private readonly IRenderingContext _pageContext;
 		private readonly TRenderingItem _renderingItem;
+		private readonly IRenderingContext _renderingItemContext;
 
 		public RenderingModel(TPageItem pageItem, TRenderingItem renderingItem, IItemFactory factory = null)
 		{
 			_pageItem = pageItem;
+			_pageContext = new RenderingContext(pageItem);
 			_renderingItem = renderingItem;
+			_renderingItemContext = new RenderingContext(renderingItem);
 			_itemFactory = factory;
 		}
 
@@ -26,10 +30,14 @@ namespace Fortis.Model
 			get { return _pageItem; }
 		}
 
+		public virtual IRenderingContext PageContext { get { return _pageContext; } }
+
 		public virtual TRenderingItem RenderingItem
 		{
 			get { return _renderingItem; }
 		}
+
+		public virtual IRenderingContext RenderingItemContext { get { return _pageContext; } }
 
 		public virtual IItemFactory Factory { get { return _itemFactory; } }
 	}
