@@ -27,6 +27,10 @@ namespace Fortis.Model.RenderingParameters.Fields
 					{
 						_value = parsedValue;
 					}
+					else
+					{
+						_value = 0;
+					}
 				}
 
 				return _value.Value;

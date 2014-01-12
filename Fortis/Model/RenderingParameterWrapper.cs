@@ -53,6 +53,9 @@ namespace Fortis.Model
 						case "number":
 							_fields[key] = new TextFieldWrapper(parameterValue);
 							break;
+						case "integer":
+							_fields[key] = new IntegerFieldWrapper(parameterValue);
+							break;
 						default:
 							_fields[key] = new FieldWrapper(parameterValue);
 							break;
