@@ -342,6 +342,12 @@ namespace Fortis.Model
 			}
 		}
 
+		public virtual IEnumerable<T> Siblings<T>()
+			where T : IItemWrapper
+		{
+			return Parent<IItemWrapper>().Children<T>();
+		}
+
 		public virtual T Parent<T>() where T : IItemWrapper
 		{
 			return Parent<T>(Item.Parent);
