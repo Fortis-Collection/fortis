@@ -348,12 +348,41 @@ namespace Fortis.Model
 			return Parent<IItemWrapper>().Children<T>();
 		}
 
-		public virtual T Parent<T>() where T : IItemWrapper
+        /// <summary>
+        /// Returns the Parent of the item if it implements T. If it does implement T the method returns null.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ancestors"></param>
+        /// <returns></returns>
+        public virtual T Parent<T>(bool ancestors = true) where T : IItemWrapper
 		{
-			return Parent<T>(Item.Parent);
+            if (ancestors)
+            {
+                return Ancestor<T>(Item.Parent);
+            }
+            var wrapper = Spawn.FromItem<T>(Item.Parent);
+            if (wrapper is T)
+            {
+                return (T)wrapper;
+            }
+            return (T)((wrapper is T) ? wrapper : null);
 		}
 
-		protected T Parent<T>(Item parent) where T : IItemWrapper
+        /// <summary>
+        /// Returns the Parent of the item if it implements T. If the item implements T, it is returned. If neither implement T the method returns null.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public virtual T ParentOrSelf<T>() where T : IItemWrapper
+        {
+            if (this is T)
+            {
+                return (T)(this as IItemWrapper);
+            }
+            return Ancestor<T>(Item.Parent);
+        }
+
+        protected T Ancestor<T>(Item parent) where T : IItemWrapper
 		{
 			IItemWrapper wrapper = null;
 
@@ -371,5 +400,29 @@ namespace Fortis.Model
 
 			return (T)((wrapper is T) ? wrapper : null);
 		}
+
+        /// <summary>
+        /// Returns the first Ancestor of the item that implements T.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+	    public virtual T Ancestor<T>() where T : IItemWrapper
+	    {
+	        return this.Ancestor<T>(Item.Parent);
+	    }
+
+        /// <summary>
+        /// Returns the first Ancestor of the item that implements T. If the item implements T, it is returned.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public virtual T AncestorOrSelf<T>() where T : IItemWrapper
+        {
+            if (this is T)
+            {
+                return (T)(this as IItemWrapper);
+            }
+            return Ancestor<T>(Item.Parent);
+        }
 	}
 }

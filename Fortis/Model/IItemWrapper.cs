@@ -40,6 +40,9 @@ namespace Fortis.Model
 		string GenerateUrl(bool includeHostname);
 		IEnumerable<T> Children<T>(bool recursive = false) where T : IItemWrapper;
 		IEnumerable<T> Siblings<T>() where T : IItemWrapper;
-		T Parent<T>() where T : IItemWrapper;
+		T Parent<T>(bool ancestors = true) where T : IItemWrapper;
+	    T ParentOrSelf<T>() where T : IItemWrapper;
+	    T Ancestor<T>() where T : IItemWrapper;
+	    T AncestorOrSelf<T>() where T : IItemWrapper;
 	}
 }
