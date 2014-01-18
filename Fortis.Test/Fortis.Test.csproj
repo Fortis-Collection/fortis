@@ -173,7 +173,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ItemFactoryTests.cs" />
+    <Compile Include="FakesHelpers.cs" />
+    <Compile Include="Model\ItemFactoryTests.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

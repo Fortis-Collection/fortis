@@ -1,4 +1,4 @@
-﻿namespace Fortis.Test
+﻿namespace Fortis.Tests
 {
 	using System;
 	using Sitecore.Data.Items;
@@ -206,10 +206,30 @@
 
 	#endregion
 
+	#region Base Rendering Parameters Template
+
+	[TemplateMapping("{6DEBF469-8D6D-4FFC-80BF-897518C143B2}", "InterfaceRenderingParameter")]
+	public partial interface IScBaseRenderingParametersTemplate : IRenderingParameterWrapper
+	{
+
+	}
+
+	[TemplateMapping("{6DEBF469-8D6D-4FFC-80BF-897518C143B2}", "RenderingParameter")]
+	public partial class ScBaseRenderingParametersTemplate : RenderingParameterWrapper, IScBaseRenderingParametersTemplate
+	{
+		public ScBaseRenderingParametersTemplate(Dictionary<string, string> parameters, ISpawnProvider spawnProvider)
+			: base(parameters, spawnProvider)
+		{
+
+		}
+	}
+
+	#endregion
+
 	#region Rendering Parameters Template
 
 	[TemplateMapping("{59CD942B-E316-4ACD-B0A1-AAA19B3C8946}", "InterfaceRenderingParameter")]
-	public partial interface IScRenderingParametersTemplate : IRenderingParameterWrapper
+	public partial interface IScRenderingParametersTemplate : IRenderingParameterWrapper, IScBaseRenderingParametersTemplate
 	{
 
 	}
