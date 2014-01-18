@@ -5,17 +5,85 @@ using Sitecore.Configuration;
 using Sitecore.Data.Items;
 using Sitecore.Publishing;
 using Fortis.Model.Fields;
+using System.Runtime.CompilerServices;
+using Sitecore.ContentSearch;
+using System.ComponentModel;
+using Sitecore.ContentSearch.Converters;
 
 namespace Fortis.Model
 {
-	public class ItemWrapper : IItemWrapper, IDisposable
+	public partial class ItemWrapper : IItemWrapper, IDisposable
 	{
 		private Item _item;
 		private Dictionary<string, IFieldWrapper> _fields;
+		private Dictionary<string, object> _lazyFields;
 
-		protected Item Item
+		public ItemWrapper() : this(null)
 		{
-			get { return _item; }
+
+		}
+
+		public ItemWrapper(Item item)
+		{
+			_item = item;
+			_fields = new Dictionary<string, IFieldWrapper>();
+			_lazyFields = new Dictionary<string, object>();
+		}
+
+		public ItemWrapper(Guid id) : this(null)
+		{
+			_itemId = id;
+		}
+
+		public ItemWrapper(Guid id, Dictionary<string, object> lazyFields) : this(id)
+		{
+			_lazyFields = lazyFields;
+		}
+
+		[IndexerName("LazyFields")]
+		public virtual string this[string key]
+		{
+			get
+			{
+				if (key == null)
+				{
+					throw new ArgumentNullException("key");
+				}
+
+				return _lazyFields.ContainsKey(key.ToLowerInvariant()) ? _lazyFields[key.ToLowerInvariant()].ToString() : null;
+			}
+			set
+			{
+				if (key == null)
+				{
+					throw new ArgumentNullException("key");
+				}
+
+				_lazyFields[key.ToLowerInvariant()] = value;
+			}
+		}
+
+		internal Item Item
+		{
+			get
+			{
+				if (_item == null && _itemId != default(Guid))
+				{
+					_item = Sitecore.Context.Database.GetItem(new Sitecore.Data.ID(_itemId));
+
+					if (_item == null)
+					{
+						throw new Exception("Fortis: Item with ID of " + _itemId + " not found in " + Sitecore.Context.Database.Name);
+					}
+
+					if (!Spawn.IsCompatibleTemplate(_item.TemplateID.Guid, this.GetType()))
+					{
+						throw new Exception("Fortis: Item " + _itemId + " of template " + _item.TemplateID.Guid + " is not compatible with " + this.GetType());
+					}
+				}
+
+				return _item;
+			}
 		}
 
 		protected Dictionary<string, IFieldWrapper> Fields
@@ -28,14 +96,23 @@ namespace Fortis.Model
 			get { return _item; }
 		}
 
+		public bool IsLazy
+		{
+			get { return _item == null; }
+		}
+
 		public string DatabaseName
 		{
 			get { return Item.Database.Name; }
 		}
 
+		private string _languageName = null;
+
+		[IndexField("_language")]
 		public string LanguageName
 		{
-			get { return Item.Language.Name; }
+			get { return IsLazy && !string.IsNullOrEmpty(_languageName) ? _languageName : Item.Language.Name; }
+			set { _languageName = value; }
 		}
 
 		public string ItemLocation
@@ -43,9 +120,34 @@ namespace Fortis.Model
 			get { return Item.Paths.FullPath; }
 		}
 
+		private Guid _itemId = default(Guid);
+
+		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_group")]
 		public Guid ItemID
 		{
-			get { return Item.ID.Guid; }
+			get { return IsLazy && _itemId != default(Guid) ? _itemId : Item.ID.Guid; }
+			set { _itemId = value; }
+		}
+
+		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_template")]
+		public Guid TemplateId
+		{
+			get { return Spawn.TemplateMap.FirstOrDefault(t => t.Value == this.GetType()).Key; }
+		}
+
+		[IndexField("_templates")]
+		public IEnumerable<Guid> TemplateIds
+		{
+			get
+			{
+				foreach (var template in Spawn.InterfaceTemplateMap)
+				{
+					if (template.Key.IsAssignableFrom(this.GetType()))
+					{
+						yield return template.Value;
+					}
+				}
+			}
 		}
 
 		public string ItemShortID
@@ -53,9 +155,35 @@ namespace Fortis.Model
 			get { return Item.ID.ToShortID().ToString(); }
 		}
 
+		private string _name = null;
+
+		[IndexField("_name")]
+		public string Name
+		{
+			get { return IsLazy && !string.IsNullOrEmpty(_name) ? _name : Item.Name; }
+			set { _name = value; }
+		}
+
+		[IndexField("_name")]
 		public string ItemName
 		{
-			get { return Item.Name; }
+			get { return Name; }
+			set { Name = value; }
+		}
+
+		private string _displayName = null;
+
+		[IndexField("__display_name")]
+		public string DisplayName
+		{
+			get { return IsLazy && !string.IsNullOrEmpty(_displayName) ? _displayName : Item.DisplayName; }
+			set { _displayName = value; }
+		}
+
+		[IndexField("_latestversion")]
+		public bool IsLatestVersion
+		{
+			get { return Item.Versions.IsLatestVersion(); }
 		}
 
 		public int ChildCount
@@ -73,10 +201,35 @@ namespace Fortis.Model
 			get { return Item.Name; }
 		}
 
-		public ItemWrapper(Item item)
+		protected T GetField<T>(string key, string lazyFieldsKey = null) where T : IFieldWrapper
 		{
-			_item = item;
-			_fields = new Dictionary<string, IFieldWrapper>();
+			if (!Fields.ContainsKey(key))
+			{
+				object lazyValue = null;
+				var typeOfT = typeof(T);
+				object[] constructorArgs;
+
+				// Attempt to get lazy value
+				if (lazyFieldsKey != null && _lazyFields != null && _lazyFields.ContainsKey(lazyFieldsKey))
+				{
+					lazyValue = _lazyFields[lazyFieldsKey];
+				}
+
+				if (lazyValue == null)
+				{
+					var scField = Item.Fields[key];
+
+					constructorArgs = new object[] { scField };
+				}
+				else
+				{
+					constructorArgs = new object[] { key, this, lazyValue };
+				}
+
+				Fields[key] = (IFieldWrapper)Activator.CreateInstance(typeOfT, constructorArgs);
+			}
+
+			return (T)Fields[key];
 		}
 
 		protected IFieldWrapper GetField(string key)
@@ -87,70 +240,28 @@ namespace Fortis.Model
 			{
 				try
 				{
-					var scField = Item.Fields[key];
-
-					switch (scField.Type.ToLower())
-					{
-						case "checkbox":
-							Fields[key] = new BooleanFieldWrapper(scField);
-							break;
-						case "image":
-							Fields[key] = new ImageFieldWrapper(scField);
-							break;
-						case "date":
-						case "datetime":
-							Fields[key] = new DateTimeFieldWrapper(scField);
-							break;
-						case "checklist":
-						case "treelist":
-						case "treelistex":
-						case "multilist":
-							Fields[key] = new ListFieldWrapper(scField);
-							break;
-						case "file":
-							Fields[key] = new FileFieldWrapper(scField);
-							break;
-						case "droplink":
-						case "droptree":
-							Fields[key] = new LinkFieldWrapper(scField);
-							break;
-						case "general link":
-							Fields[key] = new GeneralLinkFieldWrapper(scField);
-							break;
-						case "text":
-						case "single-line text":
-						case "multi-line text":
-						case "number":
-						case "droplist":
-							Fields[key] = new TextFieldWrapper(scField);
-							break;
-						case "rich text":
-							Fields[key] = new RichTextFieldWrapper(scField);
-							break;
-						default:
-							Fields[key] = null;
-							break;
-					}
+					Fields[key] = Spawn.FromField(Item.Fields[key]);
 				}
-				catch
+				catch(Exception ex)
 				{
-					// Todo: Log error
+					Sitecore.Diagnostics.Log.Error("Fortis: Unable to spawn field with key " + key, ex, this);
 				}
 			}
+
 			return (FieldWrapper)Fields[key];
 		}
 
 		public void Save()
 		{
-			if (_item.Editing.IsEditing)
+			if (Item.Editing.IsEditing)
 			{
-				_item.Editing.EndEdit();
+				Item.Editing.EndEdit();
 			}
 		}
 
 		public void Delete()
 		{
-			_item.Delete();
+			Item.Delete();
 		}
 
 		public void Publish()
@@ -191,12 +302,87 @@ namespace Fortis.Model
 			_item = null;
 		}
 
-		public virtual T Parent<T>() where T : IItemWrapper
+		public virtual IEnumerable<T> Children<T>(bool recursive = false) where T : IItemWrapper
 		{
-			return Parent<T>(Item.Parent);
+			if (Item.HasChildren)
+			{
+				if (recursive)
+				{
+					return ChildrenRecursive<T>(this);
+				}
+				else
+				{
+					return Spawn.FromItems<T>(Item.Children.AsEnumerable());
+				}
+			}
+
+			return Enumerable.Empty<T>();
 		}
 
-		protected T Parent<T>(Item parent) where T : IItemWrapper
+		protected virtual IEnumerable<T> ChildrenRecursive<T>(IItemWrapper wrapper) where T : IItemWrapper
+		{
+			var children = wrapper.Children<IItemWrapper>();
+
+			foreach (var child in children)
+			{
+				if (child is T)
+				{
+					yield return (T)child;
+				}
+
+				if (child.HasChildren)
+				{
+					var innerChildren = ChildrenRecursive<T>(child);
+
+					foreach (var innerChild in innerChildren)
+					{
+						yield return (T)innerChild;
+					}
+				}
+			}
+		}
+
+		public virtual IEnumerable<T> Siblings<T>()
+			where T : IItemWrapper
+		{
+			return Parent<IItemWrapper>().Children<T>();
+		}
+
+        /// <summary>
+        /// Returns the Parent of the item if it implements T. If it does implement T the method returns null.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ancestors"></param>
+        /// <returns></returns>
+        public virtual T Parent<T>(bool ancestors = true) where T : IItemWrapper
+		{
+            if (ancestors)
+            {
+                return Ancestor<T>(Item.Parent);
+            }
+            var wrapper = Spawn.FromItem<T>(Item.Parent);
+            if (wrapper is T)
+            {
+                return (T)wrapper;
+            }
+            return (T)((wrapper is T) ? wrapper : null);
+		}
+
+        /// <summary>
+        /// Returns the Parent of the item if it implements T. If the item implements T, it is returned. If neither implement T the method returns null.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public virtual T ParentOrSelf<T>() where T : IItemWrapper
+        {
+            if (this is T)
+            {
+                return (T)(this as IItemWrapper);
+            }
+            return Ancestor<T>(Item.Parent);
+        }
+
+        protected T Ancestor<T>(Item parent) where T : IItemWrapper
 		{
 			IItemWrapper wrapper = null;
 
@@ -214,5 +400,29 @@ namespace Fortis.Model
 
 			return (T)((wrapper is T) ? wrapper : null);
 		}
+
+        /// <summary>
+        /// Returns the first Ancestor of the item that implements T.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+	    public virtual T Ancestor<T>() where T : IItemWrapper
+	    {
+	        return this.Ancestor<T>(Item.Parent);
+	    }
+
+        /// <summary>
+        /// Returns the first Ancestor of the item that implements T. If the item implements T, it is returned.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public virtual T AncestorOrSelf<T>() where T : IItemWrapper
+        {
+            if (this is T)
+            {
+                return (T)(this as IItemWrapper);
+            }
+            return Ancestor<T>(Item.Parent);
+        }
 	}
 }

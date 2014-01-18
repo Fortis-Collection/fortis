@@ -6,6 +6,8 @@ namespace Fortis.Model.Fields
 {
 	public class DateTimeFieldWrapper : FieldWrapper, IDateTimeFieldWrapper
 	{
+		private DateTime _dateTime;
+
 		protected DateField DateField
 		{
 			get { return (Sitecore.Data.Fields.DateField)Field; }
@@ -13,12 +15,19 @@ namespace Fortis.Model.Fields
 
 		public DateTime Value
 		{
-			get { return DateField.DateTime; }
+			get { return IsLazy ? _dateTime : DateField.DateTime; }
 		}
 
 		public DateTimeFieldWrapper(Field field)
-			: base(field)
+			: base(field) { }
+
+		public DateTimeFieldWrapper(string key, ref ItemWrapper item, string value = null)
+			: base(key, ref item, value) { }
+
+		public DateTimeFieldWrapper(string key, ref ItemWrapper item, DateTime value)
+			: base(key, ref item, value.ToString())
 		{
+			_dateTime = value;
 		}
 
 		public IHtmlString Render(bool includeTime)
@@ -26,9 +35,9 @@ namespace Fortis.Model.Fields
 			return Render(includeTime ? Sitecore.Context.Language.CultureInfo.DateTimeFormat.FullDateTimePattern : Sitecore.Context.Language.CultureInfo.DateTimeFormat.ShortDatePattern);
 		}
 
-		public override IHtmlString Render(string dateTimeFormat)
+		public override IHtmlString Render(string dateTimeFormat = null, bool editing = false)
 		{
-			return base.Render("format=" + dateTimeFormat);
+			return base.Render(parameters: "format=" + dateTimeFormat);
 		}
 
 		public static implicit operator DateTime(DateTimeFieldWrapper field)

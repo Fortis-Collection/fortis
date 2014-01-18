@@ -1,5 +1,6 @@
 ﻿using System;
 using Fortis.Model.Fields;
+using System.Web;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
@@ -39,19 +40,22 @@ namespace Fortis.Model.RenderingParameters.Fields
 
 		}
 
-		public string Render(LinkFieldWrapperOptions options)
+		public IHtmlString Render(LinkFieldWrapperOptions options)
 		{
 			throw new NotImplementedException();
 		}
 
 		public virtual T GetTarget<T>() where T : IItemWrapper
 		{
-            var item = Sitecore.Context.Database.GetItem(_value);
-            if (item != null)
-            {
-                var wrapper = Spawn.FromItem<T>(item);
-                return (T)((wrapper is T) ? wrapper : null); 
-            }
+			if (!string.IsNullOrWhiteSpace(_value))
+			{
+				var item = Sitecore.Context.Database.GetItem(_value);
+				if (item != null)
+				{
+					var wrapper = Spawn.FromItem<T>(item);
+					return (T)((wrapper is T) ? wrapper : null);
+				}
+			}
 
             return default(T);
 		}
@@ -64,6 +68,21 @@ namespace Fortis.Model.RenderingParameters.Fields
 		public string Value
 		{
 			get { return Url; }
+		}
+
+		public Guid ItemId
+		{
+			get
+			{
+				Guid id;
+
+				if (!Guid.TryParse(RawValue, out id))
+				{
+					id = default(Guid);
+				}
+
+				return id;
+			}
 		}
 	}
 }

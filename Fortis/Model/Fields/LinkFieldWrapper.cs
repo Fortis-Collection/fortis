@@ -1,6 +1,8 @@
 ﻿using System;
 using Sitecore.Data.Fields;
 using Sitecore.Web.UI.WebControls;
+using Sitecore.Data;
+using System.Web;
 
 namespace Fortis.Model.Fields
 {
@@ -21,6 +23,25 @@ namespace Fortis.Model.Fields
 			}
 		}
 
+		public Guid ItemId
+		{
+			get
+			{
+				if (ShortID.IsShortID(RawValue))
+				{
+					return ShortID.Parse(RawValue).ToID().Guid;
+				}
+				else if (ID.IsID(RawValue))
+				{
+					return ID.Parse(RawValue).Guid;
+				}
+				else
+				{
+					return Guid.Parse(RawValue);
+				}
+			}
+		}
+
 		public virtual string Url
 		{
 			get
@@ -35,23 +56,30 @@ namespace Fortis.Model.Fields
 		}
 
 		public LinkFieldWrapper(Field field)
-			: base(field)
-		{
+			: base(field) { }
 
-		}
+		public LinkFieldWrapper(string key, ref ItemWrapper item, string value = null)
+			: base(key, ref item, value) { }
 
-		public string Render(LinkFieldWrapperOptions options)
+		public IHtmlString Render(LinkFieldWrapperOptions options)
 		{
 			var fieldRenderer = new FieldRenderer();
 
-			if (options.HTML.Length > 0)
+			if (options != null)
 			{
-				fieldRenderer.RenderParameters.Add("innerHTML", options.HTML);
-			}
+				if (!string.IsNullOrWhiteSpace(options.InnerHtml))
+				{
+					fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.InnerHtmlParameterName, options.InnerHtml);
+				}
 
-			if (options.CSS.Length > 0)
-			{
-				fieldRenderer.RenderParameters.Add("css", options.CSS);
+				if (!string.IsNullOrWhiteSpace(options.Css))
+				{
+					fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.CssParameterName, options.Css);
+				}
+
+				fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.OptionsParameterName, string.Empty);
+				fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.HrefDefaultParameterName, options.DisplayHrefByDefault.ToString());
+				fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.EditorCssParameterName, options.IncludeContentEditorCss.ToString());
 			}
 
 			fieldRenderer.Item = Field.Item;
@@ -59,19 +87,33 @@ namespace Fortis.Model.Fields
 
 			var result = fieldRenderer.RenderField();
 
-			return result.FirstPart + result.LastPart;
+			return new HtmlString(result.FirstPart + result.LastPart);
 		}
 
 		public virtual T GetTarget<T>() where T : IItemWrapper
 		{
-            var item = Sitecore.Context.Database.GetItem(RawValue);
-            if (item != null)
-            {
-                var wrapper = Spawn.FromItem<T>(item);
-                return (T)((wrapper is T) ? wrapper : null); ;
-            }
+			if (ShortID.IsShortID(RawValue))
+			{
+				return GetTarget<T>(ShortID.Parse(RawValue).ToID());
+			}
+			else if (ID.IsID(RawValue))
+			{
+				return GetTarget<T>(ID.Parse(RawValue));
+			}
 
-            return default(T);
+			return default(T);
+		}
+
+		private T GetTarget<T>(ID id) where T : IItemWrapper
+		{
+			var item = Sitecore.Context.Database.GetItem(id);
+			if (item != null)
+			{
+				var wrapper = Spawn.FromItem<T>(item);
+				return (T)((wrapper is T) ? wrapper : null); ;
+			}
+
+			return default(T);
 		}
 
 		public static implicit operator string(LinkFieldWrapper field)

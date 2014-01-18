@@ -30,6 +30,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\_Lib\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Sitecore.ContentSearch">
+      <HintPath>..\_Lib\Sitecore.ContentSearch.dll</HintPath>
+    </Reference>
+    <Reference Include="Sitecore.ContentSearch.Linq, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_Lib\Sitecore.ContentSearch.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Sitecore.ContentSearch.Linq.Lucene">
+      <HintPath>..\_Lib\Sitecore.ContentSearch.Linq.Lucene.dll</HintPath>
+    </Reference>
+    <Reference Include="Sitecore.ContentSearch.Linq.Solr">
+      <HintPath>..\_Lib\Sitecore.ContentSearch.Linq.Solr.dll</HintPath>
+    </Reference>
+    <Reference Include="Sitecore.ContentSearch.LuceneProvider">
+      <HintPath>..\_Lib\Sitecore.ContentSearch.LuceneProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="Sitecore.ContentSearch.SolrProvider">
+      <HintPath>..\_Lib\Sitecore.ContentSearch.SolrProvider.dll</HintPath>
+    </Reference>
     <Reference Include="Sitecore.Kernel">
       <HintPath>..\_Lib\Sitecore.Kernel.dll</HintPath>
     </Reference>
@@ -44,15 +66,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\GuidExtensions.cs" />
+    <Compile Include="Extensions\IEnumerableExtenstions.cs" />
     <Compile Include="Model\Fields\IBooleanFieldWrapper.cs" />
     <Compile Include="Model\Fields\IDateTimeFieldWrapper.cs" />
     <Compile Include="Model\Fields\IFileFieldWrapper.cs" />
     <Compile Include="Model\Fields\IGeneralLinkFieldWrapper.cs" />
     <Compile Include="Model\Fields\IImageFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IIntegerFieldWrapper.cs" />
     <Compile Include="Model\Fields\ILinkFieldWrapper.cs" />
     <Compile Include="Model\Fields\IListFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IntegerFieldWrapper.cs" />
+    <Compile Include="Model\Fields\INumberFieldWrapper.cs" />
     <Compile Include="Model\Fields\IRichTextFieldWrapper.cs" />
     <Compile Include="Model\Fields\ITextFieldWrapper.cs" />
+    <Compile Include="Model\Fields\NumberFieldWrapper.cs" />
+    <Compile Include="Model\IRenderingContext.cs" />
+    <Compile Include="Model\RenderingContext.cs" />
+    <Compile Include="Model\RenderingParameters\Fields\IntegerFieldWrapper.cs" />
+    <Compile Include="Pipelines\RenderField\LinkRenderer.cs" />
     <Compile Include="Providers\IContextProvider.cs" />
     <Compile Include="Model\IRenderingModel.cs" />
     <Compile Include="Model\Events\ItemCreated.cs" />
@@ -88,7 +120,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Spawn.cs" />
     <Compile Include="Model\TemplateMappingAttribute.cs" />
+    <Compile Include="Renderers\LinkRenderer.cs" />
+    <Compile Include="Search\CustomExpressionParser.cs" />
+    <Compile Include="Search\CustomGenericQueryable.cs" />
+    <Compile Include="Search\CustomLinqToLuceneIndex.cs" />
+    <Compile Include="Search\CustomLinqToSolrIndex.cs" />
+    <Compile Include="Search\ComputedFields\InheritedTemplates.cs" />
+    <Compile Include="Search\LuceneDocumentTypeMapper.cs" />
+    <Compile Include="Search\SearchExtensions.cs" />
+    <Compile Include="Search\SolrDocumentTypeMapper.cs" />
+    <Compile Include="SitecoreExtensions\IEnumerableExtensions.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

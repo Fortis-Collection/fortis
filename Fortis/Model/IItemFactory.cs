@@ -1,10 +1,14 @@
-﻿using System;
+﻿using Sitecore.ContentSearch;
+using Sitecore.ContentSearch.Linq.Common;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Web.UI;
 
 namespace Fortis.Model
 {
-	public interface IItemFactory
+	public partial interface IItemFactory
 	{
 		Guid GetTemplateID(Type type);
 		Type GetInterfaceType(Guid templateId);
@@ -12,10 +16,10 @@ namespace Fortis.Model
 		void Publish(IEnumerable<IItemWrapper> wrappers, bool children);
 		T GetSiteHome<T>() where T : IItemWrapper;
 		T GetContextItem<T>() where T : IItemWrapper;
-		IRenderingModel<TPageItem, TRenderingItem> GetRenderingContextItems<TPageItem, TRenderingItem>()
+		IRenderingModel<TPageItem, TRenderingItem> GetRenderingContextItems<TPageItem, TRenderingItem>(IItemFactory factory = null)
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper;
-		IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>()
+		IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>(IItemFactory factory = null)
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper
 			where TRenderingParametersItem : IRenderingParameterWrapper;
@@ -41,5 +45,6 @@ namespace Fortis.Model
 		T SelectSibling<T>(IItemWrapper wrapper) where T : IItemWrapper;
 		IEnumerable<T> SelectSiblings<T>(IItemWrapper wrapper) where T : IItemWrapper;
 		T GetRenderingDataSource<T>(Control control) where T : IItemWrapper;
+		IQueryable<T> Search<T>(IProviderSearchContext context, IExecutionContext executionContext = null) where T : IItemWrapper;
 	}
 }

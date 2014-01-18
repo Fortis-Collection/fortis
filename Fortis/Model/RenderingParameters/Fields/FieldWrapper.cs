@@ -36,7 +36,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 			_value = value;
 		}
 
-		public virtual IHtmlString Render()
+		public virtual IHtmlString Render(string parameters = null, bool editing = false)
 		{
 			throw new NotImplementedException();
 		}
@@ -55,5 +55,10 @@ namespace Fortis.Model.RenderingParameters.Fields
         {
             return Render().ToString();
         }
+
+		public bool IsLazy
+		{
+			get { return true; }
+		}
 	}
 }

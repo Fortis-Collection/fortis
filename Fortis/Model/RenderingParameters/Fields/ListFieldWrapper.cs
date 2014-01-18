@@ -44,7 +44,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 		{
 			get
 			{
-				var list = base._value.Split('|'); 
+				var list = (string.IsNullOrWhiteSpace(base._value) ? string.Empty : base._value).Split('|'); 
 
 				foreach (var id in list)
 				{

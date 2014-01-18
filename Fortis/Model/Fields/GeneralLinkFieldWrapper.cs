@@ -53,10 +53,10 @@ namespace Fortis.Model.Fields
 		}
 
 		public GeneralLinkFieldWrapper(Field field)
-			: base(field)
-		{
+			: base(field) {	}
 
-		}
+		public GeneralLinkFieldWrapper(string key, ref ItemWrapper item, string value = null)
+			: base(key, ref item, value) { }
 
 		public override T GetTarget<T>()
 		{

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 namespace Fortis.Model.Fields
 {
@@ -8,6 +9,6 @@ namespace Fortis.Model.Fields
 
 		string GetSourceUri(bool absolute);
 
-		string Render(ImageFieldWrapperOptions options);
+		IHtmlString Render(ImageFieldWrapperOptions options);
 	}
 }
