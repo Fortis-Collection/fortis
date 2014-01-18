@@ -33,7 +33,7 @@
 				Guid.TryParse(fields["_group"].ToString(), out itemId) &&
 				Guid.TryParse(fields["_template"].ToString(), out templateId))
 			{
-				var item = Spawn.FromItem(itemId, templateId, typeOfTElement, fields);
+				var item = Global.SpawnProvider.FromItem(itemId, templateId, typeOfTElement, fields);
 
 				if (item is TElement)
 				{

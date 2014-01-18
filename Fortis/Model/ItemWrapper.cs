@@ -9,33 +9,39 @@ using System.Runtime.CompilerServices;
 using Sitecore.ContentSearch;
 using System.ComponentModel;
 using Sitecore.ContentSearch.Converters;
+using Fortis.Providers;
 
 namespace Fortis.Model
 {
 	public partial class ItemWrapper : IItemWrapper, IDisposable
 	{
+		private readonly ISpawnProvider _spawnProvider;
 		private Item _item;
 		private Dictionary<string, IFieldWrapper> _fields;
 		private Dictionary<string, object> _lazyFields;
 
-		public ItemWrapper() : this(null)
+		public ItemWrapper(ISpawnProvider spawnProvider)
+			: this(null, spawnProvider)
 		{
 
 		}
 
-		public ItemWrapper(Item item)
+		public ItemWrapper(Item item, ISpawnProvider spawnProvider)
 		{
+			_spawnProvider = spawnProvider;
 			_item = item;
 			_fields = new Dictionary<string, IFieldWrapper>();
 			_lazyFields = new Dictionary<string, object>();
 		}
 
-		public ItemWrapper(Guid id) : this(null)
+		public ItemWrapper(Guid id, ISpawnProvider spawnProvider)
+			: this(null, spawnProvider)
 		{
 			_itemId = id;
 		}
 
-		public ItemWrapper(Guid id, Dictionary<string, object> lazyFields) : this(id)
+		public ItemWrapper(Guid id, Dictionary<string, object> lazyFields, ISpawnProvider spawnProvider)
+			: this(id, spawnProvider)
 		{
 			_lazyFields = lazyFields;
 		}
@@ -76,7 +82,7 @@ namespace Fortis.Model
 						throw new Exception("Fortis: Item with ID of " + _itemId + " not found in " + Sitecore.Context.Database.Name);
 					}
 
-					if (!Spawn.IsCompatibleTemplate(_item.TemplateID.Guid, this.GetType()))
+					if (!_spawnProvider.IsCompatibleTemplate(_item.TemplateID.Guid, this.GetType()))
 					{
 						throw new Exception("Fortis: Item " + _itemId + " of template " + _item.TemplateID.Guid + " is not compatible with " + this.GetType());
 					}
@@ -132,7 +138,7 @@ namespace Fortis.Model
 		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_template")]
 		public Guid TemplateId
 		{
-			get { return Spawn.TemplateMap.FirstOrDefault(t => t.Value == this.GetType()).Key; }
+			get { return _spawnProvider.TemplateMap.FirstOrDefault(t => t.Value == this.GetType()).Key; }
 		}
 
 		[IndexField("_templates")]
@@ -140,7 +146,7 @@ namespace Fortis.Model
 		{
 			get
 			{
-				foreach (var template in Spawn.InterfaceTemplateMap)
+				foreach (var template in _spawnProvider.InterfaceTemplateMap)
 				{
 					if (template.Key.IsAssignableFrom(this.GetType()))
 					{
@@ -240,7 +246,7 @@ namespace Fortis.Model
 			{
 				try
 				{
-					Fields[key] = Spawn.FromField(Item.Fields[key]);
+					Fields[key] = _spawnProvider.FromField(Item.Fields[key]);
 				}
 				catch(Exception ex)
 				{
@@ -312,7 +318,7 @@ namespace Fortis.Model
 				}
 				else
 				{
-					return Spawn.FromItems<T>(Item.Children.AsEnumerable());
+					return _spawnProvider.FromItems<T>(Item.Children.AsEnumerable());
 				}
 			}
 
@@ -360,7 +366,7 @@ namespace Fortis.Model
             {
                 return Ancestor<T>(Item.Parent);
             }
-            var wrapper = Spawn.FromItem<T>(Item.Parent);
+            var wrapper = _spawnProvider.FromItem<T>(Item.Parent);
             if (wrapper is T)
             {
                 return (T)wrapper;
@@ -388,7 +394,7 @@ namespace Fortis.Model
 
 			while (parent != null)
 			{
-				wrapper = Spawn.FromItem<T>(parent);
+				wrapper = _spawnProvider.FromItem<T>(parent);
 
 				if (wrapper is T)
 				{

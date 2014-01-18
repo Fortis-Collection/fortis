@@ -16,7 +16,7 @@ namespace Fortis.Model.Events
 			var scItem = itemCreatedEventArgs.Item;
 			Assert.IsNotNull(scItem, "scItem");
 
-			var item = Spawn.FromItem<T>(scItem);
+			var item = Global.SpawnProvider.FromItem<T>(scItem);
 
 			OnItemCreated((T)((item is T) ? item : null), sender, (object)args);
 		}

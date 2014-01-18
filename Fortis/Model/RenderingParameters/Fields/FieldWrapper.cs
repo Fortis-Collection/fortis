@@ -2,11 +2,13 @@
 using Sitecore.Data.Fields;
 using Sitecore.Web.UI.WebControls;
 using System.Web;
+using Fortis.Providers;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
 	public class FieldWrapper : IFieldWrapper
 	{
+		protected ISpawnProvider SpawnProvider;
 		protected string _value;
 
 		public bool Modified
@@ -31,9 +33,11 @@ namespace Fortis.Model.RenderingParameters.Fields
 			}
 		}
 
-		public FieldWrapper(string value)
+		public FieldWrapper(string value, ISpawnProvider spawnProvider)
 		{
 			_value = value;
+
+			SpawnProvider = spawnProvider;
 		}
 
 		public virtual IHtmlString Render(string parameters = null, bool editing = false)

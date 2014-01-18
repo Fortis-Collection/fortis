@@ -1,13 +1,14 @@
-﻿using Sitecore.Data.Fields;
+﻿using Fortis.Providers;
+using Sitecore.Data.Fields;
 
 namespace Fortis.Model.Fields
 {
 	public class RichTextFieldWrapper : TextFieldWrapper, IRichTextFieldWrapper
 	{
-		public RichTextFieldWrapper(Field field)
-			: base(field) { }
+		public RichTextFieldWrapper(Field field, ISpawnProvider spawnProvider)
+			: base(field, spawnProvider) { }
 
-		public RichTextFieldWrapper(string key, ref ItemWrapper item, string value = null)
-			: base(key, ref item, value) { }
+		public RichTextFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, string value = null)
+			: base(key, ref item, spawnProvider, value) { }
 	}
 }

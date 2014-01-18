@@ -30,7 +30,7 @@ namespace Fortis.Search
 				Guid.TryParse(document["_group"].ToString(), out itemId) &&
 				Guid.TryParse(document["_template"].ToString(), out templateId))
 			{
-				var item = Spawn.FromItem(itemId, templateId, typeOfTElement, document);
+				var item = Global.SpawnProvider.FromItem(itemId, templateId, typeOfTElement, document);
 
 				if (item is TElement)
 				{

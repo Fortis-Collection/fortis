@@ -10,17 +10,23 @@ using Fortis.Model.Fields;
 using System.Reflection;
 using System.Collections.Specialized;
 using System.Web.Configuration;
+using Fortis.Model;
 
-namespace Fortis.Model
+namespace Fortis.Providers
 {
-	internal static class Spawn
+	public class SpawnProvider : ISpawnProvider
 	{
-		private static readonly string _configurationKey = "fortis";
-		private static readonly string _assemblyConfigurationKey = "assembly";
-		private static Assembly _modelAssembly;
-		private static readonly NameValueCollection _configuration = (NameValueCollection)WebConfigurationManager.GetSection(_configurationKey);
-		private static string ModelAssemblyName { get { return _configuration[_assemblyConfigurationKey]; } }
-		private static Assembly ModelAssembly
+		public SpawnProvider()
+		{
+			_configuration = (NameValueCollection)WebConfigurationManager.GetSection(_configurationKey);
+		}
+
+		private readonly string _configurationKey = "fortis";
+		private readonly string _assemblyConfigurationKey = "assembly";
+		private Assembly _modelAssembly;
+		private readonly NameValueCollection _configuration;
+		private string ModelAssemblyName { get { return _configuration[_assemblyConfigurationKey]; } }
+		private Assembly ModelAssembly
 		{
 			get
 			{
@@ -45,15 +51,15 @@ namespace Fortis.Model
 			}
 		}
 
-		private static Dictionary<Guid, Type> _templateMap = null;
-		internal static Dictionary<Guid, Type> TemplateMap
+		private Dictionary<Guid, Type> _templateMap = null;
+		public Dictionary<Guid, Type> TemplateMap
 		{
 			get
 			{
 				if (_templateMap == null)
 				{
 					_templateMap = new Dictionary<Guid, Type>();
-					
+
 					foreach (var t in ModelAssembly.GetTypes())
 					{
 						foreach (TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof(TemplateMappingAttribute), false))
@@ -73,8 +79,8 @@ namespace Fortis.Model
 			}
 		}
 
-		private static Dictionary<Type, Guid> _interfaceTemplateMap;
-		internal static Dictionary<Type, Guid> InterfaceTemplateMap
+		private Dictionary<Type, Guid> _interfaceTemplateMap;
+		public Dictionary<Type, Guid> InterfaceTemplateMap
 		{
 			get
 			{
@@ -101,8 +107,8 @@ namespace Fortis.Model
 			}
 		}
 
-		private static Dictionary<Guid, Type> _renderingParametersTemplateMap = null;
-		internal static Dictionary<Guid, Type> RenderingParametersTemplateMap
+		private Dictionary<Guid, Type> _renderingParametersTemplateMap = null;
+		public Dictionary<Guid, Type> RenderingParametersTemplateMap
 		{
 			get
 			{
@@ -129,7 +135,7 @@ namespace Fortis.Model
 			}
 		}
 
-		internal static Type GetImplementation<T>() where T : IItemWrapper
+		public Type GetImplementation<T>() where T : IItemWrapper
 		{
 			var typeOfT = typeof(T);
 
@@ -153,12 +159,12 @@ namespace Fortis.Model
 			return TemplateMap[templateId];
 		}
 
-		internal static IItemWrapper FromItem<T>(Guid itemId, Guid templateId) where T : IItemWrapper
+		public IItemWrapper FromItem<T>(Guid itemId, Guid templateId) where T : IItemWrapper
 		{
 			return FromItem(itemId, templateId, typeof(T));
 		}
 
-		internal static IItemWrapper FromItem(Guid itemId, Guid templateId, Type template = null, Dictionary<string, object> lazyFields = null)
+		public IItemWrapper FromItem(Guid itemId, Guid templateId, Type template = null, Dictionary<string, object> lazyFields = null)
 		{
 			// Exact match
 			if (TemplateMap.ContainsKey(templateId))
@@ -171,7 +177,7 @@ namespace Fortis.Model
 					throw new Exception("Fortis: The type " + concreteTemplate.Name + " is not assignable from the type " + template.Name);
 				}
 
-				return (IItemWrapper)Activator.CreateInstance(concreteTemplate, new object[] { itemId, lazyFields });
+				return (IItemWrapper)Activator.CreateInstance(concreteTemplate, new object[] { itemId, lazyFields, this });
 			}
 
 			// Inherited template mapping needs implementing
@@ -188,23 +194,23 @@ namespace Fortis.Model
 			//		throw new Exception("Fortis | Unable to find template for " + template.FullName);
 			//	}
 
-				
+
 			//}
 
-			return new ItemWrapper(itemId);
+			return new ItemWrapper(itemId, this);
 		}
 
-		internal static IItemWrapper FromItem(Item item)
+		public IItemWrapper FromItem(Item item)
 		{
 			return FromItem<IItemWrapper>(item);
 		}
 
-		internal static IItemWrapper FromItem<T>(Item item) where T : IItemWrapper
+		public IItemWrapper FromItem<T>(Item item) where T : IItemWrapper
 		{
 			return FromItem(item, typeof(T));
 		}
 
-		internal static IItemWrapper FromItem(Item item, Type template = null)
+		public IItemWrapper FromItem(Item item, Type template = null)
 		{
 			if (item != null)
 			{
@@ -215,7 +221,7 @@ namespace Fortis.Model
 					// Get type information
 					var type = TemplateMap[id];
 
-					return (IItemWrapper)Activator.CreateInstance(type, new object[] { item });
+					return (IItemWrapper)Activator.CreateInstance(type, new object[] { item, this });
 				}
 
 				if (template != null)
@@ -240,24 +246,24 @@ namespace Fortis.Model
 								// Get type information
 								var type = TemplateMap[typeTemplateId];
 
-								return (IItemWrapper)Activator.CreateInstance(type, new object[] { item });
+								return (IItemWrapper)Activator.CreateInstance(type, new object[] { item, this });
 							}
 						}
 					}
 				}
 
-				return new ItemWrapper(item);
+				return new ItemWrapper(item, this);
 			}
 
 			return null;
 		}
 
-		internal static IEnumerable<IItemWrapper> FromItems(IEnumerable<Item> items)
+		public IEnumerable<IItemWrapper> FromItems(IEnumerable<Item> items)
 		{
 			return FromItems<IItemWrapper>(items);
 		}
 
-		internal static IEnumerable<T> FromItems<T>(IEnumerable<Item> items)
+		public IEnumerable<T> FromItems<T>(IEnumerable<Item> items)
 			where T : IItemWrapper
 		{
 			foreach (var item in items)
@@ -271,7 +277,7 @@ namespace Fortis.Model
 			}
 		}
 
-		internal static IRenderingParameterWrapper FromRenderingParameters<T>(Item renderingItem, Dictionary<string, string> parameters)
+		public IRenderingParameterWrapper FromRenderingParameters<T>(Item renderingItem, Dictionary<string, string> parameters)
 			where T : IRenderingParameterWrapper
 		{
 			if (renderingItem != null)
@@ -295,7 +301,7 @@ namespace Fortis.Model
 			return null;
 		}
 
-		internal static IEnumerable<IFieldWrapper> FromFields(FieldCollection fields)
+		public IEnumerable<IFieldWrapper> FromFields(FieldCollection fields)
 		{
 			foreach (Field field in fields)
 			{
@@ -303,7 +309,7 @@ namespace Fortis.Model
 			}
 		}
 
-		internal static IEnumerable<IFieldWrapper> FromFields(FieldChangeList fields)
+		public IEnumerable<IFieldWrapper> FromFields(FieldChangeList fields)
 		{
 			foreach (Field field in fields)
 			{
@@ -311,12 +317,12 @@ namespace Fortis.Model
 			}
 		}
 
-		internal static bool IsCompatibleTemplate<T>(Guid templateId) where T : IItemWrapper
+		public bool IsCompatibleTemplate<T>(Guid templateId) where T : IItemWrapper
 		{
 			return IsCompatibleTemplate(templateId, typeof(T));
 		}
 
-		internal static bool IsCompatibleTemplate(Guid templateId, Type template)
+		public bool IsCompatibleTemplate(Guid templateId, Type template)
 		{
 			// template Type must at least implement IItemWrapper
 			if (template != typeof(IItemWrapper))
@@ -327,12 +333,12 @@ namespace Fortis.Model
 			return true;
 		}
 
-		internal static bool IsCompatibleFieldType<T>(string fieldType) where T : FieldWrapper
+		public bool IsCompatibleFieldType<T>(string fieldType) where T : IFieldWrapper
 		{
 			return IsCompatibleFieldType(fieldType, typeof(T));
 		}
 
-		internal static bool IsCompatibleFieldType(string scFieldType, Type fieldType)
+		public bool IsCompatibleFieldType(string scFieldType, Type fieldType)
 		{
 			switch (scFieldType.ToLower())
 			{
@@ -371,7 +377,7 @@ namespace Fortis.Model
 			}
 		}
 
-		internal static IFieldWrapper FromField(Field field)
+		public IFieldWrapper FromField(Field field)
 		{
 			if (field == null)
 			{
@@ -381,41 +387,41 @@ namespace Fortis.Model
 			switch (field.Type.ToLower())
 			{
 				case "checkbox":
-					return new BooleanFieldWrapper(field);
+					return new BooleanFieldWrapper(field, this);
 				case "image":
-					return new ImageFieldWrapper(field);
+					return new ImageFieldWrapper(field, this);
 				case "date":
 				case "datetime":
-					return new DateTimeFieldWrapper(field);
+					return new DateTimeFieldWrapper(field, this);
 				case "checklist":
 				case "treelist":
 				case "treelistex":
 				case "multilist":
-					return new ListFieldWrapper(field);
+					return new ListFieldWrapper(field, this);
 				case "file":
-					return new FileFieldWrapper(field);
+					return new FileFieldWrapper(field, this);
 				case "droplink":
 				case "droptree":
-					return new LinkFieldWrapper(field);
+					return new LinkFieldWrapper(field, this);
 				case "general link":
-					return new GeneralLinkFieldWrapper(field);
+					return new GeneralLinkFieldWrapper(field, this);
 				case "text":
 				case "single-line text":
 				case "multi-line text":
 				case "droplist":
-					return new TextFieldWrapper(field);
+					return new TextFieldWrapper(field, this);
 				case "rich text":
-					return new RichTextFieldWrapper(field);
+					return new RichTextFieldWrapper(field, this);
 				case "number":
-					return new NumberFieldWrapper(field);
+					return new NumberFieldWrapper(field, this);
 				case "integer":
-					return new IntegerFieldWrapper(field);
+					return new IntegerFieldWrapper(field, this);
 				default:
 					return null;
 			}
 		}
 
-		internal static IEnumerable<T> FilterWrapperTypes<T>(IEnumerable<IItemWrapper> wrappers)
+		public IEnumerable<T> FilterWrapperTypes<T>(IEnumerable<IItemWrapper> wrappers)
 		{
 			foreach (IItemWrapper wrapper in wrappers)
 			{

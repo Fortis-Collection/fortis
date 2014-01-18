@@ -3,16 +3,17 @@ using Sitecore.Data.Fields;
 using Sitecore.Resources.Media;
 using Sitecore.Web.UI.WebControls;
 using System.Web;
+using Fortis.Providers;
 
 namespace Fortis.Model.Fields
 {
 	public class ImageFieldWrapper : FieldWrapper, IImageFieldWrapper
 	{
-		public ImageFieldWrapper(Field field)
-			: base(field) { }
+		public ImageFieldWrapper(Field field, ISpawnProvider spawnProvider)
+			: base(field, spawnProvider) { }
 
-		public ImageFieldWrapper(string key, ref ItemWrapper item, string value = null)
-			: base(key, ref item, value) { }
+		public ImageFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, string value = null)
+			: base(key, ref item, value, spawnProvider) { }
 
 		public string GetSourceUri()
 		{

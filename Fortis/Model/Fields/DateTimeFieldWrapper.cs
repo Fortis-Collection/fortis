@@ -1,6 +1,7 @@
 ﻿using System;
 using Sitecore.Data.Fields;
 using System.Web;
+using Fortis.Providers;
 
 namespace Fortis.Model.Fields
 {
@@ -18,14 +19,14 @@ namespace Fortis.Model.Fields
 			get { return IsLazy ? _dateTime : DateField.DateTime; }
 		}
 
-		public DateTimeFieldWrapper(Field field)
-			: base(field) { }
+		public DateTimeFieldWrapper(Field field, ISpawnProvider spawnProvider)
+			: base(field, spawnProvider) { }
 
-		public DateTimeFieldWrapper(string key, ref ItemWrapper item, string value = null)
-			: base(key, ref item, value) { }
+		public DateTimeFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, string value = null)
+			: base(key, ref item, value, spawnProvider) { }
 
-		public DateTimeFieldWrapper(string key, ref ItemWrapper item, DateTime value)
-			: base(key, ref item, value.ToString())
+		public DateTimeFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, DateTime value)
+			: base(key, ref item, value.ToString(), spawnProvider)
 		{
 			_dateTime = value;
 		}

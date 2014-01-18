@@ -1,6 +1,7 @@
 ﻿using System;
 using Fortis.Model.Fields;
 using System.Web;
+using Fortis.Providers;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
@@ -34,8 +35,8 @@ namespace Fortis.Model.RenderingParameters.Fields
 			}
 		}
 
-		public LinkFieldWrapper(string value)
-			: base(value)
+		public LinkFieldWrapper(string value, ISpawnProvider spawnProvider)
+			: base(value, spawnProvider)
 		{
 
 		}
@@ -52,7 +53,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 				var item = Sitecore.Context.Database.GetItem(_value);
 				if (item != null)
 				{
-					var wrapper = Spawn.FromItem<T>(item);
+					var wrapper = SpawnProvider.FromItem<T>(item);
 					return (T)((wrapper is T) ? wrapper : null);
 				}
 			}

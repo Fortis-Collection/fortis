@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Sitecore.Data.Fields;
 using Fortis.Extensions;
 using Fortis.SitecoreExtensions;
+using Fortis.Providers;
 
 namespace Fortis.Model.Fields
 {
@@ -12,17 +13,17 @@ namespace Fortis.Model.Fields
 		private const char _delimiter = '|';
 		private IEnumerable<Guid> _ids;
 
-		public ListFieldWrapper(Field field)
-			: base(field) { }
+		public ListFieldWrapper(Field field, ISpawnProvider spawnProvider)
+			: base(field, spawnProvider) { }
 
-		public ListFieldWrapper(string key, ref ItemWrapper item, string value = null)
-			: this(key, ref item, value.Split(_delimiter).ToGuidEnumerable()) { }
+		public ListFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, string value = null)
+			: this(key, ref item, spawnProvider, value.Split(_delimiter).ToGuidEnumerable()) { }
 
-		public ListFieldWrapper(string key, ref ItemWrapper item, IEnumerable ids = null)
-			: this(key, ref item, ids.ToGuidEnumerable()) { }
+		public ListFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, IEnumerable ids = null)
+			: this(key, ref item, spawnProvider, ids.ToGuidEnumerable()) { }
 
-		public ListFieldWrapper(string key, ref ItemWrapper item, IEnumerable<Guid> ids = null)
-			: base(key, ref item, ids.ToDelimitedString(_delimiter))
+		public ListFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, IEnumerable<Guid> ids = null)
+			: base(key, ref item, ids.ToDelimitedString(_delimiter), spawnProvider)
 		{
 			_ids = ids;
 		}
@@ -35,7 +36,7 @@ namespace Fortis.Model.Fields
 
                 if (item != null)
                 {
-                    var wrapper = Spawn.FromItem<T>(item);
+                    var wrapper = SpawnProvider.FromItem<T>(item);
 
                     if (wrapper is T)
                     {

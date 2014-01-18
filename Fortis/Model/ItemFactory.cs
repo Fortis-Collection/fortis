@@ -19,27 +19,29 @@
 
 	public partial class ItemFactory : IItemFactory
 	{
-		private readonly IContextProvider _contextProvider;
+		protected readonly IContextProvider ContextProvider;
+		protected readonly ISpawnProvider SpawnProvider;
 
-		public ItemFactory(IContextProvider contextProvider)
+		public ItemFactory(IContextProvider contextProvider, ISpawnProvider spawnProvider)
 		{
-			_contextProvider = contextProvider;
+			ContextProvider = contextProvider;
+			SpawnProvider = spawnProvider;
 		}
 
 		public Guid GetTemplateID(Type type)
 		{
-			if (Spawn.InterfaceTemplateMap.ContainsKey(type))
+			if (SpawnProvider.InterfaceTemplateMap.ContainsKey(type))
 			{
-				return Spawn.InterfaceTemplateMap[type];
+				return SpawnProvider.InterfaceTemplateMap[type];
 			}
 			return Guid.Empty;
 		}
 
 		public Type GetInterfaceType(Guid templateId)
 		{
-			if (Spawn.TemplateMap.ContainsKey(templateId))
+			if (SpawnProvider.TemplateMap.ContainsKey(templateId))
 			{
-				return Spawn.TemplateMap[templateId];
+				return SpawnProvider.TemplateMap[templateId];
 			}
 
 			return typeof(IItemWrapper);
@@ -83,7 +85,7 @@
 			object wrapper = null;
 			try
 			{
-				wrapper = Spawn.FromItem<T>(item);
+				wrapper = SpawnProvider.FromItem<T>(item);
 			}
 			catch { }
 			return (T)((wrapper is T) ? wrapper : null);
@@ -126,16 +128,16 @@
 			object newItemObject = null;
 			var type = typeof(T);
 
-			if (Spawn.InterfaceTemplateMap.ContainsKey(type))
+			if (SpawnProvider.InterfaceTemplateMap.ContainsKey(type))
 			{
-				var templateId = Spawn.InterfaceTemplateMap[type];
+				var templateId = SpawnProvider.InterfaceTemplateMap[type];
 
 				if (parentItem != null)
 				{
 					TemplateItem newItemTemplate = GetItem(templateId, parentItem.Database);
 					var newItem = parentItem.Add(itemName, newItemTemplate);
 
-					newItemObject = Spawn.FromItem<T>(newItem);
+					newItemObject = SpawnProvider.FromItem<T>(newItem);
 				}
 			}
 
@@ -145,14 +147,14 @@
 		public T GetSiteHome<T>() where T : IItemWrapper
 		{
 			var item = GetItem(Sitecore.Context.Site.StartPath);
-			var wrapper = Spawn.FromItem<T>(item);
+			var wrapper = SpawnProvider.FromItem<T>(item);
 			return (T)((wrapper is T) ? wrapper : null);
 		}
 
 		public T GetContextItem<T>() where T : IItemWrapper
 		{
-			var item = _contextProvider.PageContextItem;
-			var wrapper = Spawn.FromItem<T>(item);
+			var item = ContextProvider.PageContextItem;
+			var wrapper = SpawnProvider.FromItem<T>(item);
 
 			return (T)((wrapper is T) ? wrapper : null);
 		}
@@ -161,8 +163,8 @@
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper
 		{
-			var pageWrapper = Spawn.FromItem<TPageItem>(_contextProvider.PageContextItem);
-			var renderingWrapper = Spawn.FromItem<TRenderingItem>(_contextProvider.RenderingContextItem);
+			var pageWrapper = SpawnProvider.FromItem<TPageItem>(ContextProvider.PageContextItem);
+			var renderingWrapper = SpawnProvider.FromItem<TRenderingItem>(ContextProvider.RenderingContextItem);
 			var validPageWrapper = (TPageItem)(pageWrapper is TPageItem ? pageWrapper : null);
 			var validRenderingWrapper = (TRenderingItem)(renderingWrapper is TRenderingItem ? renderingWrapper : null);
 
@@ -174,9 +176,9 @@
 			where TRenderingItem : IItemWrapper
 			where TRenderingParametersItem : IRenderingParameterWrapper
 		{
-			var pageWrapper = Spawn.FromItem<TPageItem>(_contextProvider.PageContextItem);
-			var renderingWrapper = Spawn.FromItem<TRenderingItem>(_contextProvider.RenderingContextItem);
-			var renderingParametersWrapper = Spawn.FromRenderingParameters<TRenderingParametersItem>(_contextProvider.RenderingItem, _contextProvider.RenderingParameters);
+			var pageWrapper = SpawnProvider.FromItem<TPageItem>(ContextProvider.PageContextItem);
+			var renderingWrapper = SpawnProvider.FromItem<TRenderingItem>(ContextProvider.RenderingContextItem);
+			var renderingParametersWrapper = SpawnProvider.FromRenderingParameters<TRenderingParametersItem>(ContextProvider.RenderingItem, ContextProvider.RenderingParameters);
 			var validPageWrapper = (TPageItem)(pageWrapper is TPageItem ? pageWrapper : null);
 			var validRenderingWrapper = (TRenderingItem)(renderingWrapper is TRenderingItem ? renderingWrapper : null);
 			var validRenderingParametersWrapper = (TRenderingParametersItem)(renderingParametersWrapper is TRenderingParametersItem ? renderingParametersWrapper : null);
@@ -190,7 +192,7 @@
 
 			if (Sitecore.Context.Items.Contains(key) && Sitecore.Context.Items[key].GetType() == typeof(Item))
 			{
-				wrapper = Spawn.FromItem<T>((Item)Sitecore.Context.Items[key]);
+				wrapper = SpawnProvider.FromItem<T>((Item)Sitecore.Context.Items[key]);
 			}
 
 			return (T)((wrapper is T) ? wrapper : null);
@@ -232,7 +234,7 @@
 				try
 				{
 					var item = SelectSingleItem(pathOrId, database);
-					wrapper = Spawn.FromItem<T>(item);
+					wrapper = SpawnProvider.FromItem<T>(item);
 				}
 				catch { }
 				return (T)((wrapper is T) ? wrapper : null);
@@ -258,7 +260,7 @@
 			if (database != null)
 			{
 				var items = database.SelectItems(path);
-				return FilterWrapperTypes<T>(Spawn.FromItems(items));
+				return FilterWrapperTypes<T>(SpawnProvider.FromItems(items));
 			}
 			else
 			{
@@ -337,7 +339,7 @@
 		{
 			try
 			{
-				return FilterWrapperTypes<T>(Spawn.FromItems(item.Children.AsEnumerable()));
+				return FilterWrapperTypes<T>(SpawnProvider.FromItems(item.Children.AsEnumerable()));
 			}
 			catch
 			{
@@ -443,9 +445,9 @@
 			{
 				var typeOfT = typeof(T);
 
-				if (Spawn.InterfaceTemplateMap.ContainsKey(typeOfT))
+				if (SpawnProvider.InterfaceTemplateMap.ContainsKey(typeOfT))
 				{
-					var templateId = Spawn.InterfaceTemplateMap[typeOfT];
+					var templateId = SpawnProvider.InterfaceTemplateMap[typeOfT];
 
 					return results.Where(item => item.TemplateIds.Contains(templateId) && item.LanguageName == Sitecore.Context.Language.Name && item.IsLatestVersion);
 				}
