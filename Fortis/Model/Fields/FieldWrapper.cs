@@ -3,26 +3,30 @@ using Sitecore.Data.Fields;
 using Sitecore.Web.UI.WebControls;
 using System.Web;
 using Sitecore.Data.Items;
+using Fortis.Providers;
 
 namespace Fortis.Model.Fields
 {
 	public class FieldWrapper : IFieldWrapper
 	{
+		protected readonly ISpawnProvider SpawnProvider;
 		private bool _modified;
 		private Field _field;
 		private ItemWrapper _item;
 		private string _rawValue;
 		private string _key;
 
-		public FieldWrapper(Field field)
+		public FieldWrapper(Field field, ISpawnProvider spawnProvider)
 		{
 			Sitecore.Diagnostics.Assert.ArgumentNotNull(field, "field");
 
 			_modified = false;
 			_field = field;
+
+			SpawnProvider = spawnProvider;
 		}
 
-		public FieldWrapper(string key, ref ItemWrapper item, string value)
+		public FieldWrapper(string key, ref ItemWrapper item, string value, ISpawnProvider spawnProvider)
 		{
 			Sitecore.Diagnostics.Assert.ArgumentNotNull(key, "key");
 			Sitecore.Diagnostics.Assert.ArgumentNotNull(item, "item");
@@ -30,6 +34,8 @@ namespace Fortis.Model.Fields
 			_key = key;
 			_item = item;
 			_rawValue = value;
+
+			SpawnProvider = spawnProvider;
 		}
 
 		protected Field Field
@@ -45,7 +51,7 @@ namespace Fortis.Model.Fields
 						throw new Exception("Fortis: Field " + _key + " does not exist in item " + _item.ItemID);
 					}
 
-					if (!Spawn.IsCompatibleFieldType(_field.Type, this.GetType()))
+					if (!SpawnProvider.TemplateMapProvider.IsCompatibleFieldType(_field.Type, this.GetType()))
 					{
 						throw new Exception("Fortis: Field " + _key + " of type " + _field.Type + " for item " + _item.ItemID + " is not compatible with Fortis type " + this.GetType());
 					}

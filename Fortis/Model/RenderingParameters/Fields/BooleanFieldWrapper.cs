@@ -1,5 +1,6 @@
 ﻿using System;
 using Fortis.Model.Fields;
+using Fortis.Providers;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
@@ -11,8 +12,8 @@ namespace Fortis.Model.RenderingParameters.Fields
 			set { throw new NotImplementedException(); }
 		}
 
-		public BooleanFieldWrapper(string value)
-			: base(value)
+		public BooleanFieldWrapper(string value, ISpawnProvider spawnProvider)
+			: base(value, spawnProvider)
 		{
 		}
 

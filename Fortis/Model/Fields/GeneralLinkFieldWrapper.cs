@@ -1,5 +1,6 @@
 ﻿using System;
 using Sitecore.Data.Fields;
+using Fortis.Providers;
 
 namespace Fortis.Model.Fields
 {
@@ -52,17 +53,17 @@ namespace Fortis.Model.Fields
 			}
 		}
 
-		public GeneralLinkFieldWrapper(Field field)
-			: base(field) {	}
+		public GeneralLinkFieldWrapper(Field field, ISpawnProvider spawnProvider)
+			: base(field, spawnProvider) {	}
 
-		public GeneralLinkFieldWrapper(string key, ref ItemWrapper item, string value = null)
-			: base(key, ref item, value) { }
+		public GeneralLinkFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, string value = null)
+			: base(key, ref item, spawnProvider, value) { }
 
 		public override T GetTarget<T>()
 		{
 			if (IsInternal || IsMediaLink)
 			{
-                var wrapper = Spawn.FromItem<T>(LinkField.TargetItem);
+                var wrapper = SpawnProvider.FromItem<T>(LinkField.TargetItem);
                 return (T)((wrapper is T) ? wrapper : null);;
 			}
 

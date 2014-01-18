@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Web.UI;
 using Sitecore.Data.Items;
+using Fortis.Providers;
 
 namespace Fortis.Model
 {
 	public class RenderingParameterFactory : IRenderingParameterFactory
 	{
+		protected readonly ISpawnProvider SpawnProvider;
+
 		private Dictionary<Guid, Type> _templateMap = null;
 
 		private Dictionary<Guid, Type> TemplateMap
@@ -37,6 +40,11 @@ namespace Fortis.Model
 			}
 		}
 
+		public RenderingParameterFactory(ISpawnProvider spawnProvider)
+		{
+			SpawnProvider = spawnProvider;
+		}
+
 		private Item GetRenderingByPath(string path)
 		{
 			var items = Sitecore.Context.Database.SelectItems("/sitecore/layout//*");
@@ -60,7 +68,7 @@ namespace Fortis.Model
 				// Get public constructors
 				var ctors = type.GetConstructors();
 				// Invoke the first public constructor with no parameters.
-				return (IRenderingParameterWrapper)ctors[0].Invoke(new object[] { queryString });
+				return (IRenderingParameterWrapper)ctors[0].Invoke(new object[] { queryString, SpawnProvider });
 			}
 
 			var parameters = new Dictionary<string, string>();
@@ -74,7 +82,7 @@ namespace Fortis.Model
 				}
 			}
 
-			return new RenderingParameterWrapper(parameters);
+			return new RenderingParameterWrapper(parameters, SpawnProvider);
 		}
 
 		private IEnumerable<T> FilterWrapperTypes<T>(IEnumerable<IItemWrapper> wrappers)

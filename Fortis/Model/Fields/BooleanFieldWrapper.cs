@@ -1,5 +1,6 @@
 ﻿using System;
 using Sitecore.Data.Fields;
+using Fortis.Providers;
 
 namespace Fortis.Model.Fields
 {
@@ -13,14 +14,14 @@ namespace Fortis.Model.Fields
 			set { RawValue = value ? "1" : ""; }
 		}
 
-		public BooleanFieldWrapper(Field field)
-			: base(field) { }
+		public BooleanFieldWrapper(Field field, ISpawnProvider spawnProvider)
+			: base(field, spawnProvider) { }
 
-		public BooleanFieldWrapper(string key, ref ItemWrapper item, string value = null)
-			: base(key, ref item, value) { }
+		public BooleanFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, string value = null)
+			: base(key, ref item, value, spawnProvider) { }
 
-		public BooleanFieldWrapper(string key, ref ItemWrapper item, bool value)
-			: base(key, ref item, value ? "1" : "")
+		public BooleanFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, bool value)
+			: base(key, ref item, value ? "1" : "", spawnProvider)
 		{
 			_boolean = value;
 		}

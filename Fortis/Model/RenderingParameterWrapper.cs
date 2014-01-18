@@ -1,4 +1,5 @@
 ﻿using Fortis.Model.RenderingParameters.Fields;
+using Fortis.Providers;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -9,12 +10,15 @@ namespace Fortis.Model
 {
 	public class RenderingParameterWrapper : IRenderingParameterWrapper
 	{
+		protected ISpawnProvider SpawnProvider;
 		protected Dictionary<string, string> _parameters = null;
 		protected Dictionary<string, FieldWrapper> _fields = new Dictionary<string, FieldWrapper>();
 
-		public RenderingParameterWrapper(Dictionary<string, string> parameters)
+		public RenderingParameterWrapper(Dictionary<string, string> parameters, ISpawnProvider spawnProvider)
 		{
 			_parameters = parameters;
+
+			SpawnProvider = spawnProvider;
 		}
 
 		protected IFieldWrapper GetField(string key, string type)
@@ -30,7 +34,7 @@ namespace Fortis.Model
 					switch (type)
 					{
 						case "checkbox":
-							_fields[key] = new BooleanFieldWrapper(parameterValue);
+							_fields[key] = new BooleanFieldWrapper(parameterValue, SpawnProvider);
 							break;
 						case "checklist":
 						case "treelist":
@@ -39,25 +43,25 @@ namespace Fortis.Model
 						case "multilist":
 						case "multilist with search":
 						case "tags":
-							_fields[key] = new ListFieldWrapper(parameterValue);
+							_fields[key] = new ListFieldWrapper(parameterValue, SpawnProvider);
 							break;
 						case "droplink":
 						case "droptree":
 						case "general link":
-							_fields[key] = new LinkFieldWrapper(parameterValue);
+							_fields[key] = new LinkFieldWrapper(parameterValue, SpawnProvider);
 							break;
 						case "single-line text":
 						case "multi-line text":
 						case "rich text":
 						case "droplist":
 						case "number":
-							_fields[key] = new TextFieldWrapper(parameterValue);
+							_fields[key] = new TextFieldWrapper(parameterValue, SpawnProvider);
 							break;
 						case "integer":
-							_fields[key] = new IntegerFieldWrapper(parameterValue);
+							_fields[key] = new IntegerFieldWrapper(parameterValue, SpawnProvider);
 							break;
 						default:
-							_fields[key] = new FieldWrapper(parameterValue);
+							_fields[key] = new FieldWrapper(parameterValue, SpawnProvider);
 							break;
 					}
 				}
