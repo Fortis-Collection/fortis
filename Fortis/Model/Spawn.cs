@@ -129,13 +129,82 @@ namespace Fortis.Model
 			}
 		}
 
+		internal static Type GetImplementation<T>() where T : IItemWrapper
+		{
+			var typeOfT = typeof(T);
+
+			if (!typeOfT.IsInterface)
+			{
+				throw new Exception("Fortis: An interface implementing IITemWrapper must be passed as the generic argument to get the corresponding implementation. " + typeOfT.Name + " is not an interface.");
+			}
+
+			if (!InterfaceTemplateMap.ContainsKey(typeOfT))
+			{
+				throw new Exception("Fortis: Type " + typeOfT.Name + " does not exist in interface template map");
+			}
+
+			var templateId = InterfaceTemplateMap[typeOfT];
+
+			if (!TemplateMap.ContainsKey(templateId))
+			{
+				throw new Exception("Fortis: Template ID " + templateId + " does not exist in template map");
+			}
+
+			return TemplateMap[templateId];
+		}
+
+		internal static IItemWrapper FromItem<T>(Guid itemId, Guid templateId) where T : IItemWrapper
+		{
+			return FromItem(itemId, templateId, typeof(T));
+		}
+
+		internal static IItemWrapper FromItem(Guid itemId, Guid templateId, Type template = null, Dictionary<string, object> lazyFields = null)
+		{
+			// Exact match
+			if (TemplateMap.ContainsKey(templateId))
+			{
+				var concreteTemplate = TemplateMap[templateId];
+
+				// Check to see if Type being requested is assignable to the concrete type
+				if (!template.IsAssignableFrom(concreteTemplate))
+				{
+					throw new Exception("Fortis: The type " + concreteTemplate.Name + " is not assignable from the type " + template.Name);
+				}
+
+				return (IItemWrapper)Activator.CreateInstance(concreteTemplate, new object[] { itemId, lazyFields });
+			}
+
+			// Inherited template mapping needs implementing
+
+			//var typeOfBaseWrapper = typeof(IItemWrapper);
+
+			//if (template != null &&
+			//	template.IsInterface &&
+			//	template != typeOfBaseWrapper &&
+			//	template.IsAssignableFrom(typeOfBaseWrapper))
+			//{
+			//	if (!InterfaceTemplateMap.ContainsKey(template))
+			//	{
+			//		throw new Exception("Fortis | Unable to find template for " + template.FullName);
+			//	}
+
+				
+			//}
+
+			return new ItemWrapper(itemId);
+		}
+
 		internal static IItemWrapper FromItem(Item item)
 		{
 			return FromItem<IItemWrapper>(item);
 		}
 
-		internal static IItemWrapper FromItem<T>(Item item)
-			where T : IItemWrapper
+		internal static IItemWrapper FromItem<T>(Item item) where T : IItemWrapper
+		{
+			return FromItem(item, typeof(T));
+		}
+
+		internal static IItemWrapper FromItem(Item item, Type template = null)
 		{
 			if (item != null)
 			{
@@ -149,25 +218,31 @@ namespace Fortis.Model
 					return (IItemWrapper)Activator.CreateInstance(type, new object[] { item });
 				}
 
-				var wrapperType = typeof(T);
-
-				// Attempt to match the template of the type passed through to an inherited template.
-				if (wrapperType != typeof(IItemWrapper))
+				if (template != null)
 				{
-					if (!InterfaceTemplateMap.ContainsKey(wrapperType))
+					var wrapperType = template;
+
+					// Attempt to match the template of the type passed through to an inherited template.
+					if (wrapperType != typeof(IItemWrapper))
 					{
-						throw new Exception("Fortis | Unable to find template for " + wrapperType.FullName);
-					}
+						if (!InterfaceTemplateMap.ContainsKey(wrapperType))
+						{
+							throw new Exception("Fortis | Unable to find template for " + wrapperType.FullName);
+						}
 
-					var typeTemplateId = InterfaceTemplateMap[wrapperType];
-					var itemTemplate = TemplateManager.GetTemplate(item);
+						var typeTemplateId = InterfaceTemplateMap[wrapperType];
+						var itemTemplate = TemplateManager.GetTemplate(item);
 
-					if (itemTemplate.DescendsFrom(new ID(typeTemplateId)))
-					{
-						// Get type information
-						var type = TemplateMap[typeTemplateId];
+						if (itemTemplate != null)
+						{
+							if (itemTemplate.DescendsFrom(new ID(typeTemplateId)))
+							{
+								// Get type information
+								var type = TemplateMap[typeTemplateId];
 
-						return (IItemWrapper)Activator.CreateInstance(type, new object[] { item });
+								return (IItemWrapper)Activator.CreateInstance(type, new object[] { item });
+							}
+						}
 					}
 				}
 
@@ -236,8 +311,73 @@ namespace Fortis.Model
 			}
 		}
 
+		internal static bool IsCompatibleTemplate<T>(Guid templateId) where T : IItemWrapper
+		{
+			return IsCompatibleTemplate(templateId, typeof(T));
+		}
+
+		internal static bool IsCompatibleTemplate(Guid templateId, Type template)
+		{
+			// template Type must at least implement IItemWrapper
+			if (template != typeof(IItemWrapper))
+			{
+				// TODO: Implement
+			}
+
+			return true;
+		}
+
+		internal static bool IsCompatibleFieldType<T>(string fieldType) where T : FieldWrapper
+		{
+			return IsCompatibleFieldType(fieldType, typeof(T));
+		}
+
+		internal static bool IsCompatibleFieldType(string scFieldType, Type fieldType)
+		{
+			switch (scFieldType.ToLower())
+			{
+				case "checkbox":
+					return fieldType == typeof(BooleanFieldWrapper);
+				case "image":
+					return fieldType == typeof(ImageFieldWrapper);
+				case "date":
+				case "datetime":
+					return fieldType == typeof(DateTimeFieldWrapper);
+				case "checklist":
+				case "treelist":
+				case "treelistex":
+				case "multilist":
+					return fieldType == typeof(ListFieldWrapper);
+				case "file":
+					return fieldType == typeof(FileFieldWrapper);
+				case "droplink":
+				case "droptree":
+					return fieldType == typeof(LinkFieldWrapper);
+				case "general link":
+					return fieldType == typeof(GeneralLinkFieldWrapper);
+				case "text":
+				case "single-line text":
+				case "multi-line text":
+				case "droplist":
+					return fieldType == typeof(TextFieldWrapper);
+				case "rich text":
+					return fieldType == typeof(RichTextFieldWrapper);
+				case "number":
+					return fieldType == typeof(NumberFieldWrapper);
+				case "integer":
+					return fieldType == typeof(IntegerFieldWrapper);
+				default:
+					return false;
+			}
+		}
+
 		internal static IFieldWrapper FromField(Field field)
 		{
+			if (field == null)
+			{
+				return null;
+			}
+
 			switch (field.Type.ToLower())
 			{
 				case "checkbox":
@@ -262,13 +402,27 @@ namespace Fortis.Model
 				case "text":
 				case "single-line text":
 				case "multi-line text":
-				case "number":
 				case "droplist":
 					return new TextFieldWrapper(field);
 				case "rich text":
 					return new RichTextFieldWrapper(field);
+				case "number":
+					return new NumberFieldWrapper(field);
+				case "integer":
+					return new IntegerFieldWrapper(field);
 				default:
 					return null;
+			}
+		}
+
+		internal static IEnumerable<T> FilterWrapperTypes<T>(IEnumerable<IItemWrapper> wrappers)
+		{
+			foreach (IItemWrapper wrapper in wrappers)
+			{
+				if (wrapper is T)
+				{
+					yield return (T)wrapper;
+				}
 			}
 		}
 	}

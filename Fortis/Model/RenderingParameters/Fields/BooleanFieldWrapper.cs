@@ -7,7 +7,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 	{
 		public bool Value
 		{
-			get { return RawValue.Equals("1"); }
+			get { return string.IsNullOrWhiteSpace(RawValue) ? false : RawValue.Equals("1"); }
 			set { throw new NotImplementedException(); }
 		}
 

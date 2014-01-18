@@ -5,6 +5,8 @@
 	using Fortis.Model;
 	using Fortis.Model.Fields;
 	using System.Collections.Generic;
+	using Sitecore.ContentSearch;
+	using Sitecore.ContentSearch.Linq.Common;
 
 	#region Base Template
 
@@ -22,6 +24,7 @@
 		ITextFieldWrapper BaseTextField { get; }
 	}
 
+	[PredefinedQuery("template", ComparisonType.Equal, "{AF49395C-74BB-4ACF-8E01-F2B5BEECA8FE}", typeof(Guid))]
 	[TemplateMapping("{AF49395C-74BB-4ACF-8E01-F2B5BEECA8FE}")]
 	public partial class ScBaseTemplate : ItemWrapper, IScBaseTemplate
 	{
@@ -97,6 +100,7 @@
 		ITextFieldWrapper TextField { get; }
 	}
 
+	[PredefinedQuery("template", ComparisonType.Equal, "{02F5002C-325E-4E5A-9C93-A97724ED3400}", typeof(Guid))]
 	[TemplateMapping("{02F5002C-325E-4E5A-9C93-A97724ED3400}")]
 	public partial class ScTemplate : ItemWrapper, IScTemplate
 	{
@@ -110,7 +114,7 @@
 
 		public IBooleanFieldWrapper BooleanField
 		{
-			get { throw new NotImplementedException(); }
+			get { return GetField<IBooleanFieldWrapper>("Boolean Field", this["Boolean Field"]); }
 		}
 
 		public IDateTimeFieldWrapper DateTimeField
