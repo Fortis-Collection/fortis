@@ -51,7 +51,7 @@ namespace Fortis.Model.Fields
 						throw new Exception("Fortis: Field " + _key + " does not exist in item " + _item.ItemID);
 					}
 
-					if (!SpawnProvider.IsCompatibleFieldType(_field.Type, this.GetType()))
+					if (!SpawnProvider.TemplateMapProvider.IsCompatibleFieldType(_field.Type, this.GetType()))
 					{
 						throw new Exception("Fortis: Field " + _key + " of type " + _field.Type + " for item " + _item.ItemID + " is not compatible with Fortis type " + this.GetType());
 					}

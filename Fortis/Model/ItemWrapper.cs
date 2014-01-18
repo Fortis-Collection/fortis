@@ -82,7 +82,7 @@ namespace Fortis.Model
 						throw new Exception("Fortis: Item with ID of " + _itemId + " not found in " + Sitecore.Context.Database.Name);
 					}
 
-					if (!_spawnProvider.IsCompatibleTemplate(_item.TemplateID.Guid, this.GetType()))
+					if (!_spawnProvider.TemplateMapProvider.IsCompatibleTemplate(_item.TemplateID.Guid, this.GetType()))
 					{
 						throw new Exception("Fortis: Item " + _itemId + " of template " + _item.TemplateID.Guid + " is not compatible with " + this.GetType());
 					}
@@ -138,7 +138,7 @@ namespace Fortis.Model
 		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_template")]
 		public Guid TemplateId
 		{
-			get { return _spawnProvider.TemplateMap.FirstOrDefault(t => t.Value == this.GetType()).Key; }
+			get { return _spawnProvider.TemplateMapProvider.TemplateMap.FirstOrDefault(t => t.Value == this.GetType()).Key; }
 		}
 
 		[IndexField("_templates")]
@@ -146,7 +146,7 @@ namespace Fortis.Model
 		{
 			get
 			{
-				foreach (var template in _spawnProvider.InterfaceTemplateMap)
+				foreach (var template in _spawnProvider.TemplateMapProvider.InterfaceTemplateMap)
 				{
 					if (template.Key.IsAssignableFrom(this.GetType()))
 					{
@@ -238,6 +238,7 @@ namespace Fortis.Model
 			return (T)Fields[key];
 		}
 
+		[Obsolete("Use GetField<T>")]
 		protected IFieldWrapper GetField(string key)
 		{
 			key = key.ToLower();

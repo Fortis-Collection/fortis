@@ -19,6 +19,8 @@
 	[TestFixture]
 	public class ItemFactoryTests
 	{
+		private IModelAssemblyProvider _modelAssemblyProvider;
+		private ITemplateMapProvider _templateMappingProvider;
 		private ISpawnProvider _spawnProvider;
 		private IItemFactory _itemFactory;
 		private Mock<IContextProvider> _mockContextProvider;
@@ -28,7 +30,9 @@
 		{
 			// Create mock objects
 			_mockContextProvider = new Mock<IContextProvider>();
-			_spawnProvider = new SpawnProvider();
+			_modelAssemblyProvider = new ModelAssemblyProvider();
+			_templateMappingProvider = new TemplateMapProvider(_modelAssemblyProvider);
+			_spawnProvider = new SpawnProvider(_templateMappingProvider);
 			_itemFactory = new ItemFactory(_mockContextProvider.Object, _spawnProvider);
 		}
 

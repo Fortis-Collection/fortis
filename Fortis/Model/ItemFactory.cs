@@ -30,18 +30,18 @@
 
 		public Guid GetTemplateID(Type type)
 		{
-			if (SpawnProvider.InterfaceTemplateMap.ContainsKey(type))
+			if (SpawnProvider.TemplateMapProvider.InterfaceTemplateMap.ContainsKey(type))
 			{
-				return SpawnProvider.InterfaceTemplateMap[type];
+				return SpawnProvider.TemplateMapProvider.InterfaceTemplateMap[type];
 			}
 			return Guid.Empty;
 		}
 
 		public Type GetInterfaceType(Guid templateId)
 		{
-			if (SpawnProvider.TemplateMap.ContainsKey(templateId))
+			if (SpawnProvider.TemplateMapProvider.TemplateMap.ContainsKey(templateId))
 			{
-				return SpawnProvider.TemplateMap[templateId];
+				return SpawnProvider.TemplateMapProvider.TemplateMap[templateId];
 			}
 
 			return typeof(IItemWrapper);
@@ -128,9 +128,9 @@
 			object newItemObject = null;
 			var type = typeof(T);
 
-			if (SpawnProvider.InterfaceTemplateMap.ContainsKey(type))
+			if (SpawnProvider.TemplateMapProvider.InterfaceTemplateMap.ContainsKey(type))
 			{
-				var templateId = SpawnProvider.InterfaceTemplateMap[type];
+				var templateId = SpawnProvider.TemplateMapProvider.InterfaceTemplateMap[type];
 
 				if (parentItem != null)
 				{
@@ -445,9 +445,9 @@
 			{
 				var typeOfT = typeof(T);
 
-				if (SpawnProvider.InterfaceTemplateMap.ContainsKey(typeOfT))
+				if (SpawnProvider.TemplateMapProvider.InterfaceTemplateMap.ContainsKey(typeOfT))
 				{
-					var templateId = SpawnProvider.InterfaceTemplateMap[typeOfT];
+					var templateId = SpawnProvider.TemplateMapProvider.InterfaceTemplateMap[typeOfT];
 
 					return results.Where(item => item.TemplateIds.Contains(templateId) && item.LanguageName == Sitecore.Context.Language.Name && item.IsLatestVersion);
 				}

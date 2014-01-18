@@ -16,147 +16,13 @@ namespace Fortis.Providers
 {
 	public class SpawnProvider : ISpawnProvider
 	{
-		public SpawnProvider()
+		private readonly ITemplateMapProvider _templateMapProvider;
+
+		public ITemplateMapProvider TemplateMapProvider { get { return _templateMapProvider; } }
+
+		public SpawnProvider(ITemplateMapProvider templateMappingProvider)
 		{
-			_configuration = (NameValueCollection)WebConfigurationManager.GetSection(_configurationKey);
-		}
-
-		private readonly string _configurationKey = "fortis";
-		private readonly string _assemblyConfigurationKey = "assembly";
-		private Assembly _modelAssembly;
-		private readonly NameValueCollection _configuration;
-		private string ModelAssemblyName { get { return _configuration[_assemblyConfigurationKey]; } }
-		private Assembly ModelAssembly
-		{
-			get
-			{
-				if (_modelAssembly == null)
-				{
-					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-					{
-						if (assembly.FullName.Equals(ModelAssemblyName))
-						{
-							_modelAssembly = assembly;
-							break;
-						}
-					}
-
-					if (_modelAssembly == null)
-					{
-						throw new Exception("Forits | Unable to find model assembly: " + ModelAssemblyName);
-					}
-				}
-
-				return _modelAssembly;
-			}
-		}
-
-		private Dictionary<Guid, Type> _templateMap = null;
-		public Dictionary<Guid, Type> TemplateMap
-		{
-			get
-			{
-				if (_templateMap == null)
-				{
-					_templateMap = new Dictionary<Guid, Type>();
-
-					foreach (var t in ModelAssembly.GetTypes())
-					{
-						foreach (TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof(TemplateMappingAttribute), false))
-						{
-							if (string.IsNullOrEmpty(templateAttribute.Type))
-							{
-								if (!_templateMap.Keys.Contains(templateAttribute.Id))
-								{
-									_templateMap.Add(templateAttribute.Id, t);
-								}
-							}
-						}
-					}
-				}
-
-				return _templateMap;
-			}
-		}
-
-		private Dictionary<Type, Guid> _interfaceTemplateMap;
-		public Dictionary<Type, Guid> InterfaceTemplateMap
-		{
-			get
-			{
-				if (_interfaceTemplateMap == null)
-				{
-					_interfaceTemplateMap = new Dictionary<Type, Guid>();
-
-					foreach (var t in ModelAssembly.GetTypes())
-					{
-						foreach (TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof(TemplateMappingAttribute), false))
-						{
-							if (string.Equals(templateAttribute.Type, "InterfaceMap"))
-							{
-								if (!_interfaceTemplateMap.Keys.Contains(t))
-								{
-									_interfaceTemplateMap.Add(t, templateAttribute.Id);
-								}
-							}
-						}
-					}
-				}
-
-				return _interfaceTemplateMap;
-			}
-		}
-
-		private Dictionary<Guid, Type> _renderingParametersTemplateMap = null;
-		public Dictionary<Guid, Type> RenderingParametersTemplateMap
-		{
-			get
-			{
-				if (_renderingParametersTemplateMap == null)
-				{
-					_renderingParametersTemplateMap = new Dictionary<Guid, Type>();
-
-					foreach (var t in ModelAssembly.GetTypes())
-					{
-						foreach (TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof(TemplateMappingAttribute), false))
-						{
-							if (templateAttribute.Type == "RenderingParameter")
-							{
-								if (!_renderingParametersTemplateMap.Keys.Contains(templateAttribute.Id))
-								{
-									_renderingParametersTemplateMap.Add(templateAttribute.Id, t);
-								}
-							}
-						}
-					}
-				}
-
-				return _renderingParametersTemplateMap;
-			}
-		}
-
-		public Type GetImplementation<T>() where T : IItemWrapper
-		{
-			var typeOfT = typeof(T);
-
-			if (!typeOfT.IsInterface)
-			{
-				throw new Exception("Fortis: An interface implementing IITemWrapper must be passed as the generic argument to get the corresponding implementation. " + typeOfT.Name + " is not an interface.");
-			}
-
-			if (!InterfaceTemplateMap.ContainsKey(typeOfT))
-			{
-				throw new Exception("Fortis: Type " + typeOfT.Name + " does not exist in interface template map");
-			}
-
-			var templateId = InterfaceTemplateMap[typeOfT];
-
-			if (!TemplateMap.ContainsKey(templateId))
-			{
-				throw new Exception("Fortis: Template ID " + templateId + " does not exist in template map");
-			}
-
-			return TemplateMap[templateId];
+			_templateMapProvider = templateMappingProvider;
 		}
 
 		public IItemWrapper FromItem<T>(Guid itemId, Guid templateId) where T : IItemWrapper
@@ -167,9 +33,9 @@ namespace Fortis.Providers
 		public IItemWrapper FromItem(Guid itemId, Guid templateId, Type template = null, Dictionary<string, object> lazyFields = null)
 		{
 			// Exact match
-			if (TemplateMap.ContainsKey(templateId))
+			if (TemplateMapProvider.TemplateMap.ContainsKey(templateId))
 			{
-				var concreteTemplate = TemplateMap[templateId];
+				var concreteTemplate = TemplateMapProvider.TemplateMap[templateId];
 
 				// Check to see if Type being requested is assignable to the concrete type
 				if (!template.IsAssignableFrom(concreteTemplate))
@@ -216,10 +82,10 @@ namespace Fortis.Providers
 			{
 				// Attempt to exact match the item against a template in the model
 				var id = item.TemplateID.Guid;
-				if (TemplateMap.Keys.Contains(id))
+				if (TemplateMapProvider.TemplateMap.Keys.Contains(id))
 				{
 					// Get type information
-					var type = TemplateMap[id];
+					var type = TemplateMapProvider.TemplateMap[id];
 
 					return (IItemWrapper)Activator.CreateInstance(type, new object[] { item, this });
 				}
@@ -231,12 +97,12 @@ namespace Fortis.Providers
 					// Attempt to match the template of the type passed through to an inherited template.
 					if (wrapperType != typeof(IItemWrapper))
 					{
-						if (!InterfaceTemplateMap.ContainsKey(wrapperType))
+						if (!TemplateMapProvider.InterfaceTemplateMap.ContainsKey(wrapperType))
 						{
 							throw new Exception("Fortis | Unable to find template for " + wrapperType.FullName);
 						}
 
-						var typeTemplateId = InterfaceTemplateMap[wrapperType];
+						var typeTemplateId = TemplateMapProvider.InterfaceTemplateMap[wrapperType];
 						var itemTemplate = TemplateManager.GetTemplate(item);
 
 						if (itemTemplate != null)
@@ -244,7 +110,7 @@ namespace Fortis.Providers
 							if (itemTemplate.DescendsFrom(new ID(typeTemplateId)))
 							{
 								// Get type information
-								var type = TemplateMap[typeTemplateId];
+								var type = TemplateMapProvider.TemplateMap[typeTemplateId];
 
 								return (IItemWrapper)Activator.CreateInstance(type, new object[] { item, this });
 							}
@@ -287,12 +153,12 @@ namespace Fortis.Providers
 
 				if (ID.TryParse(id, out templateId))
 				{
-					if (!RenderingParametersTemplateMap.ContainsKey(templateId.Guid))
+					if (!TemplateMapProvider.RenderingParametersTemplateMap.ContainsKey(templateId.Guid))
 					{
 						throw new Exception("Fortis | Unable to find rendering parameters template " + id + " for " + renderingItem.Name);
 					}
 
-					var type = RenderingParametersTemplateMap[templateId.Guid];
+					var type = TemplateMapProvider.RenderingParametersTemplateMap[templateId.Guid];
 
 					return (IRenderingParameterWrapper)Activator.CreateInstance(type, new object[] { parameters, this });
 				}
@@ -314,66 +180,6 @@ namespace Fortis.Providers
 			foreach (Field field in fields)
 			{
 				yield return FromField(field);
-			}
-		}
-
-		public bool IsCompatibleTemplate<T>(Guid templateId) where T : IItemWrapper
-		{
-			return IsCompatibleTemplate(templateId, typeof(T));
-		}
-
-		public bool IsCompatibleTemplate(Guid templateId, Type template)
-		{
-			// template Type must at least implement IItemWrapper
-			if (template != typeof(IItemWrapper))
-			{
-				// TODO: Implement
-			}
-
-			return true;
-		}
-
-		public bool IsCompatibleFieldType<T>(string fieldType) where T : IFieldWrapper
-		{
-			return IsCompatibleFieldType(fieldType, typeof(T));
-		}
-
-		public bool IsCompatibleFieldType(string scFieldType, Type fieldType)
-		{
-			switch (scFieldType.ToLower())
-			{
-				case "checkbox":
-					return fieldType == typeof(BooleanFieldWrapper);
-				case "image":
-					return fieldType == typeof(ImageFieldWrapper);
-				case "date":
-				case "datetime":
-					return fieldType == typeof(DateTimeFieldWrapper);
-				case "checklist":
-				case "treelist":
-				case "treelistex":
-				case "multilist":
-					return fieldType == typeof(ListFieldWrapper);
-				case "file":
-					return fieldType == typeof(FileFieldWrapper);
-				case "droplink":
-				case "droptree":
-					return fieldType == typeof(LinkFieldWrapper);
-				case "general link":
-					return fieldType == typeof(GeneralLinkFieldWrapper);
-				case "text":
-				case "single-line text":
-				case "multi-line text":
-				case "droplist":
-					return fieldType == typeof(TextFieldWrapper);
-				case "rich text":
-					return fieldType == typeof(RichTextFieldWrapper);
-				case "number":
-					return fieldType == typeof(NumberFieldWrapper);
-				case "integer":
-					return fieldType == typeof(IntegerFieldWrapper);
-				default:
-					return false;
 			}
 		}
 

@@ -177,6 +177,7 @@
     <Compile Include="Model\ItemFactoryTests.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\SpawnProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

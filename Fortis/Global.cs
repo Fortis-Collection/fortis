@@ -10,9 +10,31 @@ namespace Fortis
 {
 	public static class Global
 	{
-		public static ISpawnProvider SpawnProvider;
+		internal static ISpawnProvider SpawnProvider;
 		public static IItemFactory ItemFactory;
 
+		/// <summary>
+		/// Initialise a default Fortis setup with a context provider and verifies the initialisation.
+		/// </summary>
+		/// <param name="contextProvider"></param>
+		public static void Initialise(IContextProvider contextProvider)
+		{
+			SpawnProvider = new SpawnProvider(
+									new TemplateMapProvider(
+											new ModelAssemblyProvider()
+										)
+								);
+
+			ItemFactory = new ItemFactory(contextProvider, SpawnProvider);
+
+			Verify();
+		}
+
+		/// <summary>
+		/// Initialise Fortis with a spawn provider and item factory and verifies the initialisation.
+		/// </summary>
+		/// <param name="spawnProvider"></param>
+		/// <param name="itemFactory"></param>
 		public static void Initialise(ISpawnProvider spawnProvider, IItemFactory itemFactory)
 		{
 			SpawnProvider = spawnProvider;
@@ -21,6 +43,9 @@ namespace Fortis
 			Verify();
 		}
 
+		/// <summary>
+		/// Verifies that Fortis has been correctly set up.
+		/// </summary>
 		public static void Verify()
 		{
 			var verificationFailed = false;
@@ -29,13 +54,13 @@ namespace Fortis
 			errorMessages.AppendLine("Fortis intialise verification failed:");
 			errorMessages.AppendLine();
 
-			if (SpawnProvider == null)
+			if (!VerifySpawnProvider())
 			{
 				errorMessages.AppendLine("SpawnProvider is not initialised");
 				verificationFailed = true;
 			}
 
-			if (ItemFactory == null)
+			if (!VerifyItemFactory())
 			{
 				errorMessages.AppendLine("ItemFacotry is not initialised");
 				verificationFailed = true;
@@ -45,6 +70,24 @@ namespace Fortis
 			{
 				throw new Exception(errorMessages.ToString());
 			}
+		}
+
+		/// <summary>
+		/// Verifies the item factory is correctly set up.
+		/// </summary>
+		/// <returns></returns>
+		public static bool VerifyItemFactory()
+		{
+			return ItemFactory != null;
+		}
+
+		/// <summary>
+		/// Verifies the spawn provider is correctly set up.
+		/// </summary>
+		/// <returns></returns>
+		public static bool VerifySpawnProvider()
+		{
+			return SpawnProvider != null;
 		}
 	}
 }
