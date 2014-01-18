@@ -294,7 +294,7 @@ namespace Fortis.Providers
 
 					var type = RenderingParametersTemplateMap[templateId.Guid];
 
-					return (IRenderingParameterWrapper)Activator.CreateInstance(type, new object[] { parameters });
+					return (IRenderingParameterWrapper)Activator.CreateInstance(type, new object[] { parameters, this });
 				}
 			}
 

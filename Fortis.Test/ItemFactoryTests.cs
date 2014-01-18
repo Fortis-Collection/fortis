@@ -23,16 +23,24 @@
 	[TestFixture]
 	public class ItemFactoryTests
 	{
+		private ISpawnProvider _spawnProvider;
+		private IItemFactory _itemFactory;
+		private Mock<IContextProvider> _mockContextProvider;
+
 		[TestFixtureSetUp]
 		public void Initialise()
 		{
 			// Create mock objects
+			_mockContextProvider = new Mock<IContextProvider>();
+			_spawnProvider = new SpawnProvider();
+			_itemFactory = new ItemFactory(_mockContextProvider.Object, _spawnProvider);
 		}
 
 		[SetUp]
 		public void CleanTestObjects()
 		{
 			// Clean any test objects used
+			_mockContextProvider.ResetCalls();
 		}
 
 		private Item CreateTestItem(string id = null, string name = "Test Item", Guid templateId = default(Guid), FieldCollection fields = null)
@@ -86,12 +94,10 @@
 			{
 				var templateId = new Guid("{02F5002C-325E-4E5A-9C93-A97724ED3400}");
 				var testItem = CreateTestItem(templateId: templateId);
-				var contextProvider = new Mock<IContextProvider>();
 
-				contextProvider.Setup(c => c.PageContextItem).Returns(testItem);
+				_mockContextProvider.Setup(c => c.PageContextItem).Returns(testItem);
 
-				var itemFactory = new ItemFactory(contextProvider.Object);
-				var wrappedItem = itemFactory.GetContextItem<IScTemplate>();
+				var wrappedItem = _itemFactory.GetContextItem<IScTemplate>();
 
 				Assert.IsNotNull(wrappedItem);
 			}
@@ -104,12 +110,10 @@
 			{
 				var templateId = new Guid("{AF49395C-74BB-4ACF-8E01-F2B5BEECA8FE}");
 				var testItem = CreateTestItem(templateId: templateId);
-				var contextProvider = new Mock<IContextProvider>();
 
-				contextProvider.Setup(c => c.PageContextItem).Returns(testItem);
+				_mockContextProvider.Setup(c => c.PageContextItem).Returns(testItem);
 
-				var itemFactory = new ItemFactory(contextProvider.Object);
-				var wrappedItem = itemFactory.GetContextItem<IScTemplate>();
+				var wrappedItem = _itemFactory.GetContextItem<IScTemplate>();
 
 				Assert.IsNull(wrappedItem);
 			}
@@ -122,12 +126,10 @@
 			using (ShimsContext.Create())
 			{
 				var testItem = CreateTestItem();
-				var contextProvider = new Mock<IContextProvider>();
 
-				contextProvider.Setup(c => c.PageContextItem).Returns(testItem);
+				_mockContextProvider.Setup(c => c.PageContextItem).Returns(testItem);
 
-				var itemFactory = new ItemFactory(contextProvider.Object);
-				var wrappedItem = itemFactory.GetContextItem<IScUnmappedTemplate>();
+				var wrappedItem = _itemFactory.GetContextItem<IScUnmappedTemplate>();
 			}
 		}
 
@@ -147,12 +149,10 @@
 					return templateItem;
 				};
 
-				var contextProvider = new Mock<IContextProvider>();
 
-				contextProvider.Setup(c => c.PageContextItem).Returns(testItem);
+				_mockContextProvider.Setup(c => c.PageContextItem).Returns(testItem);
 
-				var itemFactory = new ItemFactory(contextProvider.Object);
-				var wrappedItem = itemFactory.GetContextItem<IScBaseTemplate>();
+				var wrappedItem = _itemFactory.GetContextItem<IScBaseTemplate>();
 
 				Assert.IsNotNull(wrappedItem);
 			}
@@ -192,15 +192,12 @@
 					return templateItem;
 				};
 
-				var contextProvider = new Mock<IContextProvider>();
+				_mockContextProvider.Setup(c => c.PageContextItem).Returns(testItem);
+				_mockContextProvider.Setup(c => c.RenderingContextItem).Returns(testItem);
+				_mockContextProvider.Setup(c => c.RenderingItem).Returns(testRenderingItem);
+				_mockContextProvider.Setup(c => c.RenderingParameters).Returns(new Dictionary<string, string>());
 
-				contextProvider.Setup(c => c.PageContextItem).Returns(testItem);
-				contextProvider.Setup(c => c.RenderingContextItem).Returns(testItem);
-				contextProvider.Setup(c => c.RenderingItem).Returns(testRenderingItem);
-				contextProvider.Setup(c => c.RenderingParameters).Returns(new Dictionary<string, string>());
-
-				var itemFactory = new ItemFactory(contextProvider.Object);
-				var renderingModel = itemFactory.GetRenderingContextItems<IScTemplate, IScTemplate, IScRenderingParametersTemplate>();
+				var renderingModel = _itemFactory.GetRenderingContextItems<IScTemplate, IScTemplate, IScRenderingParametersTemplate>();
 
 				Assert.IsNotNull(renderingModel.PageItem);
 				Assert.IsNotNull(renderingModel.RenderingItem);
@@ -226,15 +223,12 @@
 					return templateItem;
 				};
 
-				var contextProvider = new Mock<IContextProvider>();
+				_mockContextProvider.Setup(c => c.PageContextItem).Returns(testItem);
+				_mockContextProvider.Setup(c => c.RenderingContextItem).Returns(testItem);
+				_mockContextProvider.Setup(c => c.RenderingItem).Returns(testItem);
+				_mockContextProvider.Setup(c => c.RenderingParameters).Returns(new Dictionary<string, string>());
 
-				contextProvider.Setup(c => c.PageContextItem).Returns(testItem);
-				contextProvider.Setup(c => c.RenderingContextItem).Returns(testItem);
-				contextProvider.Setup(c => c.RenderingItem).Returns(testItem);
-				contextProvider.Setup(c => c.RenderingParameters).Returns(new Dictionary<string, string>());
-
-				var itemFactory = new ItemFactory(contextProvider.Object);
-				var wrappedItem = itemFactory.GetContextItem<IScTemplate>();
+				var wrappedItem = _itemFactory.GetContextItem<IScTemplate>();
 
 				Assert.IsNotNull(wrappedItem);
 			}
