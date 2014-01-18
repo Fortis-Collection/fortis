@@ -10,7 +10,7 @@ namespace Fortis
 {
 	public static class Global
 	{
-		internal static ISpawnProvider SpawnProvider;
+		public static ISpawnProvider SpawnProvider;
 		public static IItemFactory ItemFactory;
 
 		/// <summary>
