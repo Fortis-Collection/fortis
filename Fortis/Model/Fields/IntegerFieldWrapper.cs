@@ -1,4 +1,5 @@
-﻿using Sitecore.Data.Fields;
+﻿using Fortis.Providers;
+using Sitecore.Data.Fields;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +12,14 @@ namespace Fortis.Model.Fields
 	{
 		private long? _value;
 
-		public IntegerFieldWrapper(Field field)
-			: base(field) { }
+		public IntegerFieldWrapper(Field field, ISpawnProvider spawnProvider)
+			: base(field, spawnProvider) { }
 
-		public IntegerFieldWrapper(string key, ref ItemWrapper item, string value = null)
-			: base(key, ref item, value) { }
+		public IntegerFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, string value = null)
+			: base(key, ref item, value, spawnProvider) { }
 
-		public IntegerFieldWrapper(string key, ref ItemWrapper item, long value)
-			: base(key, ref item, value.ToString())
+		public IntegerFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, long value)
+			: base(key, ref item, value.ToString(), spawnProvider)
 		{
 			_value = value;
 		}

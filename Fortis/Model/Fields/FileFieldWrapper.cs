@@ -1,4 +1,5 @@
-﻿using Sitecore.Data.Fields;
+﻿using Fortis.Providers;
+using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using Sitecore.Resources.Media;
 using System.Web;
@@ -12,11 +13,11 @@ namespace Fortis.Model.Fields
 			get { return ((FileField)Field).MediaItem; }
 		}
 
-		public FileFieldWrapper(Field field)
-			: base(field) { }
+		public FileFieldWrapper(Field field, ISpawnProvider spawnProvider)
+			: base(field, spawnProvider) { }
 
-		public FileFieldWrapper(string key, ref ItemWrapper item, string value = null)
-			: base(key, ref item, value) { }
+		public FileFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, string value = null)
+			: base(key, ref item, value, spawnProvider) { }
 
 		public override IHtmlString Render(string parameters = null, bool editing = false)
 		{

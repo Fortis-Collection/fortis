@@ -10,7 +10,7 @@ namespace Fortis.Model.Pipelines
 	{
 		public override void Process(HttpRequestArgs args)
 		{
-			var item = Spawn.FromItem<T>(Sitecore.Context.Item);
+			var item = Global.SpawnProvider.FromItem<T>(Sitecore.Context.Item);
 
 			OnProcess((T)((item is T) ? item : null), args);
 		}
