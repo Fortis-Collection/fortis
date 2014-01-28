@@ -225,11 +225,11 @@ namespace Fortis.Model
 				{
 					var scField = Item.Fields[key];
 
-					constructorArgs = new object[] { scField };
+                    constructorArgs = new object[] { scField, _spawnProvider };
 				}
 				else
 				{
-					constructorArgs = new object[] { key, this, lazyValue };
+                    constructorArgs = new object[] { key, this, lazyValue, _spawnProvider };
 				}
 
 				Fields[key] = (IFieldWrapper)Activator.CreateInstance(typeOfT, constructorArgs);
