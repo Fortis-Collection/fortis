@@ -64,5 +64,20 @@ namespace Fortis.Model.RenderingParameters.Fields
 		{
 			get { return true; }
 		}
+
+	    public IHtmlString Render(object parameters)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public IHtmlString BeginField(object parameters)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public IHtmlString EndField()
+	    {
+	        throw new NotImplementedException();
+	    }
 	}
 }

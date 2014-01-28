@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using Fortis.Helpers;
 using Sitecore.Data.Fields;
+using Sitecore.Pipelines;
+using Sitecore.Pipelines.RenderField;
 using Sitecore.Web.UI.WebControls;
 using System.Web;
-using Sitecore.Data.Items;
 using Fortis.Providers;
 
 namespace Fortis.Model.Fields
@@ -15,6 +18,53 @@ namespace Fortis.Model.Fields
 		private ItemWrapper _item;
 		private string _rawValue;
 		private string _key;
+
+	    private Stack<string> _endFieldStack;
+
+        protected virtual Stack<string> EndFieldStack
+        {
+            get
+            {
+                return _endFieldStack ?? (_endFieldStack = new Stack<string>());
+            }
+        }
+
+        public virtual IHtmlString BeginField(object parameters)
+        {
+            var renderFieldArgs = new RenderFieldArgs
+            {
+                Item = Field.Item,
+                FieldName = Field.Name
+            };
+
+            if (parameters != null)
+            {
+                TypeHelper.CopyProperties(parameters, renderFieldArgs);
+                TypeHelper.CopyProperties(parameters, renderFieldArgs.Parameters);
+            }
+
+            if (renderFieldArgs.Item == null)
+            {
+                return new HtmlString(string.Empty);
+            }
+
+            CorePipeline.Run("renderField", renderFieldArgs);
+            var result = renderFieldArgs.Result;
+            var str = result.FirstPart ?? string.Empty;
+            EndFieldStack.Push(result.LastPart ?? string.Empty);
+
+            return new HtmlString(str);
+        }
+
+        public virtual IHtmlString EndField()
+        {
+            if (EndFieldStack.Count == 0)
+            {
+                throw new InvalidOperationException("There was a call to EndField with no corresponding call to BeginField");
+            }
+
+            return new HtmlString(EndFieldStack.Pop());
+        }
 
 		public FieldWrapper(Field field, ISpawnProvider spawnProvider)
 		{
@@ -99,6 +149,11 @@ namespace Fortis.Model.Fields
 		{
 			return new HtmlString(editing ? FieldRenderer.Render(Field.Item, Field.Key, parameters ?? string.Empty) : RawValue);
 		}
+
+        public IHtmlString Render(object parameters)
+        {
+            return new HtmlString(BeginField(parameters) + EndField().ToString());
+        }
 
 		public override string ToString()
 		{

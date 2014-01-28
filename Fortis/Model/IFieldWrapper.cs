@@ -13,6 +13,10 @@ namespace Fortis.Model
 		IHtmlString Render(string parameters = null, bool editing = true);
 		string ToString();
 		bool IsLazy { get; }
+        IHtmlString Render(object parameters);
+        IHtmlString BeginField(object parameters);
+        IHtmlString EndField();
+
 	}
 
 	public interface IFieldWrapper<T> : IFieldWrapper
