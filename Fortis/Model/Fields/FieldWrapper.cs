@@ -4,7 +4,6 @@ using Fortis.Helpers;
 using Sitecore.Data.Fields;
 using Sitecore.Pipelines;
 using Sitecore.Pipelines.RenderField;
-using Sitecore.Web.UI.WebControls;
 using System.Web;
 using Fortis.Providers;
 
@@ -29,12 +28,36 @@ namespace Fortis.Model.Fields
             }
         }
 
-        public virtual IHtmlString BeginField(object parameters)
+        public virtual IHtmlString RenderBeginField(string parameters, bool editing = true)
         {
             var renderFieldArgs = new RenderFieldArgs
             {
                 Item = Field.Item,
-                FieldName = Field.Name
+                FieldName = Field.Name,
+                DisableWebEdit = !editing,
+                RawParameters = parameters
+            };
+
+            if (renderFieldArgs.Item == null)
+            {
+                return new HtmlString(string.Empty);
+            }
+
+            CorePipeline.Run("renderField", renderFieldArgs);
+            var result = renderFieldArgs.Result;
+            var str = result.FirstPart ?? string.Empty;
+            EndFieldStack.Push(result.LastPart ?? string.Empty);
+
+            return new HtmlString(str);
+        }
+
+        public virtual IHtmlString RenderBeginField(object parameters, bool editing = true)
+        {
+            var renderFieldArgs = new RenderFieldArgs
+            {
+                Item = Field.Item,
+                FieldName = Field.Name,
+                DisableWebEdit = !editing
             };
 
             if (parameters != null)
@@ -56,7 +79,7 @@ namespace Fortis.Model.Fields
             return new HtmlString(str);
         }
 
-        public virtual IHtmlString EndField()
+        public virtual IHtmlString RenderEndField()
         {
             if (EndFieldStack.Count == 0)
             {
@@ -147,12 +170,12 @@ namespace Fortis.Model.Fields
 
 		public virtual IHtmlString Render(string parameters = null, bool editing = true)
 		{
-			return new HtmlString(editing ? FieldRenderer.Render(Field.Item, Field.Key, parameters ?? string.Empty) : RawValue);
+            return new HtmlString(RenderBeginField(parameters, editing) + RenderEndField().ToString());
 		}
 
-        public IHtmlString Render(object parameters)
+        public IHtmlString Render(object parameters, bool editing = true)
         {
-            return new HtmlString(BeginField(parameters) + EndField().ToString());
+            return new HtmlString(RenderBeginField(parameters, editing) + RenderEndField().ToString());
         }
 
 		public override string ToString()

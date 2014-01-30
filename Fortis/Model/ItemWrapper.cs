@@ -121,6 +121,19 @@ namespace Fortis.Model
 			set { _languageName = value; }
 		}
 
+	    private string _longID;
+
+        /// <summary>
+        /// Gets/Sets the LongID of the item. This is all the Guids of the current items parents in a 
+        /// single string. It is used for limiting searchs to the descendants of a particular item.
+        /// </summary>
+	    [IndexField("_path")]
+	    public string LongID
+	    {
+	        get { return IsLazy && !string.IsNullOrWhiteSpace(_longID) ? _longID : Item.Paths.LongID; }
+            set { _longID = value; }
+	    }
+
 		public string ItemLocation
 		{
 			get { return Item.Paths.FullPath; }

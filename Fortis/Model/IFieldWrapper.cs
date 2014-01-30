@@ -10,12 +10,13 @@ namespace Fortis.Model
 	{
 		string RawValue { get; set; }
 		bool Modified { get; }
-		IHtmlString Render(string parameters = null, bool editing = true);
 		string ToString();
 		bool IsLazy { get; }
-        IHtmlString Render(object parameters);
-        IHtmlString BeginField(object parameters);
-        IHtmlString EndField();
+        IHtmlString Render(string parameters = null, bool editing = true);
+        IHtmlString Render(object parameters, bool editing = true);
+        IHtmlString RenderBeginField(object parameters, bool editing = true);
+        IHtmlString RenderBeginField(string parameters, bool editing = true);
+        IHtmlString RenderEndField();
 
 	}
 
