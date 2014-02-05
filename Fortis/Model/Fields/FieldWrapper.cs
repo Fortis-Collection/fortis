@@ -28,14 +28,14 @@ namespace Fortis.Model.Fields
             }
         }
 
-        public virtual IHtmlString RenderBeginField(string parameters, bool editing = true)
+        public virtual IHtmlString RenderBeginField(string parameters = null, bool editing = true)
         {
             var renderFieldArgs = new RenderFieldArgs
             {
                 Item = Field.Item,
                 FieldName = Field.Name,
                 DisableWebEdit = !editing,
-                RawParameters = parameters
+                RawParameters = parameters ?? string.Empty
             };
 
             if (renderFieldArgs.Item == null)

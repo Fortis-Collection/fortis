@@ -15,7 +15,7 @@ namespace Fortis.Model
         IHtmlString Render(string parameters = null, bool editing = true);
         IHtmlString Render(object parameters, bool editing = true);
         IHtmlString RenderBeginField(object parameters, bool editing = true);
-        IHtmlString RenderBeginField(string parameters, bool editing = true);
+        IHtmlString RenderBeginField(string parameters = null, bool editing = true);
         IHtmlString RenderEndField();
 
 	}

@@ -1,6 +1,4 @@
 ﻿using System;
-using Sitecore.Data.Fields;
-using Sitecore.Web.UI.WebControls;
 using System.Web;
 using Fortis.Providers;
 
@@ -45,7 +43,27 @@ namespace Fortis.Model.RenderingParameters.Fields
 			throw new NotImplementedException();
 		}
 
-		public override string ToString()
+	    public IHtmlString Render(object parameters, bool editing = true)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public IHtmlString RenderBeginField(object parameters, bool editing = true)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public IHtmlString RenderBeginField(string parameters, bool editing = true)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public IHtmlString RenderEndField()
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public override string ToString()
 		{
 			return RawValue;
 		}
@@ -65,19 +83,5 @@ namespace Fortis.Model.RenderingParameters.Fields
 			get { return true; }
 		}
 
-	    public IHtmlString Render(object parameters)
-	    {
-	        throw new NotImplementedException();
-	    }
-
-	    public IHtmlString BeginField(object parameters)
-	    {
-	        throw new NotImplementedException();
-	    }
-
-	    public IHtmlString EndField()
-	    {
-	        throw new NotImplementedException();
-	    }
 	}
 }

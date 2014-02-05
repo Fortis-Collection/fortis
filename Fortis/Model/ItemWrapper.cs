@@ -134,6 +134,9 @@ namespace Fortis.Model
             set { _longID = value; }
 	    }
 
+        [IndexField("_content")]
+        public string SearchContent { get; set; }
+
 		public string ItemLocation
 		{
 			get { return Item.Paths.FullPath; }
@@ -242,7 +245,7 @@ namespace Fortis.Model
 				}
 				else
 				{
-                    constructorArgs = new object[] { key, this, lazyValue, _spawnProvider };
+                    constructorArgs = new object[] { key, this, _spawnProvider, lazyValue };
 				}
 
 				Fields[key] = (IFieldWrapper)Activator.CreateInstance(typeOfT, constructorArgs);

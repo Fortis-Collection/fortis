@@ -31,6 +31,8 @@ namespace Fortis.Model
 		IEnumerable<Guid> TemplateIds { get; }
         [IndexField("_path")]
         string LongID { get; set; }
+        [IndexField("_content")]
+        string SearchContent { get; set; }
 		bool HasChildren { get; }
 		int ChildCount { get; }
 		string SearchTitle { get; }
