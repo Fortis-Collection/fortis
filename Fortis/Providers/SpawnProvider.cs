@@ -134,12 +134,17 @@ namespace Fortis.Providers
 		{
 			foreach (var item in items)
 			{
-				var wrappedItem = (T)FromItem<T>(item);
+                var wrappedItem = FromItem<IItemWrapper>(item);
 
-				if (wrappedItem != null)
-				{
-					yield return wrappedItem;
-				}
+			    if (wrappedItem == null)
+			    {
+			        continue;
+			    }
+
+                if (wrappedItem is T)
+			    {
+                    yield return (T)wrappedItem;
+			    }
 			}
 		}
 
