@@ -1,10 +1,12 @@
-﻿namespace Fortis.Search
+﻿using Sitecore.Data;
+
+namespace Fortis.Search
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using Fortis.Model;
+	using Model;
 
 	using Lucene.Net.Documents;
 
@@ -14,7 +16,7 @@
 
 	public class LuceneDocumentTypeMapper : DefaultLuceneDocumentTypeMapper
 	{
-		public override TElement MapToType<TElement>(Document document, Sitecore.ContentSearch.Linq.Methods.SelectMethod selectMethod, System.Collections.Generic.IEnumerable<Sitecore.ContentSearch.Linq.Common.IFieldQueryTranslator> virtualFieldProcessors, Sitecore.ContentSearch.Security.SearchSecurityOptions securityOptions)
+		public override TElement MapToType<TElement>(Document document, Sitecore.ContentSearch.Linq.Methods.SelectMethod selectMethod, IEnumerable<IFieldQueryTranslator> virtualFieldProcessors, Sitecore.ContentSearch.Security.SearchSecurityOptions securityOptions)
 		{
 			var typeOfTElement = typeof(TElement);
 
@@ -40,6 +42,23 @@
 					return (TElement)item;
 				}
 			}
+
+		    if (fields.ContainsKey("_uniqueid"))
+		    {
+		        var id = fields["_uniqueid"].ToString();
+
+		        var uri = ItemUri.Parse(id);
+		        var item = Sitecore.Context.Database.GetItem(uri.ToDataUri());
+
+		        if (item != null)
+		        {
+		            var mappedItem = Global.SpawnProvider.FromItem(item);
+		            if (mappedItem is TElement)
+		            {
+		                return (TElement) mappedItem;
+		            }
+		        }
+		    }
 
 			return default(TElement);
 		}

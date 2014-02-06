@@ -121,6 +121,22 @@ namespace Fortis.Model
 			set { _languageName = value; }
 		}
 
+	    private string _longID;
+
+        /// <summary>
+        /// Gets/Sets the LongID of the item. This is all the Guids of the current items parents in a 
+        /// single string. It is used for limiting searchs to the descendants of a particular item.
+        /// </summary>
+	    [IndexField("_path")]
+	    public string LongID
+	    {
+	        get { return IsLazy && !string.IsNullOrWhiteSpace(_longID) ? _longID : Item.Paths.LongID; }
+            set { _longID = value; }
+	    }
+
+        [IndexField("_content")]
+        public string SearchContent { get; set; }
+
 		public string ItemLocation
 		{
 			get { return Item.Paths.FullPath; }
@@ -225,11 +241,11 @@ namespace Fortis.Model
 				{
 					var scField = Item.Fields[key];
 
-					constructorArgs = new object[] { scField };
+                    constructorArgs = new object[] { scField, _spawnProvider };
 				}
 				else
 				{
-					constructorArgs = new object[] { key, this, lazyValue };
+                    constructorArgs = new object[] { key, this, _spawnProvider, lazyValue };
 				}
 
 				Fields[key] = (IFieldWrapper)Activator.CreateInstance(typeOfT, constructorArgs);
