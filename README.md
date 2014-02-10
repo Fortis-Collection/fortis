@@ -63,26 +63,76 @@ var seoContent = (ISeoTemplate)contextItem;
 3. We can pass objects between implementations without referencing Sitecore.
 4. Using interfaces helps mitigate changes required in the presentation layer or other consumer of the model.
 
-### <a href="howToUseIt"></a>How to Use it - *IItemWrapper*
+### <a href="howToUseIt"></a>How to Use it - *IItemWrapper* & *IItemFactory*
 
 The base model for all your strongly typed models should be *IItemWrapper*. This base model contains all the useful base fields that would be used in a model. So this includes things like *ItemId*, *ItemName* etc...  
 
-It also contains usefull methods to retrieve related items (Children, Parents etc...)
+It also contains usefull methods to retrieve related items (Children, Parents etc...), generate the url etc...
+
+*IItemFactory* is the main factory that encapsulates the Sitecore API to get the data from the database.
+
+#### Example
+Here is an example of getting an IGallery context item in a Controller rendering and then using that model in a view. This example assumes that all the IOC setup has already been done.
+
+##### Controller Action
+```csharp
+public class GalleryController: Controller 
+{
+    private IItemFactory _itemFactory;
+    
+    public GalleryController(IItemFactory itemFactory)
+    {
+        _itemFactory = itemFactory;
+    }
+    
+    public ActionResult Index()
+    {
+        var contextItem = _itemFactory.GetContextItem<IGallery>();
+        if (contextItem == null)
+        {
+            // This prevents the rendering from displaying
+            return null;
+        }
+        return View(contextItem);
+    }
+}
+```
+
+##### The View 
+```html
+@model MyProject.Models.UserDefined.IGallery
+
+<section class="row">
+    <div class="column c12">
+        <div class="gutter">
+            <h1>@Model.Title</h1>
+            <h3>@Model.SubTitle</h1>
+            @Model.Body
+        </div>
+    </div>
+</section>
+```
+
+
 
 ### Code Generation
-
-
 Each model should have an interface and a corresponding concrete implementation. The interface and class should have template mappings that identify the ID of the template this object maps.
 
 The class can also have an optional predefined query that will be read in the Sitecore 7 Search API.
 
-### Example Model
+Because of the number of templates in a usual Sitecore project, we can use code generation to build our Model classes. There are a number of ways to do this:
+* Direct from the Sitecore database
+* Sitecore Serialization
+* [Team Development for Sitecore (TDS)](https://www.hhogdev.com/products/team-development-for-sitecore/overview.aspx) (our preferred choice)
 
+We will outline the method using TDS. This product integrates with Visual Studio and serialized the Sitecore content tree down to disc. These files can then be added to your source control.
 
-#### Interface
+To generate the code we use the T4 code generation template files (Example .tt files are included in the package). This then uses the TransformT4.bat file to build our model. The example T4 templates use the TDS binaries to query the serialized items and build the models from those.
+
+#### Example Model from Code Generation
+##### Interface
 
 ```csharp
-
 /// <summary>
 /// <para>Template interface</para>
 /// <para>Template: My Template</para>
@@ -99,7 +149,7 @@ public partial interface IMyTemplate: IItemWrapper
 }
 ```
 
-#### Concrete Model
+##### Concrete Model
 ```csharp
 
 /// <summary>
