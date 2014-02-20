@@ -172,9 +172,8 @@ Your tree should now look like this:
 
 
 ##### <a name="tutorial1_setup"></a> Create the Model
-Add the Fortis.Mvc library to your Website project using NuGet.
-
-In your Website project, add a __Model.cs__ class to the _Models_ Folder. In the Models.cs file we will add the Fortis strongly typed object models for the Sitecore Templates we have just created.
+1. Add the Fortis.Mvc library to your Website project using NuGet.
+2. In your Website project, add a __Model.cs__ class to the _Models_ Folder. In the Models.cs file we will add the Fortis strongly typed object models for the Sitecore Templates we have just created.
 
 ```csharp
 
@@ -246,6 +245,9 @@ public partial class ContentPage : ItemWrapper, IContentPage
 
 }
 ```
+
+3. 
+
 
 ##### Breaking it Down
 
