@@ -151,6 +151,13 @@
 			return (T)((wrapper is T) ? wrapper : null);
 		}
 
+		public T GetSiteRoot<T>() where T : IItemWrapper
+		{
+			var item = GetItem(Sitecore.Context.Site.RootPath);
+			var wrapper = SpawnProvider.FromItem<T>(item);
+			return (T)((wrapper is T) ? wrapper : null);
+		}
+
 		public T GetContextItem<T>() where T : IItemWrapper
 		{
 			var item = ContextProvider.PageContextItem;

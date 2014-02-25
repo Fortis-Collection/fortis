@@ -15,6 +15,7 @@ namespace Fortis.Model
 		void Publish(IEnumerable<IItemWrapper> wrappers);
 		void Publish(IEnumerable<IItemWrapper> wrappers, bool children);
 		T GetSiteHome<T>() where T : IItemWrapper;
+		T GetSiteRoot<T>() where T : IItemWrapper;
 		T GetContextItem<T>() where T : IItemWrapper;
 		IRenderingModel<TPageItem, TRenderingItem> GetRenderingContextItems<TPageItem, TRenderingItem>(IItemFactory factory = null)
 			where TPageItem : IItemWrapper
