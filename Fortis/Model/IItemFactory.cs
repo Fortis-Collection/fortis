@@ -1,6 +1,4 @@
-﻿using Sitecore.ContentSearch;
-using Sitecore.ContentSearch.Linq.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -46,6 +44,5 @@ namespace Fortis.Model
 		T SelectSibling<T>(IItemWrapper wrapper) where T : IItemWrapper;
 		IEnumerable<T> SelectSiblings<T>(IItemWrapper wrapper) where T : IItemWrapper;
 		T GetRenderingDataSource<T>(Control control) where T : IItemWrapper;
-		IQueryable<T> Search<T>(IProviderSearchContext context, IExecutionContext executionContext = null) where T : IItemWrapper;
 	}
 }

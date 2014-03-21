@@ -1,15 +1,7 @@
 ﻿namespace Fortis.Model
 {
 	using Fortis.Providers;
-	using Fortis.Search;
 	using Sitecore.Configuration;
-	using Sitecore.ContentSearch;
-	using Sitecore.ContentSearch.Diagnostics;
-	using Sitecore.ContentSearch.Linq.Common;
-	using Sitecore.ContentSearch.LuceneProvider;
-	using Sitecore.ContentSearch.SearchTypes;
-	using Sitecore.ContentSearch.SolrProvider;
-	using Sitecore.ContentSearch.Utilities;
 	using Sitecore.Data;
 	using Sitecore.Data.Items;
 	using System;
@@ -415,90 +407,6 @@
 			}
 
 			return this.GetContextItem<T>();
-		}
-
-		public IQueryable<T> Search<T>(IProviderSearchContext context, IExecutionContext executionContext = null) where T : IItemWrapper
-		{
-			IQueryable<T> results = null;
-
-			#region Lucene
-
-			var luceneContext = context as LuceneSearchContext;
-
-			if (luceneContext != null)
-			{
-				results = GetLuceneQueryable<T>(luceneContext, executionContext);
-			}
-
-			#endregion
-
-			#region Solr
-
-			var solrContext = context as SolrSearchContext;
-
-			if (solrContext != null)
-			{
-				results = GetSolrQueryable<T>(solrContext, executionContext);
-			}
-
-			#endregion
-
-			if (solrContext == null && luceneContext == null)
-			{
-				throw new Exception("Fortis: Unsupported search context");
-			}
-
-			if (results != null)
-			{
-				var typeOfT = typeof(T);
-
-				if (SpawnProvider.TemplateMapProvider.InterfaceTemplateMap.ContainsKey(typeOfT))
-				{
-					var templateId = SpawnProvider.TemplateMapProvider.InterfaceTemplateMap[typeOfT];
-
-					return results.Where(item => item.TemplateIds.Contains(templateId) && item.LanguageName == Sitecore.Context.Language.Name && item.IsLatestVersion);
-				}
-				else
-				{
-					return results;
-				}
-			}
-
-			return results;
-		}
-
-		public IQueryable<TResult> GetLuceneQueryable<TResult>(LuceneSearchContext context, IExecutionContext executionContext) where TResult : IItemWrapper
-		{
-			// once the hacks in the Hacks namespace are fixed (around update 2, I hear), the commented line below can be used instead of BugFixIndex
-			// in fact once Update 3? is released, this class may become largely irrelevant as interface support is coming natively
-			//var linqToLuceneIndex = (executionContext == null) ? new LinqToLuceneIndex<TResult>(context) : new LinqToLuceneIndex<TResult>(context, executionContext);
-			var linqToLuceneIndex = (executionContext == null)
-										? new CustomLinqToLuceneIndex<TResult>(context)
-										: new CustomLinqToLuceneIndex<TResult>(context, executionContext);
-
-			if (ContentSearchConfigurationSettings.EnableSearchDebug)
-			{
-				((IHasTraceWriter)linqToLuceneIndex).TraceWriter = new LoggingTraceWriter(SearchLog.Log);
-			}
-
-			return linqToLuceneIndex.GetQueryable();
-		}
-
-		public IQueryable<TResult> GetSolrQueryable<TResult>(SolrSearchContext context, IExecutionContext executionContext) where TResult : IItemWrapper
-		{
-			// once the hacks in the Hacks namespace are fixed (around update 2, I hear), the commented line below can be used instead of BugFixIndex
-			// in fact once Update 3? is released, this class may become largely irrelevant as interface support is coming natively
-			//var linqToSolrIndex = (executionContext == null) ? new LinqToSolrIndex<TResult>(context) : new LinqToSolrIndex<TResult>(context, executionContext);
-			var linqToSolrIndex = (executionContext == null)
-										? new CustomLinqToSolrIndex<TResult>(context)
-										: new CustomLinqToSolrIndex<TResult>(context, executionContext);
-
-			if (ContentSearchConfigurationSettings.EnableSearchDebug)
-			{
-				((IHasTraceWriter)linqToSolrIndex).TraceWriter = new LoggingTraceWriter(SearchLog.Log);
-			}
-
-			return linqToSolrIndex.GetQueryable();
 		}
 	}
 }

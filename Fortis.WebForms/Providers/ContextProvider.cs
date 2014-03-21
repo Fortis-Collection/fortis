@@ -9,7 +9,7 @@
 	{
 		public Item RenderingContextItem
 		{
-			get { return null; }
+			get { throw new NotSupportedException(); }
 		}
 
 		public Item PageContextItem
@@ -19,12 +19,12 @@
 
 		public Item RenderingItem
 		{
-			get { return null; }
+			get { throw new NotSupportedException("You must use the Rendering Parameters Factory to access the item on the rendering datasource"); }
 		}
 
 		public Dictionary<string, string> RenderingParameters
 		{
-			get { return new Dictionary<string,string>(); }
+			get { throw new NotSupportedException(); }
 		}
 	}
 }

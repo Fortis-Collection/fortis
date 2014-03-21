@@ -6,9 +6,7 @@ using Sitecore.Data.Items;
 using Sitecore.Publishing;
 using Fortis.Model.Fields;
 using System.Runtime.CompilerServices;
-using Sitecore.ContentSearch;
 using System.ComponentModel;
-using Sitecore.ContentSearch.Converters;
 using Fortis.Providers;
 
 namespace Fortis.Model
@@ -114,7 +112,6 @@ namespace Fortis.Model
 
 		private string _languageName = null;
 
-		[IndexField("_language")]
 		public string LanguageName
 		{
 			get { return IsLazy && !string.IsNullOrEmpty(_languageName) ? _languageName : Item.Language.Name; }
@@ -127,14 +124,12 @@ namespace Fortis.Model
         /// Gets/Sets the LongID of the item. This is all the Guids of the current items parents in a 
         /// single string. It is used for limiting searchs to the descendants of a particular item.
         /// </summary>
-	    [IndexField("_path")]
 	    public string LongID
 	    {
 	        get { return IsLazy && !string.IsNullOrWhiteSpace(_longID) ? _longID : Item.Paths.LongID; }
             set { _longID = value; }
 	    }
 
-        [IndexField("_content")]
         public string SearchContent { get; set; }
 
 		public string ItemLocation
@@ -144,20 +139,17 @@ namespace Fortis.Model
 
 		private Guid _itemId = default(Guid);
 
-		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_group")]
 		public Guid ItemID
 		{
 			get { return IsLazy && _itemId != default(Guid) ? _itemId : Item.ID.Guid; }
 			set { _itemId = value; }
 		}
 
-		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_template")]
 		public Guid TemplateId
 		{
 			get { return _spawnProvider.TemplateMapProvider.TemplateMap.FirstOrDefault(t => t.Value == this.GetType()).Key; }
 		}
 
-		[IndexField("_templates")]
 		public IEnumerable<Guid> TemplateIds
 		{
 			get
@@ -179,14 +171,12 @@ namespace Fortis.Model
 
 		private string _name = null;
 
-		[IndexField("_name")]
 		public string Name
 		{
 			get { return IsLazy && !string.IsNullOrEmpty(_name) ? _name : Item.Name; }
 			set { _name = value; }
 		}
 
-		[IndexField("_name")]
 		public string ItemName
 		{
 			get { return Name; }
@@ -195,14 +185,12 @@ namespace Fortis.Model
 
 		private string _displayName = null;
 
-		[IndexField("__display_name")]
 		public string DisplayName
 		{
 			get { return IsLazy && !string.IsNullOrEmpty(_displayName) ? _displayName : Item.DisplayName; }
 			set { _displayName = value; }
 		}
 
-		[IndexField("_latestversion")]
 		public bool IsLatestVersion
 		{
 			get { return Item.Versions.IsLatestVersion(); }
@@ -254,7 +242,6 @@ namespace Fortis.Model
 			return (T)Fields[key];
 		}
 
-		[Obsolete("Use GetField<T>")]
 		protected IFieldWrapper GetField(string key)
 		{
 			key = key.ToLower();
