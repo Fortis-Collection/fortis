@@ -1,7 +1,8 @@
 # Fortis
-##A strongly typed, interface based, model ofthe Sitecore API.
+##A strongly typed, interface based, model of the Sitecore API.
+__Note:__ This version of Fortis is for Sitecore 6.X and has been tested on 6.5 & 6.6
 
-Fortis is a new library that forms the basis of a strongly typed model of the Sitecore API. This enables us to develop reliable, maintainable sites more efficiently than with traditional, losely typed Sitecore development.
+Fortis is a library that forms the basis of a strongly typed model of the Sitecore API. This enables us to develop reliable, maintainable sites more efficiently than with traditional, losely typed Sitecore development.
 
 Benefits:
 * Encapsulating the Sitecore API and seperates out business logic, allowing for easier unit testing.
@@ -23,16 +24,20 @@ Benefits:
 
 ## <a name="getItOnNuget"></a>Get it on NuGet!
 
-    Install-Package Fortis
+    Install-Package Fortis6
     
 For ASP.Net MVC appliactions use:
 
     Install-Package Fortis.Mvc
 
+For ASP.Net WebForms appliactions use:
+
+    Install-Package Fortis.WebForms
+
 ## <a name="requirements"></a>Pre-Requisites
 
-* Sitecore 7.x
-* ASP.NET MVC 4.x
+* Sitecore 6.x (NB: Tested on 6.5 & 6.6)
+* ASP.NET MVC 4.x (If using MVC)
  
 ## Documentation
 
