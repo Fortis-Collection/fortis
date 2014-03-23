@@ -15,6 +15,6 @@
         <tags>Sitecore Fortis</tags>
     </metadata>
     <files>
-        <file src="lib\Fortis.dll" target="lib\net45\Fortis.dll" />
+        <file src="bin\Release\Fortis.dll" target="lib\net45\Fortis.dll" />
     </files>
 </package>
