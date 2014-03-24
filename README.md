@@ -72,10 +72,11 @@ var seoContent = (ISeoTemplate)contextItem;
 ### <a name="gettingStarted"></a>Getting Started
 
 #### <a name="setup"></a>Setting up Fortis
-Fortis needs to be registered with your choice of [IoC](http://martinfowler.com/articles/injection.html) library. We have chosen [Simple Injector](https://simpleinjector.codeplex.com/) as this is a lightweight and fast container. ([IoC Benchmarks](http://www.palmmedia.de/blog/2011/8/30/ioc-container-benchmark-performance-comparison))
+Fortis needs to be registered with your choice of [IoC](http://martinfowler.com/articles/injection.html) library. We have chosen [Simple Injector](https://simpleinjector.codeplex.com/) as this is a lightweight and fast container. ([IoC Benchmarks](http://www.palmmedia.de/blog/2011/8/30/ioc-container-benchmark-performance-comparison)). Fortis was built with the Provider pattern in mind and therefore works very well with constructor injection. This gives you the flexibility to swap in your own impelementations of each interface.
 
 The interfaces that need to be registered are:
 * IItemFactory
+* IRenderingParametersFactory (WebForms only)
 * IContextProvider
 * ISpawnProvider
 * ITemplateMapProvider
@@ -93,7 +94,8 @@ namespace MySitecoreWebsite
         
 		// Register Fortis
 		container.Register<IItemFactory, ItemFactory>();
-		container.Register<IContextProvider, IContextProvider>();
+        container.Register<IRenderingParametersFactory, RenderingParametersFactory>();
+		container.Register<IContextProvider, ContextProvider>(); // This provide comes from either the Fortis.Mvc or Fortis.WebForms assembly
 		container.Register<ISpawnProvider, SpawnProvider>();
 		container.Register<ITemplateMapProvider, TemplateMapProvider>();
 		container.Register<IModelAssemblyProvider, ModelAssemblyProvider>();
@@ -104,7 +106,7 @@ namespace MySitecoreWebsite
 			container.GetInstance<IItemFactory>()
 			);
         
-        // Register the container as MVC IDependencyResolver.
+        // Register the container as MVC IDependencyResolver if using MVC.
         DependencyResolver.SetResolver(new SimpleInjectorDependencyResolver(container));
     }
 }
@@ -121,7 +123,6 @@ To enable the Fortis presentation engine, the following configuration file shoul
                 <processor type="Fortis.Pipelines.RenderField.LinkRenderer, Fortis" patch:before="processor[@type='Sitecore.Pipelines.RenderField.AddBeforeAndAfterValues, Sitecore.Kernel']" />
             </renderField>
         </pipelines>
-
     </sitecore>
 </configuration>
 
@@ -144,12 +145,11 @@ For Sitecore MVC projects add this configuration to enable View renderings to ge
 ##### Overview
 This tutorial introduces Fortis development by showing how to build a simple Sitecore website. You will install Sitecore 7.x, create some simple page templates and build a 2 page site using Fortis.
 
-__Note:__ this tutorial assumes you have a good working knowledge of Sitecore and traditional Sitecore development. It also assumes you have installed a clean Sitecore 7.1 site and can setup the basic website project.
+__Note:__ this tutorial assumes you have a good working knowledge of Sitecore and traditional Sitecore development. It also assumes you have installed a clean Sitecore 6.5/6.6 site and can setup the basic website project.
 
 Sections:
 * [Set up Sitecore Templates](#tutorial1_sitecore)
 * [Set up the Project](#tutorial1_setup)
-* 
 
 ##### <a name="tutorial1_sitecore"></a> Set up the Sitecore Templates
 This section will show you how to create the Sitecore templates for use in this project.
@@ -177,7 +177,7 @@ Your tree should now look like this:
 
 
 ##### <a name="tutorial1_setup"></a> Create the Model
-1. Add the Fortis.Mvc library to your Website project using NuGet.
+1. Add the Fortis.Mvc or Fortis.WebForms library to your Website project using NuGet.
 2. In your Website project, add a __Model.cs__ class to the _Models_ Folder. In the Models.cs file we will add the Fortis strongly typed object models for the Sitecore Templates we have just created.
 
 ```csharp
@@ -185,8 +185,6 @@ Your tree should now look like this:
 using System;
 using Sytem.Collections.Generic;
 using Sitecore.Data.Items;
-using Sitecore.ContentSearch;
-using Sitecore.ContentSearch.Linq.Common;
 using Fortis.Model;
 using Fortis.Model.Fields;
 using Fortis.Providers;
@@ -200,54 +198,41 @@ using Fortis.Providers;
 [TemplateMapping("{4F53AD03-CAC8-48F3-BFDF-FEDDD692C4AD}", "InterfaceMap")]
 public partial interface IContentPage : IItemWrapper
 {
-    [IndexField("Content Page Title")]
     ITextFieldWrapper ContentPageTitle { get; }
     
-    [IndexField("Content Page Body")]
     IRichTextFieldWrapper ContentPageBody { get; }
     
-    [IndexField("Content Page Include in Menu")]
     IBooleanFieldWrapper ContentPageIncludeInMenu { get; }
 }
 
 /// <summary>
 /// <para>Template class</para><para>/sitecore/templates/User Defined/Page Types/Base Pages/ContentPage</para>
 /// </summary>
-[PredefinedQuery("TemplateId", ComparisonType.Equal, "{4F53AD03-CAC8-48F3-BFDF-FEDDD692C4AD}", typeof(Guid))]
 [TemplateMapping("{4F53AD03-CAC8-48F3-BFDF-FEDDD692C4AD}", "")]
 public partial class ContentPage : ItemWrapper, IContentPage
 {
-	private Item _item = null;
-
-	public ContentPage(ISpawnProvider spawnProvider) : base(null, spawnProvider) { }
+	public ContentPage(ISpawnProvider spawnProvider) : base(spawnProvider) { }
 
 	public ContentPage(Guid id, ISpawnProvider spawnProvider) : base(id, spawnProvider) { }
 
 	public ContentPage(Guid id, Dictionary<string, object> lazyFields, ISpawnProvider spawnProvider) : base(id, lazyFields, spawnProvider) { }
 
-	public ContentPage(Item item, ISpawnProvider spawnProvider) : base(item, spawnProvider)
-	{
-		_item = item;
-	}
+	public ContentPage(Item item, ISpawnProvider spawnProvider) : base(item, spawnProvider) { }
     
-    [IndexField("Content Page Title")]
     public virtual ITextFieldWrapper ContentPageTitle
     { 
         get { return GetField<ListFieldWrapper>("Content Page Title", "content page title"); }
     }
 
-    [IndexField("Content Page Body")]
     public virtual IRichTextFieldWrapper ContentPageBody
     { 
         get { return GetField<ListFieldWrapper>("Content Page Body", "content page body"); }
     }
 
-    [IndexField("Content Page Include in Menu")]
     public virtual IBooleanFieldWrapper ContentPageIncludeInMenu
     { 
         get { return GetField<ListFieldWrapper>("Content Page Include in Menu", "content page include in menu"); }
     }
-
 }
 ```
 
@@ -271,7 +256,7 @@ It also contains usefull methods to retrieve related items (Children, Parents et
 
 *IItemFactory* is the main factory that encapsulates the Sitecore API to get the data from the database.
 
-#### Example
+#### MVC Example
 Here is an example of getting an IGallery context item in a Controller rendering and then using that model in a view. This example assumes that all the IOC setup has already been done.
 
 ##### Controller Action
@@ -298,7 +283,7 @@ public class GalleryController: Controller
 }
 ```
 
-##### The View 
+##### The View
 ```razor
 @model MyProject.Models.UserDefined.IGallery
 
@@ -325,6 +310,63 @@ The __GetModelFromView__ processor inspects the model requested for the view and
 * RenderingItem: Also a model based on `IItemWrapper`, this is populated from any DataSource set on the rendering.
 * RenderingParametersItem: This is an optional model based on `IRenderingParametersWrapper`. This contains a strongly styped model of any custom rendering parameters applied to the rendering.
 
+#### WebForms Example
+
+Here is an example of how to retrieve the context item within ia user control and render the fields on the control.
+
+##### User Control - Code Behind
+This example shows getting the context while in the Page_Load event in the ASP.Net page life-cycle. However you can use the factory to get items at any point that Siteore is availabe in the page-lifecycle (e.g. Page_Init).
+
+```csharp
+public partial class WebUserControl : System.Web.UI.UserControl
+{
+    private IItemFactory _itemFactory;
+    private IRenderingParametersFactory _renderingParametersFactory;
+
+    protected IGallery Gallery;
+    protected IGallery GalleryFromDatasource
+
+    public WebUserControl(IItemFactory itemFactory, IRenderingParametersFactory renderingParametersFactory)
+    {
+        _itemFactory = itemFactory;
+        _renderingParametersFactory = renderingParametersFactory;
+    }
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        // Get the context item
+        Gallery = _itemFactory.GetContextItem<IGallery>();
+        // Or you can get the item from the datasource of the rendering.
+        // If the datasource is empty it will use the context item.
+        GalleryFromDatasource = _itemFactory.GetRenderingDataSource<IGallery>(this);
+
+        // Fortis will return null if the template you've asked doesn't match the item being requested.
+        // We'll set thie user control to not be visible if this is the case. You can put in any kind of
+        // business or presentation logic you like however.
+        if (Gallery == null)
+        {
+            this.Visible = false;
+        }
+    }
+}
+```
+
+##### User Control
+Each field has a standard .Render() method associated with it. The the render methods call the Sitecore API, this way you get the full functionality of Sitecore (including Page Editor).
+
+```asp
+<%@ Control Language="C#" AutoEventWireup="true" CodeFile="WebUserControl.ascx.cs" Inherits="WebUserControl" %>
+<section class="row">
+    <div class="column c12">
+        <div class="gutter">
+            <h1><%= Gallery.Title.Render() %></h1>
+            <h3><%= Gallery.SubTitle.Render() %></h3>
+            <%= Gallery.Body.Render() %>
+        </div>
+    </div>
+</section>
+
+```
 
 ### Code Generation
 Each model should have an interface and a corresponding concrete implementation. The interface and class should have template mappings that identify the ID of the template this object maps.
@@ -367,13 +409,12 @@ public partial interface IMyTemplate: IItemWrapper
 /// <para>Template class</para>
 /// <para>/sitecore/templates/UserDefined/My Template</para>
 /// </summary>
-[PredefinedQuery("TemplateId", ComparisonType.Equal, "{0006AAA7-9379-444E-94B2-307ADC4D8835}", typeof(Guid))]
 [TemplateMapping("{0006AAA7-9379-444E-94B2-307ADC4D8835}", "")]
 public partial class MyTemplate : ItemWrapper, IMyTemplate
 {
 	private Item _item = null;
 
-	public MyTemplate(ISpawnProvider spawnProvider) : base(null, spawnProvider) { }
+	public MyTemplate(ISpawnProvider spawnProvider) : base(spawnProvider) { }
 
 	public MyTemplate(Guid id, ISpawnProvider spawnProvider) : base(id, spawnProvider) { }
 
@@ -401,11 +442,13 @@ Interface | Description
 `IFileFieldWrapper` | 
 `IGeneralLinkFieldWrapper` | 
 `IImageFieldWrapper` | for all Image fields
-`IIntegerFieldWrappe` | 
-`ILinkFieldWrapper` | for General Link, Link, Droptree, Droplink fields
+`IIntegerFieldWrapper` | 
+`INumberFieldWrapper` |
+`ILinkFieldWrapper` | for any field which links to another Sitecore item e.g. Link, Droptree, Droplink
+`IGeneralLinkFieldWrapper` | for the General Link field in Sitecore, also implements ILinkFieldWrapper
 `IListFieldWrapper` | for all Sitecore fields that have a list
 `IRichTextFieldWrapper` | 
-`ITextFieldWrapper` | for Single-Line Text, Multiline Text & Rich Text fields
+`ITextFieldWrapper` | for Single-Line Text, Multiline Text
 
 ## <a name="examples"></a>Code Examples
 
@@ -425,10 +468,10 @@ In the included examples the following is assumed:
 ```csharp
 @model Fortis.Model.RenderingModel<IContentPage, IContentPage>
 <h1>
-    @Model.ContentTitle
+    @Model.PageItem.ContentTitle
 </h1>
 <div>
-    @Model.ContentBody
+    @Model.PageItem.ContentBody
 </div>
 
 ```
