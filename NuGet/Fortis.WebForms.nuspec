@@ -1,19 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-        <id>Fortis6</id>
+        <id>Fortis.WebForms</id>
         <version>1.0.0.1</version>
-        <title>Fortis 6</title>
-        <authors>Jason Bert,Kern Herskind Nightingale</authors>
+        <title>Fortis WebForms</title>
+        <authors>Jason Bert,Kern Herskind Nightingale,Richard Seal</authors>
         <owners>Fortis Collections</owners>
-        <licenseUrl>https://github.com/Fortis-Collection/fortis/blob/Sitecore6/license.txt</licenseUrl>
-        <projectUrl>https://github.com/Fortis-Collection/fortis/tree/Sitecore6</projectUrl>
+        <licenseUrl>https://github.com/Fortis-Collection/fortis/blob/master/license.txt</licenseUrl>
+        <projectUrl>https://github.com/Fortis-Collection/fortis/</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>A framework for creating a strongly typed model of the Sitecore API</description>
-        <releaseNotes>Requires: Sitecore 6.X - tested for 6.5+
+        <description>A framework for creating a strongly typed model of the Sitecore API. Sitecore WebForms projects.</description>
+        <releaseNotes>Requires: Sitecore 6.X, 7.X
+
 Now supports .NET 4 &amp; 4.5</releaseNotes>
         <copyright>Copyright 2014</copyright>
-        <tags>Sitecore Fortis</tags>
+        <tags>Sitecore Fortis WebForms ASP.Net</tags>
     </metadata>
     <files>
         <file src="Fortis\.NET 4.0\Fortis.dll" target="lib\net40\Fortis.dll" />
