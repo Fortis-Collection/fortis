@@ -75,16 +75,16 @@ var seoContent = (ISeoTemplate)contextItem;
 Fortis needs to be registered with your choice of [IoC](http://martinfowler.com/articles/injection.html) library. We have chosen [Simple Injector](https://simpleinjector.codeplex.com/) as this is a lightweight and fast container. ([IoC Benchmarks](http://www.palmmedia.de/blog/2011/8/30/ioc-container-benchmark-performance-comparison)). Fortis was built with the Provider pattern in mind and therefore works very well with constructor injection. This gives you the flexibility to swap in your own impelementations of each interface.
 
 The interfaces that need to be registered are:
-* IItemFactory
-* IRenderingParametersFactory (WebForms only)
-* IContextProvider
-* ISpawnProvider
-* ITemplateMapProvider
-* IModelAssembleyProvider
+* IItemFactory - the main factory for accessing items in Sitecore
+* IRenderingParametersFactory (WebForms only) - used for accessing the rendering parameters on WebForms user controls
+* IContextProvider - provides the context items for the item factory, this is different depending on if you use MVC (Fortis.Mvc) or WebForms (Fortis.WebForms)
+* ISpawnProvider - provides functionality for converting Sitecore items into strongly typed Fortis objects
+* ITemplateMapProvider - provides the mapping between template ID's and their strongly typed interfaces and concrete types
+* IModelAssembleyProvider - provides the source of template ID's and their strongly typed interfaces and concrete types
 
 Once registered, Fortis requires a Global initialisation for use in Sitecore Pipelines.
 
-##### Sitecore 7.x/Mvc Example Setup using _SimpleInjector_
+##### Sitecore 6.5/6.6 Example Setup using _SimpleInjector_
 ```csharp
 namespace MySitecoreWebsite
 {
@@ -92,10 +92,10 @@ namespace MySitecoreWebsite
     {
         var container = new Container();
         
-		// Register Fortis
+		// Register required Fortis providers and factories
 		container.Register<IItemFactory, ItemFactory>();
         container.Register<IRenderingParametersFactory, RenderingParametersFactory>();
-		container.Register<IContextProvider, ContextProvider>(); // This provide comes from either the Fortis.Mvc or Fortis.WebForms assembly
+		container.Register<IContextProvider, ContextProvider>();
 		container.Register<ISpawnProvider, SpawnProvider>();
 		container.Register<ITemplateMapProvider, TemplateMapProvider>();
 		container.Register<IModelAssemblyProvider, ModelAssemblyProvider>();
@@ -143,7 +143,7 @@ For Sitecore MVC projects add this configuration to enable View renderings to ge
 #### Tutorial: Getting Started with Fortis
 
 ##### Overview
-This tutorial introduces Fortis development by showing how to build a simple Sitecore website. You will install Sitecore 7.x, create some simple page templates and build a 2 page site using Fortis.
+This tutorial introduces Fortis development by showing how to build a simple Sitecore website. You will install Sitecore 6.5/6.6, create some simple page templates and build a 2 page site using Fortis.
 
 __Note:__ this tutorial assumes you have a good working knowledge of Sitecore and traditional Sitecore development. It also assumes you have installed a clean Sitecore 6.5/6.6 site and can setup the basic website project.
 
@@ -221,17 +221,17 @@ public partial class ContentPage : ItemWrapper, IContentPage
     
     public virtual ITextFieldWrapper ContentPageTitle
     { 
-        get { return GetField<ListFieldWrapper>("Content Page Title", "content page title"); }
+        get { return GetField<ListFieldWrapper>("Content Page Title"); }
     }
 
     public virtual IRichTextFieldWrapper ContentPageBody
     { 
-        get { return GetField<ListFieldWrapper>("Content Page Body", "content page body"); }
+        get { return GetField<ListFieldWrapper>("Content Page Body"); }
     }
 
     public virtual IBooleanFieldWrapper ContentPageIncludeInMenu
     { 
-        get { return GetField<ListFieldWrapper>("Content Page Include in Menu", "content page include in menu"); }
+        get { return GetField<ListFieldWrapper>("Content Page Include in Menu"); }
     }
 }
 ```
@@ -371,8 +371,6 @@ Each field has a standard .Render() method associated with it. The the render me
 ### Code Generation
 Each model should have an interface and a corresponding concrete implementation. The interface and class should have template mappings that identify the ID of the template this object maps.
 
-The class can also have an optional predefined query that will be read in the Sitecore 7 Search API.
-
 Because of the number of templates in a usual Sitecore project, we can use code generation to build our Model classes. There are a number of ways to do this:
 * Direct from the Sitecore database
 * Sitecore Serialization
@@ -440,12 +438,11 @@ Interface | Description
 `IBooleanFieldWrapper` | 
 `IDateTimeFieldWrapper` | 
 `IFileFieldWrapper` | 
-`IGeneralLinkFieldWrapper` | 
+`IGeneralLinkFieldWrapper` | for the General Link field in Sitecore, also implements ILinkFieldWrapper
 `IImageFieldWrapper` | for all Image fields
 `IIntegerFieldWrapper` | 
 `INumberFieldWrapper` |
 `ILinkFieldWrapper` | for any field which links to another Sitecore item e.g. Link, Droptree, Droplink
-`IGeneralLinkFieldWrapper` | for the General Link field in Sitecore, also implements ILinkFieldWrapper
 `IListFieldWrapper` | for all Sitecore fields that have a list
 `IRichTextFieldWrapper` | 
 `ITextFieldWrapper` | for Single-Line Text, Multiline Text
@@ -517,8 +514,11 @@ View:
 
 ### Creating a Custom Rendering Model
 
+Documentation coming soon!
 
+## Compiling
 
+### Dependencies
 
 * See README in _Lib\ folder
 * See README in Fortis.Test\Fakes folder
