@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Fortis.WebForms</id>
-        <version>1.0.0.1</version>
+        <version>1.0.0.2</version>
         <title>Fortis WebForms</title>
         <authors>Jason Bert,Kern Herskind Nightingale,Richard Seal</authors>
         <owners>Fortis Collections</owners>
@@ -17,7 +17,7 @@ Now supports .NET 4 &amp; 4.5</releaseNotes>
         <tags>Sitecore Fortis WebForms ASP.Net</tags>
     </metadata>
     <files>
-        <file src="Fortis\.NET 4.0\Fortis.dll" target="lib\net40\Fortis.dll" />
-        <file src="Fortis\.NET 4.5\Fortis.dll" target="lib\net45\Fortis.dll" />
+        <file src="Fortis.WebForms\.NET 4.0\Fortis.WebForms.dll" target="lib\net40\Fortis.WebForms.dll" />
+        <file src="Fortis.WebForms\.NET 4.5\Fortis.WebForms.dll" target="lib\net45\Fortis.WebForms.dll" />
     </files>
 </package>
