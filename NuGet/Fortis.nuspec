@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Fortis6</id>
-        <version>1.0.0.1</version>
+        <version>1.0.0.2</version>
         <title>Fortis 6</title>
         <authors>Jason Bert,Kern Herskind Nightingale</authors>
         <owners>Fortis Collections</owners>
@@ -11,7 +11,8 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>A framework for creating a strongly typed model of the Sitecore API</description>
         <releaseNotes>Requires: Sitecore 6.X - tested for 6.5+
-Now supports .NET 4 &amp; 4.5</releaseNotes>
+
+* Changed the rendering parameters factory over to use the SpawnProvider</releaseNotes>
         <copyright>Copyright 2014</copyright>
         <tags>Sitecore Fortis</tags>
     </metadata>
