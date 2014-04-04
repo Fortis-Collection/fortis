@@ -1,22 +1,21 @@
-﻿namespace Fortis.Model
-{
-	using Fortis.Providers;
-	using Fortis.Search;
-	using Sitecore.Configuration;
-	using Sitecore.ContentSearch;
-	using Sitecore.ContentSearch.Diagnostics;
-	using Sitecore.ContentSearch.Linq.Common;
-	using Sitecore.ContentSearch.LuceneProvider;
-	using Sitecore.ContentSearch.SearchTypes;
-	using Sitecore.ContentSearch.SolrProvider;
-	using Sitecore.ContentSearch.Utilities;
-	using Sitecore.Data;
-	using Sitecore.Data.Items;
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Linq.Expressions;
+﻿using Sitecore.Web.UI.WebControls;
+using Fortis.Providers;
+using Fortis.Search;
+using Sitecore.Configuration;
+using Sitecore.ContentSearch;
+using Sitecore.ContentSearch.Diagnostics;
+using Sitecore.ContentSearch.Linq.Common;
+using Sitecore.ContentSearch.LuceneProvider;
+using Sitecore.ContentSearch.SolrProvider;
+using Sitecore.ContentSearch.Utilities;
+using Sitecore.Data;
+using Sitecore.Data.Items;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
+namespace Fortis.Model
+{
 	public partial class ItemFactory : IItemFactory
 	{
 		protected readonly IContextProvider ContextProvider;
@@ -222,11 +221,10 @@
 		{
 			if (database != null)
 			{
-				string pathOrId = path;
-
+				var pathOrId = path;
 				try
 				{
-					pathOrId = Sitecore.Data.ID.Parse(path).ToString();
+					pathOrId = ID.Parse(path).ToString();
 				}
 				catch { }
 
@@ -239,10 +237,8 @@
 				catch { }
 				return (T)((wrapper is T) ? wrapper : null);
 			}
-			else
-			{
-				return default(T);
-			}
+
+			return default(T);
 		}
 
 		public IEnumerable<T> SelectAll<T>(string path) where T : IItemWrapper
@@ -262,10 +258,8 @@
 				var items = database.SelectItems(path);
 				return FilterWrapperTypes<T>(SpawnProvider.FromItems(items));
 			}
-			else
-			{
-				return Enumerable.Empty<T>();
-			}
+
+			return Enumerable.Empty<T>();
 		}
 
 		public T SelectChild<T>(IItemWrapper item) where T : IItemWrapper
@@ -390,24 +384,30 @@
 			{
 				return SelectChildren<T>(parent);
 			}
-			else
-			{
-				return Enumerable.Empty<T>();
-			}
+			return Enumerable.Empty<T>();
 		}
 
 		public T GetRenderingDataSource<T>(System.Web.UI.Control control) where T : IItemWrapper
 		{
-			if (control.Parent is Sitecore.Web.UI.WebControls.Sublayout)
+			var parent = control.Parent as Sublayout;
+			if (parent != null)
 			{
-				string dataSourcePath = ((Sitecore.Web.UI.WebControls.Sublayout)control.Parent).DataSource;
+				var dataSourcePath = parent.DataSource;
 				if (dataSourcePath.Length > 0)
 				{
-					return this.Select<T>(dataSourcePath);
+					if (dataSourcePath.StartsWith("query:"))
+					{
+						var item = Sitecore.Context.Database.SelectSingleItem(dataSourcePath);
+						if (item != null)
+						{
+							return SpawnFromItem<T>(item);
+						}
+					}
+					return Select<T>(dataSourcePath);
 				}
 			}
 
-			return this.GetContextItem<T>();
+			return GetContextItem<T>();
 		}
 
 		public IQueryable<T> Search<T>(IProviderSearchContext context, IExecutionContext executionContext = null) where T : IItemWrapper
