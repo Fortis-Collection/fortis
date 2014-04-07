@@ -1,16 +1,33 @@
-﻿namespace Fortis.Mvc.Providers
-{
-	using Fortis.Providers;
-	using Sitecore.Data.Items;
-	using Sitecore.Mvc.Presentation;
-	using System.Collections.Generic;
-	using System.Linq;
+﻿using Fortis.Providers;
+using Sitecore;
+using Sitecore.Data;
+using Sitecore.Data.Items;
+using Sitecore.Mvc.Presentation;
+using System.Collections.Generic;
 
+namespace Fortis.Mvc.Providers
+{
 	public class ContextProvider : IContextProvider
 	{
+
 		public Item RenderingContextItem
 		{
-			get { return RenderingContext.Current.Rendering.Item; }
+			get
+			{
+				if (RenderingContext.Current.Rendering.DataSource.StartsWith("query"))
+				{
+					if (RenderingContext.Current.Rendering.DataSource.Length > 1)
+					{
+						var contextItem = RenderingContext.Current.PageContext.Item;
+						if (contextItem != null)
+						{
+							var item = contextItem.Axes.SelectSingleItem(RenderingContext.Current.Rendering.DataSource.Replace("query:", ""));
+							return item;
+						}
+					}
+				}
+				return RenderingContext.Current.Rendering.Item;
+			}
 		}
 
 		public Item PageContextItem
