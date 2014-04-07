@@ -1,4 +1,6 @@
 ﻿using Fortis.Providers;
+using Sitecore;
+using Sitecore.Data;
 using Sitecore.Data.Items;
 using Sitecore.Mvc.Presentation;
 using System.Collections.Generic;
@@ -14,14 +16,13 @@ namespace Fortis.Mvc.Providers
 			{
 				if (RenderingContext.Current.Rendering.DataSource.StartsWith("query"))
 				{
-					var source = RenderingContext.Current.Rendering.DataSource.Split(':');
-					if (source.Length > 1)
+					if (RenderingContext.Current.Rendering.DataSource.Length > 1)
 					{
-						var query = source[1];
-						var db = RenderingContext.Current.ContextItem.Database;
-						if (db != null)
+						var contextItem = RenderingContext.Current.PageContext.Item;
+						if (contextItem != null)
 						{
-							return db.SelectSingleItem(query);
+							var item = contextItem.Axes.SelectSingleItem(RenderingContext.Current.Rendering.DataSource.Replace("query:", ""));
+							return item;
 						}
 					}
 				}
