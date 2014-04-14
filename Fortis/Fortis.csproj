@@ -86,6 +86,7 @@
     <Compile Include="Model\Fields\NumberFieldWrapper.cs" />
     <Compile Include="Model\IRenderingContext.cs" />
     <Compile Include="Model\RenderingContext.cs" />
+    <Compile Include="Model\RenderingParameters\Fields\NumberFieldWrapper.cs" />
     <Compile Include="Model\RenderingParameters\Fields\IntegerFieldWrapper.cs" />
     <Compile Include="Pipelines\RenderField\LinkRenderer.cs" />
     <Compile Include="Providers\IContextProvider.cs" />
