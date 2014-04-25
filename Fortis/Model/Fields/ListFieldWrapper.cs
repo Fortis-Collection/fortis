@@ -17,7 +17,7 @@ namespace Fortis.Model.Fields
 			: base(field, spawnProvider) { }
 
 		public ListFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, string value = null)
-			: this(key, ref item, spawnProvider, value.Split(_delimiter).ToGuidEnumerable()) { }
+			: this(key, ref item, spawnProvider, (value ?? "").Split(_delimiter).ToGuidEnumerable()) { }
 
 		public ListFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, IEnumerable ids = null)
 			: this(key, ref item, spawnProvider, ids.ToGuidEnumerable()) { }

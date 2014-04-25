@@ -48,6 +48,7 @@ namespace Fortis.Model
 						case "droplink":
 						case "droptree":
 						case "general link":
+						case "general link with search":
 							_fields[key] = new LinkFieldWrapper(parameterValue, SpawnProvider);
 							break;
 						case "single-line text":
