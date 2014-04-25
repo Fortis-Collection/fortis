@@ -134,6 +134,26 @@ For Sitecore MVC projects add this configuration to enable View renderings to ge
 
 ```
 
+#### Web.config Changes
+Fortis also needs some setup in the web.config.
+
+Make sure the following lines are added:
+
+```xml
+<configuration>
+	<configSections>
+		<section name="fortis" type="System.Configuration.NameValueSectionHandler" />
+	</configSections>
+	<fortis>
+		<add key="assembly" value="{Model Project}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+	</fortis>
+</configuration>
+
+```
+
+{Model Project} should be the assembley name that contains your Model.cs class.
+
+
 #### Tutorial: Getting Started with Fortis
 
 ##### Overview
