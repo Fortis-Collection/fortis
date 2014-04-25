@@ -81,7 +81,9 @@ namespace Fortis.Search
 				 * 								each constant expression against
 				 * 		constant			->	this is the constant expression (value) to be passed to the method
 				 */
-				expressions = constants.Select(constant => Expression.Call(typeof(Enumerable), methodName, typeOfTKey.GenericTypeArguments, keySelector.Body, constant));
+				var typeArgs = typeOfTKey.IsArray ? new[] { typeOfTKey.GetElementType() } : typeOfTKey.GenericTypeArguments;
+
+				expressions = constants.Select(constant => Expression.Call(typeof(Enumerable), methodName, typeArgs, keySelector.Body, constant));
 			}
 
 			/* 
