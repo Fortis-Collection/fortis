@@ -139,7 +139,7 @@ Fortis also needs some setup in the web.config.
 
 Make sure the following lines are added:
 
-```
+```xml
 <configuration>
 	<configSections>
 		<section name="fortis" type="System.Configuration.NameValueSectionHandler" />
