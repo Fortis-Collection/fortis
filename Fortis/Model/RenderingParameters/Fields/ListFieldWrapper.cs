@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Fortis.Model.Fields;
 using Fortis.Providers;
+using Sitecore;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
@@ -15,11 +16,11 @@ namespace Fortis.Model.RenderingParameters.Fields
 
 		public IEnumerable<T> GetItems<T>() where T : IItemWrapper
 		{
-			var list = _value.Split('|');
+			var list = (string.IsNullOrWhiteSpace(_value) ? string.Empty : _value).Split('|'); 
 
 			foreach (var id in list)
 			{
-                var item = Sitecore.Context.Database.GetItem(id);
+                var item = Context.Database.GetItem(id);
                 if (item != null)
                 {
                     var wrapper = SpawnProvider.FromItem<T>(item);
@@ -45,7 +46,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 		{
 			get
 			{
-				var list = (string.IsNullOrWhiteSpace(base._value) ? string.Empty : base._value).Split('|'); 
+				var list = (string.IsNullOrWhiteSpace(_value) ? string.Empty : _value).Split('|'); 
 
 				foreach (var id in list)
 				{
