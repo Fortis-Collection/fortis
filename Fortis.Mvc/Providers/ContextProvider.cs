@@ -1,4 +1,5 @@
-﻿using Fortis.Providers;
+﻿using System;
+using Fortis.Providers;
 using Sitecore;
 using Sitecore.Data;
 using Sitecore.Data.Items;
@@ -14,18 +15,24 @@ namespace Fortis.Mvc.Providers
 		{
 			get
 			{
-				if (RenderingContext.Current.Rendering.DataSource.StartsWith("query"))
+				// Check for a sitecore query datasource
+				var query = RenderingContext.Current.Rendering.DataSource;
+				if (query.StartsWith("./", StringComparison.InvariantCulture))
 				{
-					if (RenderingContext.Current.Rendering.DataSource.Length > 1)
+					// Relative to the current context item
+					var contextItem = RenderingContext.Current.PageContext.Item;
+					if (contextItem != null)
 					{
-						var contextItem = RenderingContext.Current.PageContext.Item;
-						if (contextItem != null)
-						{
-							var item = contextItem.Axes.SelectSingleItem(RenderingContext.Current.Rendering.DataSource.Replace("query:", ""));
-							return item;
-						}
+						var item = contextItem.Axes.SelectSingleItem(query);
+						return item;
 					}
 				}
+				else if (!string.IsNullOrEmpty(query))
+				{
+					// Straight sitecore query
+					return RenderingContext.Current.ContextItem.Database.SelectSingleItem(query);
+				}
+				// Item Id set in the datasource
 				return RenderingContext.Current.Rendering.Item;
 			}
 		}
