@@ -28,18 +28,19 @@ namespace Fortis.Model.Fields
 		{
 			get
 			{
+				if (string.IsNullOrWhiteSpace(RawValue))
+				{
+					return Guid.Empty;
+				}
 				if (ShortID.IsShortID(RawValue))
 				{
 					return ShortID.Parse(RawValue).ToID().Guid;
 				}
-				else if (ID.IsID(RawValue))
+				if (ID.IsID(RawValue))
 				{
 					return ID.Parse(RawValue).Guid;
 				}
-				else
-				{
-					return Guid.Parse(RawValue);
-				}
+				return Guid.Parse(RawValue);
 			}
 		}
 
@@ -87,17 +88,25 @@ namespace Fortis.Model.Fields
 			fieldRenderer.FieldName = Field.Key;
 
 			var result = fieldRenderer.RenderField();
-
 			return new HtmlString(result.FirstPart + result.LastPart);
 		}
 
+		/// <summary>
+		/// Gets the target Sitecore Item and spawns a new T object.
+		/// </summary>
+		/// <typeparam name="T">The generic type to return. Must be of type <see cref="Fortis.Model.IItemWrapper"/></typeparam>
+		/// <returns>If the target is not set, returns null, otherwise returns T</returns>
 		public virtual T GetTarget<T>() where T : IItemWrapper
 		{
+			if (string.IsNullOrWhiteSpace(RawValue))
+			{
+				return default(T);
+			}
 			if (ShortID.IsShortID(RawValue))
 			{
 				return GetTarget<T>(ShortID.Parse(RawValue).ToID());
 			}
-			else if (ID.IsID(RawValue))
+			if (ID.IsID(RawValue))
 			{
 				return GetTarget<T>(ID.Parse(RawValue));
 			}
@@ -107,14 +116,17 @@ namespace Fortis.Model.Fields
 
 		private T GetTarget<T>(ID id) where T : IItemWrapper
 		{
-			var item = Sitecore.Context.Database.GetItem(id);
-			if (item != null)
+			if (ID.IsNullOrEmpty(id))
 			{
-				var wrapper = SpawnProvider.FromItem<T>(item);
-				return (T)((wrapper is T) ? wrapper : null); ;
+				return default(T);
 			}
-
-			return default(T);
+			var item = Sitecore.Context.Database.GetItem(id);
+			if (item == null)
+			{
+				return default(T);
+			}
+			var wrapper = SpawnProvider.FromItem<T>(item);
+			return (T)((wrapper is T) ? wrapper : null);
 		}
 
 		public static implicit operator string(LinkFieldWrapper field)
