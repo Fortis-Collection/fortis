@@ -16,6 +16,11 @@ namespace Fortis.Model.RenderingParameters.Fields
 
 		public IEnumerable<T> GetItems<T>() where T : IItemWrapper
 		{
+			if (_value == null)
+			{
+				yield break;
+			}
+
 			var list = (string.IsNullOrWhiteSpace(_value) ? string.Empty : _value).Split('|'); 
 
 			foreach (var id in list)
@@ -46,6 +51,11 @@ namespace Fortis.Model.RenderingParameters.Fields
 		{
 			get
 			{
+				if (_value == null)
+				{
+					yield break;
+				}
+
 				var list = (string.IsNullOrWhiteSpace(_value) ? string.Empty : _value).Split('|'); 
 
 				foreach (var id in list)
