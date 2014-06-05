@@ -34,29 +34,39 @@ namespace Fortis.Model
 			return null;
 		}
 
-		public T GetParameters<T>(Control control) where T : IRenderingParameterWrapper
+		public T GetParameters<T>(Control control)
+			where T : IRenderingParameterWrapper
 		{
 			if (control.Parent is Sublayout)
 			{
 				var sublayout = (Sublayout)control.Parent;
-				var renderingItem = GetRenderingByPath(sublayout.Path);
 
-				if (renderingItem != null)
+				var parsedParameters = HttpUtility.ParseQueryString(sublayout.Parameters);
+				var parameters = new Dictionary<string, string>();
+
+				foreach (var parameterKey in parsedParameters.AllKeys)
 				{
-					var parsedParameters = HttpUtility.ParseQueryString(sublayout.Parameters);
-					var parameters = new Dictionary<string, string>();
-
-					foreach (var parameterKey in parsedParameters.AllKeys)
+					if (!parameters.ContainsKey(parameterKey))
 					{
-						if (!parameters.ContainsKey(parameterKey))
-						{
-							parameters.Add(parameterKey, parsedParameters[parameterKey]);
-						}
+						parameters.Add(parameterKey, parsedParameters[parameterKey]);
 					}
-
-					var wrapper = SpawnProvider.FromRenderingParameters<T>(renderingItem, parameters);
-					return (T)((wrapper is T) ? wrapper : default(T));
 				}
+
+				return GetParameters<T>(sublayout.Path, parameters);
+			}
+
+			return default(T);
+		}
+
+		public T GetParameters<T>(string filePath, Dictionary<string, string> parameters)
+			where T : IRenderingParameterWrapper
+		{
+			var renderingItem = GetRenderingByPath(filePath);
+
+			if (renderingItem != null)
+			{
+				var wrapper = SpawnProvider.FromRenderingParameters<T>(renderingItem, parameters);
+				return (T)((wrapper is T) ? wrapper : default(T));
 			}
 
 			return default(T);

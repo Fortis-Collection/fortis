@@ -8,6 +8,9 @@ namespace Fortis.Model
 {
 	public interface IRenderingParameterFactory
 	{
-		T GetParameters<T>(Control control) where T : IRenderingParameterWrapper;
+		T GetParameters<T>(Control control)
+			where T : IRenderingParameterWrapper;
+		T GetParameters<T>(string filePath, Dictionary<string, string> parameters)
+			where T : IRenderingParameterWrapper;
 	}
 }

@@ -2,9 +2,9 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Fortis6</id>
-        <version>1.0.0.2</version>
+        <version>1.0.1.0</version>
         <title>Fortis 6</title>
-        <authors>Jason Bert,Kern Herskind Nightingale</authors>
+        <authors>Jason Bert,Kern Herskind Nightingale,Richard Seal</authors>
         <owners>Fortis Collections</owners>
         <licenseUrl>https://github.com/Fortis-Collection/fortis/blob/Sitecore6/license.txt</licenseUrl>
         <projectUrl>https://github.com/Fortis-Collection/fortis/tree/Sitecore6</projectUrl>
@@ -12,7 +12,7 @@
         <description>A framework for creating a strongly typed model of the Sitecore API</description>
         <releaseNotes>Requires: Sitecore 6.X - tested for 6.5+
 
-* Changed the rendering parameters factory over to use the SpawnProvider</releaseNotes>
+* Added an overload for accepting a physical path and dictionary parameters</releaseNotes>
         <copyright>Copyright 2014</copyright>
         <tags>Sitecore Fortis</tags>
     </metadata>

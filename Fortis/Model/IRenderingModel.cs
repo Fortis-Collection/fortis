@@ -10,7 +10,6 @@
 		IRenderingContext PageContext { get; }
 		TRenderingItem RenderingItem { get; }
 		IRenderingContext RenderingItemContext { get; }
-		IItemFactory Factory { get; }
 	}
 
 	public interface IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> : IRenderingModel<TPageItem, TRenderingItem>
