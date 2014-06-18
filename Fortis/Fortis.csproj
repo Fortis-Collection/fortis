@@ -135,6 +135,7 @@
     <Compile Include="Search\CustomLinqToLuceneIndex.cs" />
     <Compile Include="Search\CustomLinqToSolrIndex.cs" />
     <Compile Include="Search\ComputedFields\InheritedTemplates.cs" />
+    <Compile Include="Search\DefaultDocumentMapperObjectFactory.cs" />
     <Compile Include="Search\LuceneDocumentTypeMapper.cs" />
     <Compile Include="Search\SearchExtensions.cs" />
     <Compile Include="Search\SolrDocumentTypeMapper.cs" />
