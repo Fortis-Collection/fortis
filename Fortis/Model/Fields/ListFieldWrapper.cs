@@ -30,6 +30,11 @@ namespace Fortis.Model.Fields
 
 		public IEnumerable<T> GetItems<T>() where T : IItemWrapper
 		{
+			if (_ids == null)
+			{
+				yield break;
+			}
+
 			foreach (var id in Value)
 			{
                 var item = Sitecore.Context.Database.GetItem(id.ToString());
