@@ -16,7 +16,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 
 		public IEnumerable<T> GetItems<T>() where T : IItemWrapper
 		{
-			if (_value == null)
+			if (string.IsNullOrWhiteSpace(_value))
 			{
 				yield break;
 			}
@@ -51,7 +51,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 		{
 			get
 			{
-				if (_value == null)
+				if (string.IsNullOrWhiteSpace(_value))
 				{
 					yield break;
 				}
