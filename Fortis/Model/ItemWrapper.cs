@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Sitecore.Configuration;
 using Sitecore.Data.Items;
+using Sitecore.Globalization;
+using Sitecore.Links;
 using Sitecore.Publishing;
 using Fortis.Model.Fields;
 using System.Runtime.CompilerServices;
@@ -302,17 +304,38 @@ namespace Fortis.Model
 			publisher.Publish();
 		}
 
+		/// <summary>
+		/// Use the Sitecore LinkManager to generate the Url with the standard site options
+		/// </summary>
+		/// <returns></returns>
 		public virtual string GenerateUrl()
 		{
-			return Sitecore.Links.LinkManager.GetItemUrl(Item);
+			return LinkManager.GetItemUrl(Item);
 		}
 
+		/// <summary>
+		/// Use the Sitecore LinkManager to generate the Url ensuring the host name is always included
+		/// </summary>
+		/// <param name="includeHostname">If true the hostname will always be added to the Url</param>
+		/// <returns></returns>
 		public virtual string GenerateUrl(bool includeHostname)
 		{
-			var options = Sitecore.Links.LinkManager.GetDefaultUrlOptions();
+			var options = LinkManager.GetDefaultUrlOptions();
 			options.AlwaysIncludeServerUrl = true;
 
-			return Sitecore.Links.LinkManager.GetItemUrl(Item, options);
+			return LinkManager.GetItemUrl(Item, options);
+		}
+
+		/// <summary>
+		/// Use the Sitecore LinkManager to generate the Url for the item for a specified language
+		/// </summary>
+		/// <param name="language">The Sitecore language code</param>
+		/// <returns></returns>
+		public string GenerateUrl(string language)
+		{
+			var options = LinkManager.GetDefaultUrlOptions();
+			options.Language = Language.Parse(language);
+			return LinkManager.GetItemUrl(Item, options);
 		}
 
 		public void Dispose()

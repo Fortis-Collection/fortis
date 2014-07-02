@@ -28,10 +28,13 @@ namespace Fortis.Model
 		T Create<T>(IItemWrapper parent, string itemName) where T : IItemWrapper;
 		T Create<T>(string parentPath, string itemName) where T : IItemWrapper;
 		T Create<T>(Guid parentId, string itemName) where T : IItemWrapper;
+		
 		T Select<T>(string path) where T : IItemWrapper;
 		T Select<T>(Guid id) where T : IItemWrapper;
 		T Select<T>(string path, string database) where T : IItemWrapper;
 		T Select<T>(Guid id, string database) where T : IItemWrapper;
+		T Select<T>(Guid id, string database, string language) where T : IItemWrapper;
+
 		IEnumerable<T> SelectAll<T>(string path) where T : IItemWrapper;
 		IEnumerable<T> SelectAll<T>(string path, string database) where T : IItemWrapper;
 		T SelectChild<T>(IItemWrapper item) where T : IItemWrapper;
