@@ -1,4 +1,5 @@
-﻿using Sitecore.Web.UI.WebControls;
+﻿using Sitecore.Globalization;
+using Sitecore.Web.UI.WebControls;
 using Fortis.Providers;
 using Fortis.Search;
 using Sitecore.Configuration;
@@ -66,6 +67,15 @@ namespace Fortis.Model
 
 		protected virtual Item GetItem(Guid id, Database database = null)
 		{
+			return (database ?? Sitecore.Context.Database).GetItem(new ID(id));
+		}
+
+		protected virtual Item GetItem(Guid id, Language language = null, Database database = null)
+		{
+			if (language != null)
+			{
+				return (database ?? Sitecore.Context.Database).GetItem(new ID(id), language);
+			}
 			return (database ?? Sitecore.Context.Database).GetItem(new ID(id));
 		}
 
@@ -204,6 +214,7 @@ namespace Fortis.Model
 			return (T)((wrapper is T) ? wrapper : null);
 		}
 
+
 		public T Select<T>(string path) where T : IItemWrapper
 		{
 			return Select<T>(path, Sitecore.Context.Database);
@@ -211,7 +222,7 @@ namespace Fortis.Model
 
 		public T Select<T>(Guid id) where T : IItemWrapper
 		{
-			return SpawnFromItem<T>(GetItem(id));
+			return SpawnFromItem<T>(GetItem(id, null));
 		}
 
 		public T Select<T>(string path, string database) where T : IItemWrapper
@@ -222,6 +233,22 @@ namespace Fortis.Model
 		public T Select<T>(Guid id, string database) where T : IItemWrapper
 		{
 			return SpawnFromItem<T>(GetItem(id, Factory.GetDatabase(database)));
+		}
+
+		public T Select<T>(Guid id, string database, string language) where T : IItemWrapper
+		{
+			Language lang = Sitecore.Context.Language;
+			if (!string.IsNullOrWhiteSpace(language))
+			{
+				lang = Language.Parse(language);
+			}
+
+			if (string.IsNullOrWhiteSpace(database))
+			{
+				return SpawnFromItem<T>(GetItem(id, lang));
+			}
+
+			return SpawnFromItem<T>(GetItem(id, lang, Factory.GetDatabase(database)));
 		}
 
 		protected virtual T Select<T>(string path, Database database) where T : IItemWrapper
@@ -333,7 +360,7 @@ namespace Fortis.Model
 
 		public IEnumerable<T> SelectChildren<T>(Guid id) where T : IItemWrapper
 		{
-			return SelectChildren<T>(GetItem(id));
+			return SelectChildren<T>(GetItem(id, null));
 		}
 
 		protected IEnumerable<T> SelectChildren<T>(Item item) where T : IItemWrapper

@@ -42,6 +42,7 @@ namespace Fortis.Model
 		void Publish(bool children);
 		string GenerateUrl();
 		string GenerateUrl(bool includeHostname);
+		string GenerateUrl(string language);
 		IEnumerable<T> Children<T>(bool recursive = false) where T : IItemWrapper;
 		IEnumerable<T> Siblings<T>() where T : IItemWrapper;
 		T Parent<T>(bool ancestors = true) where T : IItemWrapper;
