@@ -9,21 +9,6 @@ namespace Fortis.Model.Fields
 {
 	public class LinkFieldWrapper : FieldWrapper, ILinkFieldWrapper
 	{
-		private IItemWrapper _target;
-
-		protected virtual IItemWrapper Target
-		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = GetTarget<IItemWrapper>();
-				}
-
-				return _target;
-			}
-		}
-
 		public Guid ItemId
 		{
 			get
@@ -48,12 +33,13 @@ namespace Fortis.Model.Fields
 		{
 			get
 			{
-				if (Target == null)
+			    var target = GetTarget<IItemWrapper>();
+				if (target == null)
 				{
 					return string.Empty;
 				}
 
-				return Target.GenerateUrl();
+				return target.GenerateUrl();
 			}
 		}
 
