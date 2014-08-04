@@ -12,6 +12,9 @@ namespace Fortis.Model
 {
 	public class RenderingParameterFactory : IRenderingParameterFactory
 	{
+		private Dictionary<string, Guid> _renderings;
+		private object _renderingsLock = new object();
+
 		protected readonly ISpawnProvider SpawnProvider;
 
 		public RenderingParameterFactory(ISpawnProvider spawnProvider)
@@ -21,14 +24,11 @@ namespace Fortis.Model
 
 		private Item GetRenderingByPath(string path)
 		{
-			var items = Sitecore.Context.Database.SelectItems("/sitecore/layout//*");
-
-			foreach (var item in items)
+			if (Renderings.Any(r => r.Key.Equals(path, StringComparison.InvariantCultureIgnoreCase)))
 			{
-				if (item["Path"].Equals(path, StringComparison.InvariantCultureIgnoreCase))
-				{
-					return item;
-				}
+				var rendering = Renderings.FirstOrDefault(r => r.Key.Equals(path, StringComparison.InvariantCultureIgnoreCase));
+
+				return Sitecore.Context.Database.GetItem(Sitecore.Data.ID.Parse(rendering.Value));
 			}
 
 			return null;
@@ -70,6 +70,37 @@ namespace Fortis.Model
 			}
 
 			return default(T);
+		}
+
+		public Dictionary<string, Guid> Renderings
+		{
+			get
+			{
+				if (_renderings == null)
+				{
+					lock (_renderingsLock)
+					{
+						if (_renderings == null)
+						{
+							_renderings = new Dictionary<string, Guid>();
+
+							var items = Sitecore.Context.Database.SelectItems("fast:/sitecore/layout//*");
+
+							foreach (var item in items)
+							{
+								var filePath = item["Path"];
+
+								if (!string.IsNullOrWhiteSpace(filePath) && !_renderings.ContainsKey(filePath))
+								{
+									_renderings.Add(filePath, item.ID.Guid);
+								}
+							}
+						}
+					}
+				}
+
+				return _renderings;
+			}
 		}
 	}
 }
