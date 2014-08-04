@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Fortis6</id>
-        <version>1.0.1.0</version>
+        <version>1.0.1.1</version>
         <title>Fortis 6</title>
         <authors>Jason Bert,Kern Herskind Nightingale,Richard Seal</authors>
         <owners>Fortis Collections</owners>
@@ -12,7 +12,7 @@
         <description>A framework for creating a strongly typed model of the Sitecore API</description>
         <releaseNotes>Requires: Sitecore 6.X - tested for 6.5+
 
-* Added an overload for accepting a physical path and dictionary parameters</releaseNotes>
+* Switched the loading of renderings for rendering parameters to a fast query and cached them per application life cycle</releaseNotes>
         <copyright>Copyright 2014</copyright>
         <tags>Sitecore Fortis</tags>
     </metadata>
