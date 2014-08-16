@@ -11,5 +11,7 @@
 		bool IsMediaLink { get; }
 
 		string Styles { get; }
+
+        string Target { get; }
 	}
 }

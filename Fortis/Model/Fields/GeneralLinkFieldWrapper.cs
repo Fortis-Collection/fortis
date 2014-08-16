@@ -36,6 +36,11 @@ namespace Fortis.Model.Fields
 			get { return LinkField.Class; }
 		}
 
+	    public string Target
+	    {
+	        get { return LinkField.Target; }
+	    }
+
 		public override string Url
 		{
 			get
@@ -44,9 +49,10 @@ namespace Fortis.Model.Fields
 				{
 					return Sitecore.Resources.Media.MediaManager.GetMediaUrl(LinkField.TargetItem);
 				}
-				if (IsInternal && Target != null)
+			    var target = GetTarget<IItemWrapper>();
+				if (IsInternal && target != null)
 				{
-					return Target.GenerateUrl();
+					return target.GenerateUrl();
 				}
 
 				return LinkField.Url;
