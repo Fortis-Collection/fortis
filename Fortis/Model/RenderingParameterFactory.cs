@@ -46,7 +46,7 @@ namespace Fortis.Model
 
 				foreach (var parameterKey in parsedParameters.AllKeys)
 				{
-					if (!parameters.ContainsKey(parameterKey))
+					if (!string.IsNullOrWhiteSpace(parameterKey) && !parameters.ContainsKey(parameterKey))
 					{
 						parameters.Add(parameterKey, parsedParameters[parameterKey]);
 					}
