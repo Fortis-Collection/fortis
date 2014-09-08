@@ -167,6 +167,8 @@ namespace Fortis.Providers
 				case "treelist":
 				case "treelistex":
 				case "multilist":
+				case "multilist with search":
+				case "treelist with search":
 					return fieldType == typeof(ListFieldWrapper);
 				case "file":
 					return fieldType == typeof(FileFieldWrapper);

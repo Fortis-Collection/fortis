@@ -32,7 +32,7 @@ namespace Fortis.Model.Fields
 		{
 			foreach (var id in Value)
 			{
-                var item = Sitecore.Context.Database.GetItem(id.ToString());
+                var item = Database.GetItem(id.ToString());
 
                 if (item != null)
                 {

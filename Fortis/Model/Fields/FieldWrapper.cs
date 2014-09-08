@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Fortis.Helpers;
+using Sitecore.Data;
 using Sitecore.Data.Fields;
 using Sitecore.Pipelines;
 using Sitecore.Pipelines.RenderField;
@@ -131,6 +132,25 @@ namespace Fortis.Model.Fields
 				}
 
 				return _field;
+			}
+		}
+
+		public Database Database
+		{
+			get
+			{
+				if (Sitecore.Context.Database == null)
+				{
+					if (Field != null)
+					{
+						return Field.Database;
+					}
+					if (_item != null)
+					{
+						return _item.Database;
+					}
+				}
+				return Sitecore.Context.Database;
 			}
 		}
 

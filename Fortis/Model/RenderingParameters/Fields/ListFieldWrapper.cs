@@ -25,7 +25,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 
 			foreach (var id in list)
 			{
-                var item = Context.Database.GetItem(id);
+                var item = Database.GetItem(id);
                 if (item != null)
                 {
                     var wrapper = SpawnProvider.FromItem<T>(item);

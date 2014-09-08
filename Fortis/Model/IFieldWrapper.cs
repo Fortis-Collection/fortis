@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
+﻿using System.Web;
+using Sitecore.Data;
 
 namespace Fortis.Model
 {
@@ -17,7 +14,7 @@ namespace Fortis.Model
         IHtmlString RenderBeginField(object parameters, bool editing = true);
         IHtmlString RenderBeginField(string parameters = null, bool editing = true);
         IHtmlString RenderEndField();
-
+		Database Database { get; }
 	}
 
 	public interface IFieldWrapper<T> : IFieldWrapper
