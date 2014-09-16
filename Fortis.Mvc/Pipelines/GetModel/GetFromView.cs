@@ -1,13 +1,13 @@
-﻿namespace Fortis.Mvc.Pipelines.GetModel
+﻿using System.Linq;
+using System.Web.Compilation;
+using System.Web.Mvc;
+using Fortis.Model;
+
+using Sitecore.Mvc.Pipelines.Response.GetModel;
+using Sitecore.Mvc.Presentation;
+
+namespace Fortis.Mvc.Pipelines.GetModel
 {
-	using System.Linq;
-	using System.Web.Compilation;
-	using System.Web.Mvc;
-	using Fortis.Model;
-
-	using Sitecore.Mvc.Pipelines.Response.GetModel;
-	using Sitecore.Mvc.Presentation;
-
 	public class GetFromView : GetModelProcessor
 	{
 		protected virtual object GetFromViewPath(Rendering rendering, GetModelArgs args)
