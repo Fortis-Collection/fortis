@@ -10,5 +10,7 @@ namespace Fortis.Model.Fields
 		string GetSourceUri(bool absolute);
 
 		IHtmlString Render(ImageFieldWrapperOptions options);
+
+		T GetTarget<T>() where T : IItemWrapper;
 	}
 }

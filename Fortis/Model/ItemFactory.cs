@@ -162,25 +162,7 @@ namespace Fortis.Model
 
 		public T GetSiteRoot<T>() where T : IItemWrapper
 		{
-			Item item = null;
-
-			// Support preview and page editor mode here
-			if (Sitecore.Context.PageMode.IsPageEditor || Sitecore.Context.PageMode.IsPreview)
-			{
-				// In preview and page edit mode we do not have a propert site context
-				// so try to infer it from the path of the current context item
-				var sites = Factory.GetSiteInfoList();
-				var site = sites.FirstOrDefault(x => Sitecore.Context.Item.Paths.FullPath.StartsWith(x.RootPath));
-				if (site != null)
-				{
-					item = GetItem(site.RootPath);
-				}
-			}
-			else
-			{
-				item = GetItem(Sitecore.Context.Site.RootPath);
-			}
-
+			var item = GetItem(Sitecore.Context.Site.RootPath);
 			// Make sure we have value item at this point
 			if (item == null)
 			{

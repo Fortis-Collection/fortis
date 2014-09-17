@@ -1,5 +1,6 @@
 ﻿using System;
 using Sitecore.Data.Fields;
+using Sitecore.Data.Items;
 using Sitecore.Resources.Media;
 using Sitecore.Web.UI.WebControls;
 using System.Web;
@@ -26,10 +27,7 @@ namespace Fortis.Model.Fields
 			{
 				return string.Empty;
 			}
-			else
-			{
-				return MediaManager.GetMediaUrl(((ImageField)Field).MediaItem, new MediaUrlOptions() { AbsolutePath = absolute });
-			}
+			return MediaManager.GetMediaUrl(((ImageField)Field).MediaItem, new MediaUrlOptions() { AbsolutePath = absolute });
 		}
 
 		public IHtmlString Render(ImageFieldWrapperOptions options)
@@ -67,6 +65,21 @@ namespace Fortis.Model.Fields
 			var result = fieldRenderer.RenderField();
 
 			return new HtmlString(result.FirstPart + result.LastPart);
+		}
+
+		public T GetTarget<T>() where T : IItemWrapper
+		{
+			if (Field == null || Field.Value.Length == 0)
+			{
+				return default(T);
+			}
+			var mediaItem = ((ImageField) Field).MediaItem;
+			if (mediaItem != null)
+			{
+				var target = SpawnProvider.FromItem<T>(new Item(mediaItem.ID, mediaItem.InnerData, mediaItem.Database));
+				return (T)((target is T) ? target : null);
+			}
+			return default(T);
 		}
 
 		public static implicit operator string(ImageFieldWrapper field)
