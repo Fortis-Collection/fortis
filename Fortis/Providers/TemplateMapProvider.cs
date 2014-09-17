@@ -1,15 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sitecore.Collections;
-using Sitecore.Data;
-using Sitecore.Data.Fields;
-using Sitecore.Data.Items;
-using Sitecore.Data.Managers;
 using Fortis.Model.Fields;
-using System.Reflection;
-using System.Collections.Specialized;
-using System.Web.Configuration;
 using Fortis.Model;
 
 namespace Fortis.Providers
@@ -23,31 +15,36 @@ namespace Fortis.Providers
 			_modelAssemblyProvider = modelAssemblyProvider;
 		}
 
+		private object _lock = new object();
 		private Dictionary<Guid, Type> _templateMap = null;
 		public Dictionary<Guid, Type> TemplateMap
 		{
 			get
 			{
-				if (_templateMap == null)
+				lock (_lock)
 				{
-					_templateMap = new Dictionary<Guid, Type>();
-
-					foreach (var t in _modelAssemblyProvider.Assembly.GetTypes())
+					if (_templateMap == null)
 					{
-						foreach (TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof(TemplateMappingAttribute), false))
+						_templateMap = new Dictionary<Guid, Type>();
+
+						var types = _modelAssemblyProvider.Assembly.GetTypes();
+						foreach (var t in types)
 						{
-							if (string.IsNullOrEmpty(templateAttribute.Type))
+							var customAttributes = t.GetCustomAttributes(typeof (TemplateMappingAttribute), false);
+							foreach (TemplateMappingAttribute templateAttribute in customAttributes)
 							{
-								if (!_templateMap.Keys.Contains(templateAttribute.Id))
+								if (string.IsNullOrEmpty(templateAttribute.Type))
 								{
-									_templateMap.Add(templateAttribute.Id, t);
+									if (!_templateMap.Keys.Contains(templateAttribute.Id))
+									{
+										_templateMap.Add(templateAttribute.Id, t);
+									}
 								}
 							}
 						}
 					}
+					return _templateMap;
 				}
-
-				return _templateMap;
 			}
 		}
 
@@ -56,26 +53,30 @@ namespace Fortis.Providers
 		{
 			get
 			{
-				if (_interfaceTemplateMap == null)
+				lock (_lock)
 				{
-					_interfaceTemplateMap = new Dictionary<Type, Guid>();
 
-					foreach (var t in _modelAssemblyProvider.Assembly.GetTypes())
+					if (_interfaceTemplateMap == null)
 					{
-						foreach (TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof(TemplateMappingAttribute), false))
+						_interfaceTemplateMap = new Dictionary<Type, Guid>();
+
+						foreach (var t in _modelAssemblyProvider.Assembly.GetTypes())
 						{
-							if (string.Equals(templateAttribute.Type, "InterfaceMap"))
+							foreach (
+								TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof (TemplateMappingAttribute), false))
 							{
-								if (!_interfaceTemplateMap.Keys.Contains(t))
+								if (string.Equals(templateAttribute.Type, "InterfaceMap"))
 								{
-									_interfaceTemplateMap.Add(t, templateAttribute.Id);
+									if (!_interfaceTemplateMap.Keys.Contains(t))
+									{
+										_interfaceTemplateMap.Add(t, templateAttribute.Id);
+									}
 								}
 							}
 						}
 					}
+					return _interfaceTemplateMap;
 				}
-
-				return _interfaceTemplateMap;
 			}
 		}
 
@@ -84,26 +85,30 @@ namespace Fortis.Providers
 		{
 			get
 			{
-				if (_renderingParametersTemplateMap == null)
+				lock (_lock)
 				{
-					_renderingParametersTemplateMap = new Dictionary<Guid, Type>();
 
-					foreach (var t in _modelAssemblyProvider.Assembly.GetTypes())
+					if (_renderingParametersTemplateMap == null)
 					{
-						foreach (TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof(TemplateMappingAttribute), false))
+						_renderingParametersTemplateMap = new Dictionary<Guid, Type>();
+						foreach (var t in _modelAssemblyProvider.Assembly.GetTypes())
 						{
-							if (templateAttribute.Type == "RenderingParameter")
+							foreach (
+								TemplateMappingAttribute templateAttribute in t.GetCustomAttributes(typeof (TemplateMappingAttribute), false))
 							{
-								if (!_renderingParametersTemplateMap.Keys.Contains(templateAttribute.Id))
+								if (templateAttribute.Type == "RenderingParameter")
 								{
-									_renderingParametersTemplateMap.Add(templateAttribute.Id, t);
+									if (!_renderingParametersTemplateMap.Keys.Contains(templateAttribute.Id))
+									{
+										_renderingParametersTemplateMap.Add(templateAttribute.Id, t);
+									}
 								}
 							}
 						}
 					}
-				}
 
-				return _renderingParametersTemplateMap;
+					return _renderingParametersTemplateMap;
+				}
 			}
 		}
 
@@ -167,6 +172,8 @@ namespace Fortis.Providers
 				case "treelist":
 				case "treelistex":
 				case "multilist":
+				case "multilist with search":
+				case "treelist with search":
 					return fieldType == typeof(ListFieldWrapper);
 				case "file":
 					return fieldType == typeof(FileFieldWrapper);

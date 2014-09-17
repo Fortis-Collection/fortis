@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Web;
 using Fortis.Providers;
+using Lucene.Net.Documents;
+using Sitecore;
+using Sitecore.Data;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
@@ -63,7 +66,12 @@ namespace Fortis.Model.RenderingParameters.Fields
 	        throw new NotImplementedException();
 	    }
 
-	    public override string ToString()
+		public Database Database
+		{
+			get { return Context.Database ?? Context.ContentDatabase; }
+		}
+
+		public override string ToString()
 		{
 			return RawValue;
 		}

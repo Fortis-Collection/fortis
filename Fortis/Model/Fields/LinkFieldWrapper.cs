@@ -106,7 +106,8 @@ namespace Fortis.Model.Fields
 			{
 				return default(T);
 			}
-			var item = Sitecore.Context.Database.GetItem(id);
+
+			var item = Database.GetItem(id);
 			if (item == null)
 			{
 				return default(T);

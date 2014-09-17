@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sitecore.Configuration;
+using Sitecore.Data;
 using Sitecore.Data.Items;
 using Sitecore.Globalization;
 using Sitecore.Links;
@@ -77,7 +78,7 @@ namespace Fortis.Model
 			{
 				if (_item == null && _itemId != default(Guid))
 				{
-					_item = Sitecore.Context.Database.GetItem(new Sitecore.Data.ID(_itemId));
+					_item = Database.GetItem(new Sitecore.Data.ID(_itemId));
 
 					if (_item == null)
 					{
@@ -91,6 +92,15 @@ namespace Fortis.Model
 				}
 
 				return _item;
+			}
+		}
+
+		public Database Database
+		{
+			get
+			{
+				
+				return (Sitecore.Context.Database ?? Sitecore.Context.ContentDatabase) ?? Factory.GetDatabase(DatabaseName);
 			}
 		}
 
@@ -109,9 +119,13 @@ namespace Fortis.Model
 			get { return _item == null; }
 		}
 
+		private string _databaseName;
+
+		[IndexField("_database")]
 		public string DatabaseName
 		{
-			get { return Item.Database.Name; }
+			get { return IsLazy && !string.IsNullOrEmpty(_databaseName) ? _databaseName : Item.Database.Name; }
+			set { _databaseName = value; }
 		}
 
 		private string _languageName = null;

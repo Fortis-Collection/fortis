@@ -3,12 +3,15 @@ using Sitecore.ContentSearch.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Sitecore.Data;
 
 namespace Fortis.Model
 {
 	public partial interface IItemWrapper : IWrapper
 	{
 		bool IsLazy { get; }
+		Database Database { get; }
+		[IndexField("_database")]
 		string DatabaseName { get; }
 		[IndexField("_language")]
 		string LanguageName { get; }

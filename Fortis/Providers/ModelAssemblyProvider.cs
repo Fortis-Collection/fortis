@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Configuration;
 
 namespace Fortis.Providers
@@ -18,6 +15,7 @@ namespace Fortis.Providers
 
 		private readonly string _configurationKey = "fortis";
 		private readonly string _assemblyConfigurationKey = "assembly";
+		private object _lock = new object();
 		private Assembly _modelAssembly;
 		private readonly NameValueCollection _configuration;
 		private string ModelAssemblyName { get { return _configuration[_assemblyConfigurationKey]; } }
@@ -26,24 +24,20 @@ namespace Fortis.Providers
 		{
 			get
 			{
-				if (_modelAssembly == null)
+				lock (_lock)
 				{
-					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-					{
-						if (assembly.FullName.Equals(ModelAssemblyName))
-						{
-							_modelAssembly = assembly;
-							break;
-						}
-					}
-
 					if (_modelAssembly == null)
 					{
-						throw new Exception("Forits | Unable to find model assembly: " + ModelAssemblyName);
-					}
-				}
+						var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+						_modelAssembly = assemblies.FirstOrDefault(assembly => assembly.FullName.Equals(ModelAssemblyName));
 
-				return _modelAssembly;
+						if (_modelAssembly == null)
+						{
+							throw new Exception("Forits | Unable to find model assembly: " + ModelAssemblyName);
+						}
+					}
+					return _modelAssembly;
+				}
 			}
 		}
 	}
