@@ -181,7 +181,7 @@ namespace Fortis.Model
 			return (T)((wrapper is T) ? wrapper : null);
 		}
 
-		public IRenderingModel<TPageItem, TRenderingItem> GetRenderingContextItems<TPageItem, TRenderingItem>(IItemFactory factory = null)
+		public virtual IRenderingModel<TPageItem, TRenderingItem> GetRenderingContextItems<TPageItem, TRenderingItem>(IItemFactory factory = null)
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper
 		{
@@ -193,7 +193,7 @@ namespace Fortis.Model
 			return new RenderingModel<TPageItem, TRenderingItem>(validPageWrapper, validRenderingWrapper, factory);
 		}
 
-		public IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>(IItemFactory factory = null)
+		public virtual IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>(IItemFactory factory = null)
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper
 			where TRenderingParametersItem : IRenderingParameterWrapper
