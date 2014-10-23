@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Sitecore.Data.Fields;
 using Sitecore.Resources.Media;
 using Sitecore.Web.UI.WebControls;
@@ -22,44 +19,44 @@ namespace Fortis.Model.Fields
 
 		public string GetSourceURI(bool absolute)
 		{
-			if (Field.Value.Length == 0)
-			{
-				return string.Empty;
-			}
-			else
-			{
-				return MediaManager.GetMediaUrl(((ImageField)Field).MediaItem, new MediaUrlOptions() { AbsolutePath = absolute });
-			}
+			return Field.Value.Length == 0 
+				? string.Empty 
+				: MediaManager.GetMediaUrl(((ImageField)Field).MediaItem, new MediaUrlOptions { AbsolutePath = absolute });
 		}
 
 		public string Render(ImageFieldWrapperOptions options)
 		{
-			string param = "";
+			var param = new StringBuilder();
 
-			param += (options.Width > 0) ? "&width=" + options.Width : string.Empty;
-			param += (options.Height > 0) ? "&height=" + options.Height : string.Empty;
-			param += (options.Crop) ? "&crop=1" : string.Empty;
+			param.Append(options.MaxWidth > 0 ? "&mw=" + options.Width : string.Empty);
+			param.Append(options.Width > 0 ? "&w=" + options.Width : string.Empty);
+			param.Append(options.MaxHeight > 0 ? "&mh=" + options.Height : string.Empty);
+			param.Append(options.Height > 0 ? "&h=" + options.Height : string.Empty);
+			param.Append(options.Crop ? "&crop=1" : string.Empty);
 
 			if (options.CornerRadii.Length > 0)
 			{
 				if (options.CornerRadii.Length == 4)
 				{
-					param += "&rc=" + options.CornerRadii[0] + "," + options.CornerRadii[1] + "," + options.CornerRadii[2] + "," + options.CornerRadii[3];
+					param.Append("&rc=" + options.CornerRadii[0] + "," + options.CornerRadii[1] + "," + options.CornerRadii[2] + "," + options.CornerRadii[3]);
 				}
 				else if (options.CornerRadii.Length == 1 && options.CornerRadii[0] > 0)
 				{
-					param += "&rc=" + options.CornerRadii[0];
+					param.Append("&rc=" + options.CornerRadii[0]);
 				}
 			}
-			if (param.StartsWith("&"))
+
+			var parameters = param.ToString();
+
+			if (parameters.StartsWith("&"))
 			{
-				param = param.Substring(1);
+				parameters = parameters.Substring(1);
 			}
 
 			var fieldRenderer = new FieldRenderer();
 			fieldRenderer.Item = Field.Item;
 			fieldRenderer.FieldName = Field.Key;
-			fieldRenderer.Parameters = param;
+			fieldRenderer.Parameters = parameters;
 
 			var result = fieldRenderer.RenderField();
 
