@@ -13,10 +13,72 @@ namespace Fortis.Search
 	using Sitecore.ContentSearch.Linq.Common;
 	using Sitecore.ContentSearch.LuceneProvider;
 	using Sitecore.Diagnostics;
+	using Sitecore.ContentSearch;
+	using Sitecore.ContentSearch.Linq.Methods;
+	using Sitecore.ContentSearch.Security;
 
 	public class LuceneDocumentTypeMapper : DefaultLuceneDocumentTypeMapper
 	{
-		public override TElement MapToType<TElement>(Document document, Sitecore.ContentSearch.Linq.Methods.SelectMethod selectMethod, IEnumerable<IFieldQueryTranslator> virtualFieldProcessors, Sitecore.ContentSearch.Security.SearchSecurityOptions securityOptions)
+		protected override void MapFieldValuesToType<TElement>(IDictionary<string, object> fieldValues, TElement result, DocumentTypeMapInfo documentTypeMapInfo)
+		{
+			base.MapFieldValuesToType<TElement>(fieldValues, result, documentTypeMapInfo);
+		}
+
+		public override TElement MapToType<TElement>(Document document, SelectMethod selectMethod,
+			IEnumerable<IFieldQueryTranslator> virtualFieldProcessors,
+			IEnumerable<IExecutionContext> executionContexts,
+			SearchSecurityOptions securityOptions)
+		{
+			var typeOfTElement = typeof(TElement);
+
+			if (!typeof(IItemWrapper).IsAssignableFrom(typeOfTElement))
+			{
+
+				return base.MapToType<TElement>(document, selectMethod, virtualFieldProcessors, executionContexts,
+					securityOptions);
+			}
+
+			Guid itemId;
+			Guid templateId;
+
+			var fields = ExtractFieldsFromDocument(document, virtualFieldProcessors);
+
+			if (fields.ContainsKey("_group") &&
+				fields.ContainsKey("_template") &&
+				Guid.TryParse(fields["_group"].ToString(), out itemId) &&
+				Guid.TryParse(fields["_template"].ToString(), out templateId))
+			{
+				var item = Global.SpawnProvider.FromItem(itemId, templateId, typeOfTElement, fields);
+
+				if (item is TElement)
+				{
+					return (TElement)item;
+				}
+			}
+
+			if (fields.ContainsKey("_uniqueid"))
+			{
+				var id = fields["_uniqueid"].ToString();
+
+				var uri = ItemUri.Parse(id);
+				var item = Sitecore.Context.Database.GetItem(uri.ToDataUri());
+
+				if (item != null)
+				{
+					var mappedItem = Global.SpawnProvider.FromItem(item);
+					if (mappedItem is TElement)
+					{
+						return (TElement)mappedItem;
+					}
+				}
+			}
+
+			return default(TElement);
+		}
+
+		public override TElement MapToType<TElement>(Document document, Sitecore.ContentSearch.Linq.Methods.SelectMethod selectMethod,
+			IEnumerable<IFieldQueryTranslator> virtualFieldProcessors,
+			Sitecore.ContentSearch.Security.SearchSecurityOptions securityOptions)
 		{
 			var typeOfTElement = typeof(TElement);
 
@@ -43,22 +105,22 @@ namespace Fortis.Search
 				}
 			}
 
-		    if (fields.ContainsKey("_uniqueid"))
-		    {
-		        var id = fields["_uniqueid"].ToString();
+			if (fields.ContainsKey("_uniqueid"))
+			{
+				var id = fields["_uniqueid"].ToString();
 
-		        var uri = ItemUri.Parse(id);
-		        var item = Sitecore.Context.Database.GetItem(uri.ToDataUri());
+				var uri = ItemUri.Parse(id);
+				var item = Sitecore.Context.Database.GetItem(uri.ToDataUri());
 
-		        if (item != null)
-		        {
-		            var mappedItem = Global.SpawnProvider.FromItem(item);
-		            if (mappedItem is TElement)
-		            {
-		                return (TElement) mappedItem;
-		            }
-		        }
-		    }
+				if (item != null)
+				{
+					var mappedItem = Global.SpawnProvider.FromItem(item);
+					if (mappedItem is TElement)
+					{
+						return (TElement)mappedItem;
+					}
+				}
+			}
 
 			return default(TElement);
 		}
