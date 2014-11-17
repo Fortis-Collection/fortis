@@ -8,7 +8,7 @@ namespace Fortis.Search
 
 	using Model;
 
-	using Lucene.Net.Documents;
+	using global::Lucene.Net.Documents;
 
 	using Sitecore.ContentSearch.Linq.Common;
 	using Sitecore.ContentSearch.LuceneProvider;

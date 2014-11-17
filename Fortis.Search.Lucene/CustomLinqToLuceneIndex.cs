@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fortis.Search
+namespace Fortis.Search.Lucene
 {
 	// Thanks to Kam (@kamsar)
 	// https://github.com/kamsar/Synthesis/tree/master/Source/Synthesis/ContentSearch/Hacks
