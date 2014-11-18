@@ -112,11 +112,18 @@ namespace Fortis.Search
 			return queryable.Where(item => item.IsLatestVersion);
 		}
 
+		public static IQueryable<TSource> WhereNotStandardValues<TSource>(this IQueryable<TSource> queryable)
+			where TSource : IItemWrapper
+		{
+			return queryable.Where(item => !item.IsStandardValues);
+		}
+
 		public static IQueryable<TSource> ApplyFilters<TSource>(this IQueryable<TSource> queryable)
 			where TSource : IItemWrapper
 		{
 			return queryable.WhereContextLanguage()
-							.WhereLatestVersion();
+							.WhereLatestVersion()
+							.WhereNotStandardValues();
 		}
 	}
 }

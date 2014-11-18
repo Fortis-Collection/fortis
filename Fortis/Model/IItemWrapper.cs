@@ -28,6 +28,8 @@ namespace Fortis.Model
 		string DisplayName { get; }
 		[IndexField("_latestversion")]
 		bool IsLatestVersion { get; }
+		[IndexField("_isstandardvalues")]
+		bool IsStandardValues { get; }
 		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_template")]
 		Guid TemplateId { get; }
 		[IndexField("_templates")]
