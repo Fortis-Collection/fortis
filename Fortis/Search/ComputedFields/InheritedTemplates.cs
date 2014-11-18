@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fortis.Search
+namespace Fortis.Search.ComputedFields
 {
 	/// <summary>
 	/// A computed field that correctly recurses all templates, unlike the default.
