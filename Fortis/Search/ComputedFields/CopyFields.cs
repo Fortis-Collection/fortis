@@ -7,9 +7,13 @@ using System.Xml;
 
 namespace Fortis.Search.ComputedFields
 {
-	public class CopyFields : AbstractComputedIndexField
+	public class CopyFields : IComputedIndexField
 	{
 		public readonly List<string> CopyFromFields;
+
+		public string FieldName { get; set; }
+
+		public string ReturnType { get; set; }
 
 		public CopyFields()
 			: this(null)
@@ -22,7 +26,7 @@ namespace Fortis.Search.ComputedFields
 			CopyFromFields = ParseCopyFromFields(configurationNode);
 		}
 
-		public override object ComputeFieldValue(IIndexable indexable)
+		public virtual object ComputeFieldValue(IIndexable indexable)
 		{
 			var computedField = new List<string>();
 
