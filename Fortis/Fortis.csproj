@@ -116,10 +116,10 @@
     <Compile Include="Providers\SpawnProvider.cs" />
     <Compile Include="Providers\TemplateMapProvider.cs" />
     <Compile Include="Renderers\LinkRenderer.cs" />
-    <Compile Include="Search\ComputedFields\IsStandardValue.cs" />
     <Compile Include="Search\ComputedFields\CopyFields.cs" />
     <Compile Include="Search\ComputedFields\InheritedTemplates.cs" />
     <Compile Include="Search\ComputedFields\CopyIdFields.cs" />
+    <Compile Include="Search\ComputedFields\IsStandardValues.cs" />
     <Compile Include="Search\DefaultDocumentMapperObjectFactory.cs" />
     <Compile Include="Search\IItemSearchFactory.cs" />
     <Compile Include="Search\ItemSearchFactory.cs" />
