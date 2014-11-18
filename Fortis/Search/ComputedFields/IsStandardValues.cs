@@ -10,9 +10,13 @@ using System.Threading.Tasks;
 
 namespace Fortis.Search.ComputedFields
 {
-	public class IsStandardValues : AbstractComputedIndexField
+	public class IsStandardValues : IComputedIndexField
 	{
-		public override object ComputeFieldValue(IIndexable indexable)
+		public string FieldName { get; set; }
+
+		public string ReturnType { get; set; }
+
+		public object ComputeFieldValue(IIndexable indexable)
 		{
 			var item = (Item)(indexable as SitecoreIndexableItem);
 			var isStandardValues = StandardValuesManager.IsStandardValuesHolder(item);
