@@ -49,6 +49,5 @@ namespace Fortis.Model
 		T SelectSibling<T>(IItemWrapper wrapper) where T : IItemWrapper;
 		IEnumerable<T> SelectSiblings<T>(IItemWrapper wrapper) where T : IItemWrapper;
 		T GetRenderingDataSource<T>(Control control) where T : IItemWrapper;
-		IQueryable<T> Search<T>(IProviderSearchContext context, IExecutionContext executionContext = null) where T : IItemWrapper;
 	}
 }
