@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Fortis.Search.ComputedFields
 {
-	public class IsStandardValue : AbstractComputedIndexField
+	public class IsStandardValues : AbstractComputedIndexField
 	{
 		public override object ComputeFieldValue(IIndexable indexable)
 		{
