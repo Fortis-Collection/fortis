@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Fortis.Search.Lucene</id>
-        <version>1.0.0.0</version>
+        <version>1.0.0.1</version>
         <title>Fortis Search - Lucene</title>
         <authors>Jason Bert</authors>
         <owners>Fortis Collections</owners>
@@ -10,12 +10,14 @@
         <projectUrl>http://fortis.ws/</projectUrl>
         <iconUrl>http://fortis.ws/wp-content/uploads/2014/11/Logo.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Provides Lucene search functionality for the Fortis framework</description>
+        <description>Provides Lucene search functionality for the Fortis framework
+
+* Fixed computed field configuration issues</description>
         <releaseNotes>Requires: Sitecore 7.2+</releaseNotes>
         <copyright>Copyright 2014</copyright>
         <tags>Sitecore Fortis</tags>
         <dependencies>
-            <dependency id="Fortis" version="3.5.0.0" />
+            <dependency id="Fortis" version="3.5.0.1" />
         </dependencies>
     </metadata>
     <files>
