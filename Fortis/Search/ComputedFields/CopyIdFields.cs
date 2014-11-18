@@ -19,7 +19,7 @@ namespace Fortis.Search.ComputedFields
 
 		}
 
-		public object ComputeFieldValue(IIndexable indexable)
+		public override object ComputeFieldValue(IIndexable indexable)
 		{
 			var computedField = new List<string>();
 
