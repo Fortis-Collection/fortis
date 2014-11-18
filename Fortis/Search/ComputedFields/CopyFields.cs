@@ -16,7 +16,6 @@ namespace Fortis.Search.ComputedFields
 		public string ReturnType { get; set; }
 
 		public CopyFields()
-			: this(null)
 		{
 
 		}
