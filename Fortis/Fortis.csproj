@@ -116,12 +116,11 @@
     <Compile Include="Providers\SpawnProvider.cs" />
     <Compile Include="Providers\TemplateMapProvider.cs" />
     <Compile Include="Renderers\LinkRenderer.cs" />
-    <Compile Include="Search\CustomExpressionParser.cs" />
-    <Compile Include="Search\CustomGenericQueryable.cs" />
+    <Compile Include="Search\ComputedFields\CopyFields.cs" />
     <Compile Include="Search\ComputedFields\InheritedTemplates.cs" />
+    <Compile Include="Search\ComputedFields\CopyIdFields.cs" />
     <Compile Include="Search\DefaultDocumentMapperObjectFactory.cs" />
     <Compile Include="Search\IItemSearchFactory.cs" />
-    <Compile Include="Search\ISearchProvider.cs" />
     <Compile Include="Search\ItemSearchFactory.cs" />
     <Compile Include="Search\SearchExtensions.cs" />
     <Compile Include="SitecoreExtensions\IEnumerableExtensions.cs" />

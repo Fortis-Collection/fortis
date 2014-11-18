@@ -51,9 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomLinqToSolrIndex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchProvider.cs" />
     <Compile Include="SolrDocumentTypeMapper.cs" />
   </ItemGroup>
   <ItemGroup>
