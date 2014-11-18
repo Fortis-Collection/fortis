@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Fortis MVC")]
-[assembly: AssemblyDescription("Required functionality to allow Fortis to work with Sitecore MVC")]
+[assembly: AssemblyTitle("Fortis Search Lucene")]
+[assembly: AssemblyDescription("Provides Lucene search functionality for the Fortis framework")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Fortis Collections")]
 [assembly: AssemblyProduct("Fortis")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f9ac1eb7-8151-4baf-9f7e-16e19f5373e7")]
+[assembly: Guid("b3b69915-c332-4aac-ad29-50e6c7159649")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.1.0.0")]
-[assembly: AssemblyFileVersion("2.1.0.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

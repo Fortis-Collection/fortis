@@ -224,6 +224,15 @@ namespace Fortis.Model
 			get { return Item.Versions.IsLatestVersion(); }
 		}
 
+		[IndexField("_isstandardvalue")]
+		public bool IsStandardValues
+		{
+			get
+			{
+				return StandardValuesManager.IsStandardValuesHolder(Item);
+			}
+		}
+
 		public int ChildCount
 		{
 			get { return Item.Children.Count; }

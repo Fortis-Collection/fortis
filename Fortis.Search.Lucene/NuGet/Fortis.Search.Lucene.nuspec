@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Fortis.Search.Lucene</id>
+        <version>1.0.0.0</version>
+        <title>Fortis Search - Lucene</title>
+        <authors>Jason Bert</authors>
+        <owners>Fortis Collections</owners>
+        <licenseUrl>https://github.com/Fortis-Collection/fortis/blob/master/license.txt</licenseUrl>
+        <projectUrl>http://fortis.ws/</projectUrl>
+        <iconUrl>http://fortis.ws/wp-content/uploads/2014/11/Logo.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Provides Lucene search functionality for the Fortis framework</description>
+        <releaseNotes>Requires: Sitecore 7.2+</releaseNotes>
+        <copyright>Copyright 2014</copyright>
+        <tags>Sitecore Fortis</tags>
+        <dependencies>
+            <dependency id="Fortis" version="3.5.0.0" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="content\App_Config\Include\Fortis\Fortis.Search.Lucene.config" target="content\App_Config\Include\Fortis\Fortis.Search.Lucene.config" />
+        <file src="lib\net45\Fortis.Search.Lucene.dll" target="lib\net45\Fortis.Search.Lucene.dll" />
+    </files>
+</package>

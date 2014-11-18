@@ -48,3 +48,4 @@ _notes/
 _Lib/
 packages/*
 *.Fakes.*
+NuGet/

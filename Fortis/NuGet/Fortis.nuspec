@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Fortis</id>
+        <version>3.5.0.0</version>
+        <title>Fortis</title>
+        <authors>Jason Bert,Kern Herskind Nightingale,Richard Seal</authors>
+        <owners>Fortis Collections</owners>
+        <licenseUrl>https://github.com/Fortis-Collection/fortis/blob/master/license.txt</licenseUrl>
+        <projectUrl>http://fortis.ws/</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A framework for creating a strongly typed model of the Sitecore API</description>
+        <releaseNotes>Requires: Sitecore 7.2+</releaseNotes>
+        <copyright>Copyright 2014</copyright>
+        <tags>Sitecore Fortis</tags>
+    </metadata>
+    <files>
+        <file src="lib\net45\Fortis.dll" target="lib\net45\Fortis.dll" />
+    </files>
+</package>

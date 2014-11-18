@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web;
 using Fortis.Providers;
-using Lucene.Net.Documents;
 using Sitecore;
 using Sitecore.Data;
 

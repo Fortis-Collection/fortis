@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,27 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Lucene.Net">
-      <HintPath>..\_Lib\Lucene.Net.dll</HintPath>
-    </Reference>
     <Reference Include="Sitecore.ContentSearch">
       <HintPath>..\_Lib\Sitecore.ContentSearch.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.ContentSearch.Linq, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_Lib\Sitecore.ContentSearch.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="Sitecore.ContentSearch.Linq.Lucene">
-      <HintPath>..\_Lib\Sitecore.ContentSearch.Linq.Lucene.dll</HintPath>
-    </Reference>
-    <Reference Include="Sitecore.ContentSearch.Linq.Solr">
-      <HintPath>..\_Lib\Sitecore.ContentSearch.Linq.Solr.dll</HintPath>
-    </Reference>
-    <Reference Include="Sitecore.ContentSearch.LuceneProvider">
-      <HintPath>..\_Lib\Sitecore.ContentSearch.LuceneProvider.dll</HintPath>
-    </Reference>
-    <Reference Include="Sitecore.ContentSearch.SolrProvider">
-      <HintPath>..\_Lib\Sitecore.ContentSearch.SolrProvider.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Kernel">
       <HintPath>..\_Lib\Sitecore.Kernel.dll</HintPath>
@@ -130,15 +116,14 @@
     <Compile Include="Providers\SpawnProvider.cs" />
     <Compile Include="Providers\TemplateMapProvider.cs" />
     <Compile Include="Renderers\LinkRenderer.cs" />
-    <Compile Include="Search\CustomExpressionParser.cs" />
-    <Compile Include="Search\CustomGenericQueryable.cs" />
-    <Compile Include="Search\CustomLinqToLuceneIndex.cs" />
-    <Compile Include="Search\CustomLinqToSolrIndex.cs" />
+    <Compile Include="Search\ComputedFields\CopyFields.cs" />
     <Compile Include="Search\ComputedFields\InheritedTemplates.cs" />
+    <Compile Include="Search\ComputedFields\CopyIdFields.cs" />
+    <Compile Include="Search\ComputedFields\IsStandardValues.cs" />
     <Compile Include="Search\DefaultDocumentMapperObjectFactory.cs" />
-    <Compile Include="Search\LuceneDocumentTypeMapper.cs" />
+    <Compile Include="Search\IItemSearchFactory.cs" />
+    <Compile Include="Search\ItemSearchFactory.cs" />
     <Compile Include="Search\SearchExtensions.cs" />
-    <Compile Include="Search\SolrDocumentTypeMapper.cs" />
     <Compile Include="SitecoreExtensions\IEnumerableExtensions.cs" />
   </ItemGroup>
   <ItemGroup />
