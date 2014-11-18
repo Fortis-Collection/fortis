@@ -2,6 +2,7 @@
 using Sitecore.ContentSearch.Linq.Common;
 using Sitecore.ContentSearch.Linq.Helpers;
 using Sitecore.ContentSearch.Linq.Nodes;
+using Sitecore.ContentSearch.Linq.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -167,5 +168,32 @@ namespace Fortis.Search
 			return Visit(GetArgument(methodCall.Arguments, index));
 		}
 
+		protected override QueryNode VisitGetResultsMethod(MethodCallExpression methodCall)
+		{
+			Type expectedType = typeof(IQueryable<>).MakeGenericType(new Type[] { this.ItemType });
+			this.ValidateArgument(methodCall.Arguments, 0, expectedType);
+			QueryNode sourceNode = this.Visit(methodCall.Arguments[0]);
+			GetResultsOptions options = GetResultsOptions.Default;
+			if (methodCall.Arguments.Count >= 2)
+			{
+				Expression argument = this.GetArgument(methodCall.Arguments, 1);
+				QueryNode node2 = this.Visit(argument);
+				if (node2.NodeType != QueryNodeType.Constant)
+				{
+					throw new NotSupportedException(string.Format("Invalid get results options node type: {0} - {1}", node2.NodeType, node2));
+				}
+				options = (GetResultsOptions)((ConstantNode)node2).Value;
+			}
+			return new GetResultsNode(sourceNode, options);
+		}
+
+		private void ValidateArgument(ReadOnlyCollection<Expression> arguments, int index, Type expectedType)
+		{
+			Expression argument = this.GetArgument(arguments, index);
+			if (!argument.Type.IsAssignableTo(expectedType))
+			{
+				throw new InvalidOperationException(string.Format("Wrong type: {0}. Expected: {1}", argument.Type.FullName, expectedType.FullName));
+			}
+		}
 	}
 }

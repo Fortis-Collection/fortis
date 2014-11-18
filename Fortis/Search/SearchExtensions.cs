@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Fortis.Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,6 +98,25 @@ namespace Fortis.Search
 			var lambda = Expression.Lambda<Func<TSource, bool>>(aggregateExpressions, parameter);
 
 			return queryable.Where(lambda);
+		}
+
+		public static IQueryable<TSource> WhereContextLanguage<TSource>(this IQueryable<TSource> queryable)
+			where TSource : IItemWrapper
+		{
+			return queryable.Where(item => item.LanguageName == Sitecore.Context.Language.Name);
+		}
+
+		public static IQueryable<TSource> WhereLatestVersion<TSource>(this IQueryable<TSource> queryable)
+			where TSource : IItemWrapper
+		{
+			return queryable.Where(item => item.IsLatestVersion);
+		}
+
+		public static IQueryable<TSource> ApplyFilters<TSource>(this IQueryable<TSource> queryable)
+			where TSource : IItemWrapper
+		{
+			return queryable.WhereContextLanguage()
+							.WhereLatestVersion();
 		}
 	}
 }

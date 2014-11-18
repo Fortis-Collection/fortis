@@ -1,5 +1,8 @@
-﻿using Sitecore.ContentSearch.Linq.Common;
+﻿using Lucene.Net.Search;
+using Sitecore.ContentSearch.Linq.Common;
 using Sitecore.ContentSearch.Linq.Lucene;
+using Sitecore.ContentSearch.Linq.Methods;
+using Sitecore.ContentSearch.Linq.Nodes;
 using Sitecore.ContentSearch.Linq.Parsing;
 using Sitecore.ContentSearch.LuceneProvider;
 using System;

@@ -14,36 +14,49 @@ namespace Fortis.Search
 {
 	public class ItemSearchFactory : IItemSearchFactory
 	{
-		protected readonly ISearchProvider _searchProvider;
-		protected readonly ISpawnProvider _spawnProvider;
+		protected readonly ITemplateMapProvider _templateMapProvider;
 
-		public ItemSearchFactory(ISearchProvider searchProvider, ISpawnProvider spawnProvider)
+		public ItemSearchFactory(ITemplateMapProvider templateMapProvider)
 		{
-			_searchProvider = searchProvider;
-			_spawnProvider = spawnProvider;
+			_templateMapProvider = templateMapProvider;
 		}
 
-		public IQueryable<T> Search<T>(IProviderSearchContext context, IExecutionContext executionContext = null) where T : IItemWrapper
+		public IQueryable<T> Search<T>(IQueryable<T> queryable)
+			where T : IItemWrapper
 		{
-			IQueryable<T> results = _searchProvider.GetQueryable<T>(context, executionContext);
-
-			if (results != null)
+			if (queryable != null)
 			{
 				var typeOfT = typeof(T);
 
-				if (_spawnProvider.TemplateMapProvider.InterfaceTemplateMap.ContainsKey(typeOfT))
+				if (_templateMapProvider.InterfaceTemplateMap.ContainsKey(typeOfT))
 				{
-					var templateId = _spawnProvider.TemplateMapProvider.InterfaceTemplateMap[typeOfT];
+					var templateId = _templateMapProvider.InterfaceTemplateMap[typeOfT];
 
-					return results.Where(item => item.TemplateIds.Contains(templateId) && item.LanguageName == Sitecore.Context.Language.Name && item.IsLatestVersion);
-				}
-				else
-				{
-					return results;
+					queryable = queryable.Where(item => item.TemplateIds.Contains(templateId));
 				}
 			}
 
-			return results;
+			return queryable;
+		}
+
+		public IQueryable<T> FilteredSearch<T>(IQueryable<T> queryable)
+			where T : IItemWrapper
+		{
+			return Search<T>(queryable).ApplyFilters();
+		}
+
+		[Obsolete("Use Search<T> methods which accept an IQueryable<T>")]
+		public IQueryable<T> Search<T>(IProviderSearchContext context, IExecutionContext executionContext = null)
+			where T : IItemWrapper
+		{
+			IQueryable<T> queryable = context.GetQueryable<T>(executionContext);
+
+			if (queryable != null)
+			{
+				queryable = FilteredSearch<T>(queryable);
+			}
+
+			return queryable;
 		}
 	}
 }
