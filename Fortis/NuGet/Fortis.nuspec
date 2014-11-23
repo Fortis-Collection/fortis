@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Fortis</id>
-        <version>3.5.0.1</version>
+        <version>3.5.1.0</version>
         <title>Fortis</title>
         <authors>Jason Bert,Kern Herskind Nightingale,Richard Seal</authors>
         <owners>Fortis Collections</owners>
@@ -13,7 +13,7 @@
         <description>A framework for creating a strongly typed model of the Sitecore API</description>
         <releaseNotes>Requires: Sitecore 7.2+
 
-* Fixed an issue with the computed fields not working in Sitecore 7.2</releaseNotes>
+* Added functionality to wrap the GetResults Sitecore search extension</releaseNotes>
         <copyright>Copyright 2014</copyright>
         <tags>Sitecore Fortis</tags>
     </metadata>
