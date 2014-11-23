@@ -13,6 +13,7 @@ namespace Fortis.Search
 	{
 		IQueryable<T> Search<T>(IQueryable<T> queryable) where T : IItemWrapper;
 		IQueryable<T> FilteredSearch<T>(IQueryable<T> queryable) where T : IItemWrapper;
+		ISearchResults<T> GetResults<T>(IQueryable<T> queryable) where T : IItemWrapper;
 		[Obsolete("Use Search<T> methods which accept an IQueryable<T>")]
 		IQueryable<T> Search<T>(IProviderSearchContext context, IExecutionContext executionContext = null) where T : IItemWrapper;
 	}

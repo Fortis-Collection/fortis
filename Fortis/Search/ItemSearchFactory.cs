@@ -14,11 +14,15 @@ namespace Fortis.Search
 {
 	public class ItemSearchFactory : IItemSearchFactory
 	{
-		protected readonly ITemplateMapProvider _templateMapProvider;
+		protected readonly ITemplateMapProvider TemplateMapProvider;
+		protected readonly ISearchResultsAdapter SearchResultsAdapter;
 
-		public ItemSearchFactory(ITemplateMapProvider templateMapProvider)
+		public ItemSearchFactory(
+			ITemplateMapProvider templateMapProvider,
+			ISearchResultsAdapter searchResultsAdapter)
 		{
-			_templateMapProvider = templateMapProvider;
+			TemplateMapProvider = templateMapProvider;
+			SearchResultsAdapter = searchResultsAdapter;
 		}
 
 		public IQueryable<T> Search<T>(IQueryable<T> queryable)
@@ -26,14 +30,7 @@ namespace Fortis.Search
 		{
 			if (queryable != null)
 			{
-				var typeOfT = typeof(T);
-
-				if (_templateMapProvider.InterfaceTemplateMap.ContainsKey(typeOfT))
-				{
-					var templateId = _templateMapProvider.InterfaceTemplateMap[typeOfT];
-
-					queryable = queryable.Where(item => item.TemplateIds.Contains(templateId));
-				}
+				queryable = queryable.WhereTemplate(TemplateMapProvider);
 			}
 
 			return queryable;
@@ -43,6 +40,12 @@ namespace Fortis.Search
 			where T : IItemWrapper
 		{
 			return Search<T>(queryable).ApplyFilters();
+		}
+
+		public ISearchResults<T> GetResults<T>(IQueryable<T> queryable)
+			where T : IItemWrapper
+		{
+			return SearchResultsAdapter.GetResults<T>(queryable);
 		}
 
 		[Obsolete("Use Search<T> methods which accept an IQueryable<T>")]

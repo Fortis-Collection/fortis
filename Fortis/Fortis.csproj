@@ -122,8 +122,14 @@
     <Compile Include="Search\ComputedFields\IsStandardValues.cs" />
     <Compile Include="Search\DefaultDocumentMapperObjectFactory.cs" />
     <Compile Include="Search\IItemSearchFactory.cs" />
+    <Compile Include="Search\ISearchHit.cs" />
+    <Compile Include="Search\ISearchResults.cs" />
+    <Compile Include="Search\ISearchResultsAdapter.cs" />
     <Compile Include="Search\ItemSearchFactory.cs" />
     <Compile Include="Search\SearchExtensions.cs" />
+    <Compile Include="Search\SearchHit.cs" />
+    <Compile Include="Search\SearchResults.cs" />
+    <Compile Include="Search\SearchResultsAdapter.cs" />
     <Compile Include="SitecoreExtensions\IEnumerableExtensions.cs" />
   </ItemGroup>
   <ItemGroup />
