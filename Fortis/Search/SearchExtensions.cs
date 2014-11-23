@@ -1,4 +1,5 @@
 ﻿using Fortis.Model;
+using Fortis.Providers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -116,6 +117,21 @@ namespace Fortis.Search
 			where TSource : IItemWrapper
 		{
 			return queryable.Where(item => !item.IsStandardValues);
+		}
+
+		public static IQueryable<TSource> WhereTemplate<TSource>(this IQueryable<TSource> queryable, ITemplateMapProvider templateMapProvider)
+			where TSource : IItemWrapper
+		{
+			var typeOfT = typeof(TSource);
+
+			if (templateMapProvider.InterfaceTemplateMap.ContainsKey(typeOfT))
+			{
+				var templateId = templateMapProvider.InterfaceTemplateMap[typeOfT];
+
+				queryable = queryable.Where(item => item.TemplateIds.Contains(templateId));
+			}
+
+			return queryable;
 		}
 
 		public static IQueryable<TSource> ApplyFilters<TSource>(this IQueryable<TSource> queryable)
