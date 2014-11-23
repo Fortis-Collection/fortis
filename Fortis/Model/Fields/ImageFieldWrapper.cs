@@ -23,11 +23,19 @@ namespace Fortis.Model.Fields
 
 		public string GetSourceUri(bool absolute)
 		{
-			if (Field.Value.Length == 0)
+			if (string.IsNullOrWhiteSpace(Field.Value))
 			{
 				return string.Empty;
 			}
-			return MediaManager.GetMediaUrl(((ImageField)Field).MediaItem, new MediaUrlOptions() { AbsolutePath = absolute });
+
+			var mediaItem = ((ImageField)Field).MediaItem;
+
+			if (mediaItem == null)
+			{
+				return string.Empty;
+			}
+
+			return MediaManager.GetMediaUrl(mediaItem, new MediaUrlOptions() { AbsolutePath = absolute });
 		}
 
 		public IHtmlString Render(ImageFieldWrapperOptions options)
