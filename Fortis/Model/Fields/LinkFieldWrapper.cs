@@ -13,19 +13,7 @@ namespace Fortis.Model.Fields
 		{
 			get
 			{
-				if (string.IsNullOrWhiteSpace(RawValue))
-				{
-					return Guid.Empty;
-				}
-				if (ShortID.IsShortID(RawValue))
-				{
-					return ShortID.Parse(RawValue).ToID().Guid;
-				}
-				if (ID.IsID(RawValue))
-				{
-					return ID.Parse(RawValue).Guid;
-				}
-				return Guid.Parse(RawValue);
+				return GetItemId(RawValue);
 			}
 		}
 
@@ -100,7 +88,7 @@ namespace Fortis.Model.Fields
 			return default(T);
 		}
 
-		private T GetTarget<T>(ID id) where T : IItemWrapper
+		public T GetTarget<T>(ID id) where T : IItemWrapper
 		{
 			if (ID.IsNullOrEmpty(id))
 			{
@@ -121,9 +109,26 @@ namespace Fortis.Model.Fields
 			return field.Url;
 		}
 
-		public string Value
+		public Guid Value
 		{
-			get { return Url; }
+			get { return GetItemId(RawValue); }
+		}
+
+		public Guid GetItemId(string value)
+		{
+			if (string.IsNullOrWhiteSpace(value))
+			{
+				return Guid.Empty;
+			}
+			if (ShortID.IsShortID(value))
+			{
+				return ShortID.Parse(value).ToID().Guid;
+			}
+			if (ID.IsID(value))
+			{
+				return ID.Parse(value).Guid;
+			}
+			return Guid.Parse(value);
 		}
 	}
 }
