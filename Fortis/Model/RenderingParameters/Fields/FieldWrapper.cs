@@ -45,25 +45,25 @@ namespace Fortis.Model.RenderingParameters.Fields
 			throw new NotImplementedException();
 		}
 
-	    public IHtmlString Render(object parameters, bool editing = true)
-	    {
-	        throw new NotImplementedException();
-	    }
+		public IHtmlString Render(object parameters, bool editing = true)
+		{
+			throw new NotImplementedException();
+		}
 
-	    public IHtmlString RenderBeginField(object parameters, bool editing = true)
-	    {
-	        throw new NotImplementedException();
-	    }
+		public IHtmlString RenderBeginField(object parameters, bool editing = true)
+		{
+			throw new NotImplementedException();
+		}
 
-	    public IHtmlString RenderBeginField(string parameters, bool editing = true)
-	    {
-	        throw new NotImplementedException();
-	    }
+		public IHtmlString RenderBeginField(string parameters, bool editing = true)
+		{
+			throw new NotImplementedException();
+		}
 
-	    public IHtmlString RenderEndField()
-	    {
-	        throw new NotImplementedException();
-	    }
+		public IHtmlString RenderEndField()
+		{
+			throw new NotImplementedException();
+		}
 
 		public Database Database
 		{
@@ -75,15 +75,15 @@ namespace Fortis.Model.RenderingParameters.Fields
 			return RawValue;
 		}
 
-        public static implicit operator string(FieldWrapper field)
+		public static implicit operator string(FieldWrapper field)
 		{
 			return field.RawValue;
 		}
 
-        public string ToHtmlString()
-        {
-            return Render().ToString();
-        }
+		public string ToHtmlString()
+		{
+			return Render().ToString();
+		}
 
 		public bool IsLazy
 		{

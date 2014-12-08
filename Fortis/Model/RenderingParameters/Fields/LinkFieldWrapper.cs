@@ -58,32 +58,37 @@ namespace Fortis.Model.RenderingParameters.Fields
 				}
 			}
 
-            return default(T);
+			return default(T);
 		}
 
-        public static implicit operator string(LinkFieldWrapper field)
+		public static implicit operator string(LinkFieldWrapper field)
 		{
 			return field.Url;
 		}
 
-		public string Value
+		public Guid Value
 		{
-			get { return Url; }
+			get { return GetItemId(RawValue); }
 		}
 
 		public Guid ItemId
 		{
 			get
 			{
-				Guid id;
-
-				if (!Guid.TryParse(RawValue, out id))
-				{
-					id = default(Guid);
-				}
-
-				return id;
+				return GetItemId(RawValue);
 			}
+		}
+
+		public Guid GetItemId(string value)
+		{
+			Guid id;
+
+			if (!Guid.TryParse(value, out id))
+			{
+				id = default(Guid);
+			}
+
+			return id;
 		}
 	}
 }

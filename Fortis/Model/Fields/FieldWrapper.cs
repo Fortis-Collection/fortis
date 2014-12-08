@@ -19,76 +19,76 @@ namespace Fortis.Model.Fields
 		private string _rawValue;
 		private string _key;
 
-	    private Stack<string> _endFieldStack;
+		private Stack<string> _endFieldStack;
 
-        protected virtual Stack<string> EndFieldStack
-        {
-            get
-            {
-                return _endFieldStack ?? (_endFieldStack = new Stack<string>());
-            }
-        }
+		protected virtual Stack<string> EndFieldStack
+		{
+			get
+			{
+				return _endFieldStack ?? (_endFieldStack = new Stack<string>());
+			}
+		}
 
-        public virtual IHtmlString RenderBeginField(string parameters = null, bool editing = true)
-        {
-            var renderFieldArgs = new RenderFieldArgs
-            {
-                Item = Field.Item,
-                FieldName = Field.Name,
-                DisableWebEdit = !editing,
-                RawParameters = parameters ?? string.Empty
-            };
+		public virtual IHtmlString RenderBeginField(string parameters = null, bool editing = true)
+		{
+			var renderFieldArgs = new RenderFieldArgs
+			{
+				Item = Field.Item,
+				FieldName = Field.Name,
+				DisableWebEdit = !editing,
+				RawParameters = parameters ?? string.Empty
+			};
 
-            if (renderFieldArgs.Item == null)
-            {
-                return new HtmlString(string.Empty);
-            }
+			if (renderFieldArgs.Item == null)
+			{
+				return new HtmlString(string.Empty);
+			}
 
-            CorePipeline.Run("renderField", renderFieldArgs);
-            var result = renderFieldArgs.Result;
-            var str = result.FirstPart ?? string.Empty;
-            EndFieldStack.Push(result.LastPart ?? string.Empty);
+			CorePipeline.Run("renderField", renderFieldArgs);
+			var result = renderFieldArgs.Result;
+			var str = result.FirstPart ?? string.Empty;
+			EndFieldStack.Push(result.LastPart ?? string.Empty);
 
-            return new HtmlString(str);
-        }
+			return new HtmlString(str);
+		}
 
-        public virtual IHtmlString RenderBeginField(object parameters, bool editing = true)
-        {
-            var renderFieldArgs = new RenderFieldArgs
-            {
-                Item = Field.Item,
-                FieldName = Field.Name,
-                DisableWebEdit = !editing
-            };
+		public virtual IHtmlString RenderBeginField(object parameters, bool editing = true)
+		{
+			var renderFieldArgs = new RenderFieldArgs
+			{
+				Item = Field.Item,
+				FieldName = Field.Name,
+				DisableWebEdit = !editing
+			};
 
-            if (parameters != null)
-            {
-                TypeHelper.CopyProperties(parameters, renderFieldArgs);
-                TypeHelper.CopyProperties(parameters, renderFieldArgs.Parameters);
-            }
+			if (parameters != null)
+			{
+				TypeHelper.CopyProperties(parameters, renderFieldArgs);
+				TypeHelper.CopyProperties(parameters, renderFieldArgs.Parameters);
+			}
 
-            if (renderFieldArgs.Item == null)
-            {
-                return new HtmlString(string.Empty);
-            }
+			if (renderFieldArgs.Item == null)
+			{
+				return new HtmlString(string.Empty);
+			}
 
-            CorePipeline.Run("renderField", renderFieldArgs);
-            var result = renderFieldArgs.Result;
-            var str = result.FirstPart ?? string.Empty;
-            EndFieldStack.Push(result.LastPart ?? string.Empty);
+			CorePipeline.Run("renderField", renderFieldArgs);
+			var result = renderFieldArgs.Result;
+			var str = result.FirstPart ?? string.Empty;
+			EndFieldStack.Push(result.LastPart ?? string.Empty);
 
-            return new HtmlString(str);
-        }
+			return new HtmlString(str);
+		}
 
-        public virtual IHtmlString RenderEndField()
-        {
-            if (EndFieldStack.Count == 0)
-            {
-                throw new InvalidOperationException("There was a call to EndField with no corresponding call to BeginField");
-            }
+		public virtual IHtmlString RenderEndField()
+		{
+			if (EndFieldStack.Count == 0)
+			{
+				throw new InvalidOperationException("There was a call to EndField with no corresponding call to BeginField");
+			}
 
-            return new HtmlString(EndFieldStack.Pop());
-        }
+			return new HtmlString(EndFieldStack.Pop());
+		}
 
 		public FieldWrapper(Field field, ISpawnProvider spawnProvider)
 		{
@@ -190,32 +190,32 @@ namespace Fortis.Model.Fields
 
 		public virtual IHtmlString Render(string parameters = null, bool editing = true)
 		{
-            return new HtmlString(RenderBeginField(parameters, editing) + RenderEndField().ToString());
+			return new HtmlString(RenderBeginField(parameters, editing) + RenderEndField().ToString());
 		}
 
-        public IHtmlString Render(object parameters, bool editing = true)
-        {
-            return new HtmlString(RenderBeginField(parameters, editing) + RenderEndField().ToString());
-        }
+		public IHtmlString Render(object parameters, bool editing = true)
+		{
+			return new HtmlString(RenderBeginField(parameters, editing) + RenderEndField().ToString());
+		}
 
 		public override string ToString()
 		{
 			return RawValue;
 		}
 
-        public static implicit operator string(FieldWrapper field)
+		public static implicit operator string(FieldWrapper field)
 		{
 			return field.RawValue;
 		}
 
-        public string ToHtmlString()
-        {
-            return Render().ToString();
-        }
+		public string ToHtmlString()
+		{
+			return Render().ToString();
+		}
 
 		public bool IsLazy
 		{
 			get { return _field == null; }
 		}
-    }
+	}
 }

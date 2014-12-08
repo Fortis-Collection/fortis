@@ -1,10 +1,13 @@
 ﻿using System;
 using Sitecore.Data.Fields;
 using Fortis.Providers;
+using Sitecore.Data;
+using System.Web;
+using Sitecore.Web.UI.WebControls;
 
 namespace Fortis.Model.Fields
 {
-	public class GeneralLinkFieldWrapper : LinkFieldWrapper, IGeneralLinkFieldWrapper
+	public class GeneralLinkFieldWrapper : FieldWrapper, IGeneralLinkFieldWrapper
 	{
 		protected LinkField LinkField
 		{
@@ -36,12 +39,12 @@ namespace Fortis.Model.Fields
 			get { return LinkField.Class; }
 		}
 
-	    public string Target
-	    {
-	        get { return LinkField.Target; }
-	    }
+		public string Target
+		{
+			get { return LinkField.Target; }
+		}
 
-		public override string Url
+		public string Url
 		{
 			get
 			{
@@ -49,10 +52,15 @@ namespace Fortis.Model.Fields
 				{
 					return Sitecore.Resources.Media.MediaManager.GetMediaUrl(LinkField.TargetItem);
 				}
-			    var target = GetTarget<IItemWrapper>();
-				if (IsInternal && target != null)
+
+				if (IsInternal)
 				{
-					return target.GenerateUrl();
+					var target = GetTarget<IItemWrapper>();
+
+					if (target != null)
+					{
+						return target.GenerateUrl();
+					}
 				}
 
 				return LinkField.Url;
@@ -63,14 +71,50 @@ namespace Fortis.Model.Fields
 			: base(field, spawnProvider) {	}
 
 		public GeneralLinkFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, string value = null)
-			: base(key, ref item, spawnProvider, value) { }
+			: base(key, ref item, value, spawnProvider) { }
 
-		public override T GetTarget<T>()
+		public Guid ItemId
+		{
+			get
+			{
+				return LinkField.TargetID.ToGuid();
+			}
+		}
+
+		public IHtmlString Render(LinkFieldWrapperOptions options)
+		{
+			var fieldRenderer = new FieldRenderer();
+
+			if (options != null)
+			{
+				if (!string.IsNullOrWhiteSpace(options.InnerHtml))
+				{
+					fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.InnerHtmlParameterName, options.InnerHtml);
+				}
+
+				if (!string.IsNullOrWhiteSpace(options.Css))
+				{
+					fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.CssParameterName, options.Css);
+				}
+
+				fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.OptionsParameterName, string.Empty);
+				fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.HrefDefaultParameterName, options.DisplayHrefByDefault.ToString());
+				fieldRenderer.RenderParameters.Add(LinkFieldWrapperOptions.EditorCssParameterName, options.IncludeContentEditorCss.ToString());
+			}
+
+			fieldRenderer.Item = Field.Item;
+			fieldRenderer.FieldName = Field.Key;
+
+			var result = fieldRenderer.RenderField();
+			return new HtmlString(result.FirstPart + result.LastPart);
+		}
+
+		public T GetTarget<T>() where T : IItemWrapper
 		{
 			if (IsInternal || IsMediaLink)
 			{
-                var wrapper = SpawnProvider.FromItem<T>(LinkField.TargetItem);
-                return (T)((wrapper is T) ? wrapper : null);;
+				var wrapper = SpawnProvider.FromItem<T>(LinkField.TargetItem);
+				return (T)((wrapper is T) ? wrapper : null);;
 			}
 
 			return default(T);
@@ -79,6 +123,11 @@ namespace Fortis.Model.Fields
 		public static implicit operator string(GeneralLinkFieldWrapper field)
 		{
 			return field.Url;
+		}
+
+		public string Value
+		{
+			get { return Url; }
 		}
 	}
 }
