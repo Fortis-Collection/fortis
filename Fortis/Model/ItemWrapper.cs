@@ -344,7 +344,7 @@ namespace Fortis.Model
 		public virtual string GenerateUrl(bool includeHostname)
 		{
 			var options = LinkManager.GetDefaultUrlOptions();
-			options.AlwaysIncludeServerUrl = true;
+			options.AlwaysIncludeServerUrl = includeHostname;
 
 			return LinkManager.GetItemUrl(Item, options);
 		}
