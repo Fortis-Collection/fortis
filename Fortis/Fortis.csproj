@@ -68,8 +68,10 @@
     <Compile Include="Model\Fields\IntegerFieldWrapper.cs" />
     <Compile Include="Model\Fields\INumberFieldWrapper.cs" />
     <Compile Include="Model\Fields\IRichTextFieldWrapper.cs" />
+    <Compile Include="Model\Fields\INameValueListFieldWrapper.cs" />
     <Compile Include="Model\Fields\ITextFieldWrapper.cs" />
     <Compile Include="Model\Fields\NumberFieldWrapper.cs" />
+    <Compile Include="Model\Fields\NameValueListFieldWrapper.cs" />
     <Compile Include="Model\IRenderingContext.cs" />
     <Compile Include="Model\RenderingContext.cs" />
     <Compile Include="Model\RenderingParameters\Fields\NumberFieldWrapper.cs" />
