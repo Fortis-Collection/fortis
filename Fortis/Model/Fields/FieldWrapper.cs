@@ -13,11 +13,12 @@ namespace Fortis.Model.Fields
 	public class FieldWrapper : IFieldWrapper
 	{
 		protected readonly ISpawnProvider SpawnProvider;
-		private bool _modified;
-		private Field _field;
-		private ItemWrapper _item;
-		private string _rawValue;
-		private string _key;
+
+		protected bool _modified;
+		protected Field _field;
+		protected ItemWrapper _item;
+		protected string _rawValue;
+		protected string _key;
 
 		private Stack<string> _endFieldStack;
 

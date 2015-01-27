@@ -193,6 +193,8 @@ namespace Fortis.Providers
 					return fieldType == typeof(NumberFieldWrapper);
 				case "integer":
 					return fieldType == typeof(IntegerFieldWrapper);
+				case "name value list":
+					return fieldType == typeof(NameValueListFieldWrapper);
 				default:
 					return false;
 			}
