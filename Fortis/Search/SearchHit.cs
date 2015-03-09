@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fortis.Search
+﻿namespace Fortis.Search
 {
 	public class SearchHit<TSource> : ISearchHit<TSource>
 	{

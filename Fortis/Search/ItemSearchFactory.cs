@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sitecore.ContentSearch;
-using Sitecore.ContentSearch.Diagnostics;
-using Sitecore.ContentSearch.Linq.Common;
-using Sitecore.ContentSearch.Utilities;
+
 using Fortis.Model;
 using Fortis.Providers;
+
+using Sitecore.ContentSearch;
+using Sitecore.ContentSearch.Linq.Common;
 
 namespace Fortis.Search
 {
@@ -25,7 +22,7 @@ namespace Fortis.Search
 			SearchResultsAdapter = searchResultsAdapter;
 		}
 
-		public IQueryable<T> Search<T>(IQueryable<T> queryable)
+		public virtual IQueryable<T> Search<T>(IQueryable<T> queryable)
 			where T : IItemWrapper
 		{
 			if (queryable != null)
@@ -36,20 +33,20 @@ namespace Fortis.Search
 			return queryable;
 		}
 
-		public IQueryable<T> FilteredSearch<T>(IQueryable<T> queryable)
+		public virtual IQueryable<T> FilteredSearch<T>(IQueryable<T> queryable)
 			where T : IItemWrapper
 		{
 			return Search<T>(queryable).ApplyFilters();
 		}
 
-		public ISearchResults<T> GetResults<T>(IQueryable<T> queryable)
+		public virtual ISearchResults<T> GetResults<T>(IQueryable<T> queryable)
 			where T : IItemWrapper
 		{
 			return SearchResultsAdapter.GetResults<T>(queryable);
 		}
 
 		[Obsolete("Use Search<T> methods which accept an IQueryable<T>")]
-		public IQueryable<T> Search<T>(IProviderSearchContext context, IExecutionContext executionContext = null)
+		public virtual IQueryable<T> Search<T>(IProviderSearchContext context, IExecutionContext executionContext = null)
 			where T : IItemWrapper
 		{
 			IQueryable<T> queryable = context.GetQueryable<T>(executionContext);
