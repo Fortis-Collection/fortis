@@ -181,6 +181,7 @@ namespace Fortis.Providers
 				case "droptree":
 					return fieldType == typeof(LinkFieldWrapper);
 				case "general link":
+				case "general link with search":
 					return fieldType == typeof(GeneralLinkFieldWrapper);
 				case "text":
 				case "single-line text":
