@@ -10,11 +10,18 @@ namespace Fortis.Model.Fields
 {
 	public class ImageFieldWrapper : FieldWrapper, IImageFieldWrapper
 	{
+		protected ImageField ImageField { get { return (ImageField)Field; } }
+
 		public ImageFieldWrapper(Field field, ISpawnProvider spawnProvider)
 			: base(field, spawnProvider) { }
 
 		public ImageFieldWrapper(string key, ref ItemWrapper item, ISpawnProvider spawnProvider, string value = null)
 			: base(key, ref item, value, spawnProvider) { }
+
+		public string AltText
+		{
+			get { return ImageField.Alt; }
+		}
 
 		public string GetSourceUri()
 		{
@@ -81,7 +88,7 @@ namespace Fortis.Model.Fields
 			{
 				return default(T);
 			}
-			var mediaItem = ((ImageField) Field).MediaItem;
+			var mediaItem = ImageField.MediaItem;
 			if (mediaItem != null)
 			{
 				var target = SpawnProvider.FromItem<T>(new Item(mediaItem.ID, mediaItem.InnerData, mediaItem.Database));

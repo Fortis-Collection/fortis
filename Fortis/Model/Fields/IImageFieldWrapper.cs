@@ -5,6 +5,8 @@ namespace Fortis.Model.Fields
 {
 	public interface IImageFieldWrapper : IFieldWrapper<string>
 	{
+		string AltText { get; }
+
 		string GetSourceUri();
 
 		string GetSourceUri(bool absolute);
