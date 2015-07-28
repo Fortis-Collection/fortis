@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Fortis</id>
-        <version>3.5.2.1</version>
+        <version>3.5.5.0</version>
         <title>Fortis</title>
         <authors>Jason Bert,Kern Herskind Nightingale,Richard Seal</authors>
         <owners>Fortis Collections</owners>
@@ -13,8 +13,8 @@
         <description>A framework for creating a strongly typed model of the Sitecore API
 
 Requires: Sitecore 7.2+</description>
-        <releaseNotes>* Fixed the Value property on the link field wrapper and now returns a Guid rather than a string</releaseNotes>
-        <copyright>Copyright 2014</copyright>
+        <releaseNotes>* Exposed the Alt Text for an image field</releaseNotes>
+        <copyright>Copyright 2015</copyright>
         <tags>Sitecore Fortis</tags>
     </metadata>
     <files>
