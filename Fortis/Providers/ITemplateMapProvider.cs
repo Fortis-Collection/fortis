@@ -9,9 +9,9 @@ namespace Fortis.Providers
 {
 	public interface ITemplateMapProvider
 	{
-		Dictionary<Guid, Type> TemplateMap { get; }
+        Dictionary<Guid, List<Type>> TemplateMap { get; }
 		Dictionary<Type, Guid> InterfaceTemplateMap { get; }
-		Dictionary<Guid, Type> RenderingParametersTemplateMap { get; }
+        Dictionary<Guid, List<Type>> RenderingParametersTemplateMap { get; }
 		Type GetImplementation<T>() where T : IItemWrapper;
 		bool IsCompatibleTemplate<T>(Guid templateId) where T : IItemWrapper;
 		bool IsCompatibleTemplate(Guid templateId, Type template);

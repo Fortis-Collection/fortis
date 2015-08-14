@@ -7,10 +7,9 @@ using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using Sitecore.Data.Managers;
 using Fortis.Model.Fields;
-using System.Reflection;
-using System.Collections.Specialized;
-using System.Web.Configuration;
 using Fortis.Model;
+using Sitecore.ContentSearch.Linq.Extensions;
+using Sitecore.WordOCX.Extensions;
 
 namespace Fortis.Providers
 {
@@ -35,33 +34,16 @@ namespace Fortis.Providers
 			// Exact match
 			if (TemplateMapProvider.TemplateMap.ContainsKey(templateId))
 			{
-				var concreteTemplate = TemplateMapProvider.TemplateMap[templateId];
+				var concreteTemplates = TemplateMapProvider.TemplateMap[templateId];
 
 				// Check to see if Type being requested is assignable to the concrete type
-				if (!template.IsAssignableFrom(concreteTemplate))
+				if (template != null && !concreteTemplates.Any(template.IsAssignableFrom))
 				{
-					throw new Exception("Fortis: The type " + concreteTemplate.Name + " is not assignable from the type " + template.Name);
+					throw new Exception("Fortis: The types " + concreteTemplates.Select(ct => ct.Name).StringConcatenate(s => s + ", ") + "are not assignable from the type " + template.Name);
 				}
 
-				return (IItemWrapper)Activator.CreateInstance(concreteTemplate, new object[] { itemId, lazyFields, this });
+				return (IItemWrapper)Activator.CreateInstance(concreteTemplates[0], new object[] { itemId, lazyFields, this });
 			}
-
-			// Inherited template mapping needs implementing
-
-			//var typeOfBaseWrapper = typeof(IItemWrapper);
-
-			//if (template != null &&
-			//	template.IsInterface &&
-			//	template != typeOfBaseWrapper &&
-			//	template.IsAssignableFrom(typeOfBaseWrapper))
-			//{
-			//	if (!InterfaceTemplateMap.ContainsKey(template))
-			//	{
-			//		throw new Exception("Fortis | Unable to find template for " + template.FullName);
-			//	}
-
-
-			//}
 
 			return new ItemWrapper(itemId, this);
 		}
@@ -84,11 +66,20 @@ namespace Fortis.Providers
 				var id = item.TemplateID.Guid;
 				if (TemplateMapProvider.TemplateMap.Keys.Contains(id))
 				{
+				    Type type = null;
 					// Get type information
-					var type = TemplateMapProvider.TemplateMap[id];
+				    if (template != null && template.IsInterface)
+				        type = TemplateMapProvider.TemplateMap[id].FirstOrDefault(t => t.ImplementsInterface(template));
 
-					return (IItemWrapper)Activator.CreateInstance(type, new object[] { item, this });
-				}
+				    if (type == null && template == null)
+				    {
+				        type = TemplateMapProvider.TemplateMap[id][0];
+
+				    }
+
+                    if(type != null)
+                        return (IItemWrapper)Activator.CreateInstance(type, item, this);
+                }
 
 				if (template != null)
 				{
@@ -109,10 +100,15 @@ namespace Fortis.Providers
 						{
 							if (itemTemplate.DescendsFrom(new ID(typeTemplateId)))
 							{
-								// Get type information
-								var type = TemplateMapProvider.TemplateMap[typeTemplateId];
+                                // Get type information
+                                Type type = null;
 
-								return (IItemWrapper)Activator.CreateInstance(type, new object[] { item, this });
+                                // Get type information
+                                if (template.IsInterface)
+                                    type = TemplateMapProvider.TemplateMap[typeTemplateId].FirstOrDefault(t => t.ImplementsInterface(template));
+
+                                if (type != null)
+                                    return (IItemWrapper)Activator.CreateInstance(type, item, this);
 							}
 						}
 					}
@@ -163,9 +159,9 @@ namespace Fortis.Providers
 						throw new Exception("Fortis | Unable to find rendering parameters template " + id + " for " + renderingItem.Name);
 					}
 
-					var type = TemplateMapProvider.RenderingParametersTemplateMap[templateId.Guid];
+					var type = TemplateMapProvider.RenderingParametersTemplateMap[templateId.Guid][0];
 
-					return (IRenderingParameterWrapper)Activator.CreateInstance(type, new object[] { parameters, this });
+					return (IRenderingParameterWrapper)Activator.CreateInstance(type, parameters, this);
 				}
 			}
 

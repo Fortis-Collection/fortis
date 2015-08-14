@@ -21,8 +21,9 @@ namespace Fortis.Providers
         }
 
         private object _lock = new object();
-        private Dictionary<Guid, Type> _templateMap = null;
-        public Dictionary<Guid, Type> TemplateMap
+        private Dictionary<Guid, List<Type>> _templateMap = null;
+
+        public Dictionary<Guid, List<Type>> TemplateMap
         {
             get
             {
@@ -30,7 +31,7 @@ namespace Fortis.Providers
                 {
                     if (_templateMap == null)
                     {
-                        _templateMap = new Dictionary<Guid, Type>();
+                        _templateMap = new Dictionary<Guid, List<Type>>();
 
                         foreach (var modelAssemblyProvider in _modelAssemblyProviders)
                         {
@@ -44,7 +45,11 @@ namespace Fortis.Providers
                                     {
                                         if (!_templateMap.Keys.Contains(templateAttribute.Id))
                                         {
-                                            _templateMap.Add(templateAttribute.Id, t);
+                                            _templateMap.Add(templateAttribute.Id, new List<Type> {t});
+                                        }
+                                        else
+                                        {
+                                            _templateMap[templateAttribute.Id].Add(t);
                                         }
                                     }
                                 }
@@ -92,8 +97,8 @@ namespace Fortis.Providers
             }
         }
 
-        private Dictionary<Guid, Type> _renderingParametersTemplateMap = null;
-        public Dictionary<Guid, Type> RenderingParametersTemplateMap
+        private Dictionary<Guid, List<Type>> _renderingParametersTemplateMap = null;
+        public Dictionary<Guid, List<Type>> RenderingParametersTemplateMap
         {
             get
             {
@@ -102,7 +107,7 @@ namespace Fortis.Providers
 
                     if (_renderingParametersTemplateMap == null)
                     {
-                        _renderingParametersTemplateMap = new Dictionary<Guid, Type>();
+                        _renderingParametersTemplateMap = new Dictionary<Guid, List<Type>>();
 
                         foreach (var modelAssemblyProvider in _modelAssemblyProviders)
                         {
@@ -115,7 +120,11 @@ namespace Fortis.Providers
                                     {
                                         if (!_renderingParametersTemplateMap.Keys.Contains(templateAttribute.Id))
                                         {
-                                            _renderingParametersTemplateMap.Add(templateAttribute.Id, t);
+                                            _renderingParametersTemplateMap.Add(templateAttribute.Id, new List<Type> {t});
+                                        }
+                                        else
+                                        {
+                                            _renderingParametersTemplateMap[templateAttribute.Id].Add(t);
                                         }
                                     }
                                 }
@@ -149,7 +158,13 @@ namespace Fortis.Providers
                 throw new Exception("Fortis: Template ID " + templateId + " does not exist in template map");
             }
 
-            return TemplateMap[templateId];
+            foreach (var type in TemplateMap[templateId])
+            {
+                if (typeOfT.IsAssignableFrom(type))
+                    return type;
+            }
+
+            return null;
         }
 
         public bool IsCompatibleTemplate<T>(Guid templateId) where T : IItemWrapper
