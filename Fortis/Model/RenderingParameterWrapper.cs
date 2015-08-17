@@ -61,6 +61,9 @@ namespace Fortis.Model
 						case "integer":
 							_fields[key] = new IntegerFieldWrapper(parameterValue, SpawnProvider);
 							break;
+                        case "image":
+                            _fields[key] = new ImageFieldWrapper(parameterValue, SpawnProvider);
+                            break;
 						default:
 							_fields[key] = new FieldWrapper(parameterValue, SpawnProvider);
 							break;

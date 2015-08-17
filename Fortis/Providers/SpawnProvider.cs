@@ -128,23 +128,10 @@ namespace Fortis.Providers
 		public IEnumerable<T> FromItems<T>(IEnumerable<Item> items)
 			where T : IItemWrapper
 		{
-			foreach (var item in items)
-			{
-                var wrappedItem = FromItem<IItemWrapper>(item);
-
-			    if (wrappedItem == null)
-			    {
-			        continue;
-			    }
-
-                if (wrappedItem is T)
-			    {
-                    yield return (T)wrappedItem;
-			    }
-			}
+		    return items.Select(FromItem<T>).OfType<T>();
 		}
 
-		public IRenderingParameterWrapper FromRenderingParameters<T>(Item renderingItem, Dictionary<string, string> parameters)
+	    public IRenderingParameterWrapper FromRenderingParameters<T>(Item renderingItem, Dictionary<string, string> parameters)
 			where T : IRenderingParameterWrapper
 		{
 			if (renderingItem != null)
