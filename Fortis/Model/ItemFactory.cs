@@ -35,7 +35,7 @@ namespace Fortis.Model
 		{
 			if (SpawnProvider.TemplateMapProvider.TemplateMap.ContainsKey(templateId))
 			{
-				return SpawnProvider.TemplateMapProvider.TemplateMap[templateId];
+				return SpawnProvider.TemplateMapProvider.TemplateMap[templateId][0];
 			}
 
 			return typeof(IItemWrapper);

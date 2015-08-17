@@ -170,7 +170,7 @@ namespace Fortis.Model
 		[TypeConverter(typeof(IndexFieldGuidValueConverter)), IndexField("_template")]
 		public Guid TemplateId
 		{
-			get { return _spawnProvider.TemplateMapProvider.TemplateMap.FirstOrDefault(t => t.Value == this.GetType()).Key; }
+			get { return _spawnProvider.TemplateMapProvider.TemplateMap.FirstOrDefault(t => t.Value.Contains(this.GetType())).Key; }
 		}
 
 		[IndexField("_templates")]
