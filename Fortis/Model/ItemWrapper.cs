@@ -111,7 +111,7 @@ namespace Fortis.Model
 
 		public object Original
 		{
-			get { return _item; }
+			get { return Item; }
 		}
 
 		public bool IsLazy
