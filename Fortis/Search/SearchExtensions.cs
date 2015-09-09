@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Sitecore.ContentSearch.Linq;
 
 namespace Fortis.Search
 {
@@ -104,19 +105,19 @@ namespace Fortis.Search
 		public static IQueryable<TSource> WhereContextLanguage<TSource>(this IQueryable<TSource> queryable)
 			where TSource : IItemWrapper
 		{
-			return queryable.Where(item => item.LanguageName == Sitecore.Context.Language.Name);
+			return queryable.Filter(item => item.LanguageName == Sitecore.Context.Language.Name);
 		}
 
 		public static IQueryable<TSource> WhereLatestVersion<TSource>(this IQueryable<TSource> queryable)
 			where TSource : IItemWrapper
 		{
-			return queryable.Where(item => item.IsLatestVersion);
+			return queryable.Filter(item => item.IsLatestVersion);
 		}
 
 		public static IQueryable<TSource> WhereNotStandardValues<TSource>(this IQueryable<TSource> queryable)
 			where TSource : IItemWrapper
 		{
-			return queryable.Where(item => !item.IsStandardValues);
+			return queryable.Filter(item => !item.IsStandardValues);
 		}
 
 		public static IQueryable<TSource> WhereTemplate<TSource>(this IQueryable<TSource> queryable, ITemplateMapProvider templateMapProvider)
@@ -128,7 +129,7 @@ namespace Fortis.Search
 			{
 				var templateId = templateMapProvider.InterfaceTemplateMap[typeOfT];
 
-				queryable = queryable.Where(item => item.TemplateIds.Contains(templateId));
+				queryable = queryable.Filter(item => item.TemplateIds.Contains(templateId));
 			}
 
 			return queryable;
