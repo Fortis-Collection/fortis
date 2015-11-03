@@ -175,6 +175,22 @@ namespace Fortis.Model
 			return (T)((wrapper is T) ? wrapper : null);
 		}
 
+		public virtual IRenderingModel<TPageItem, TRenderingItem> ResolveRenderingModel<TPageItem, TRenderingItem>(IItemFactory factory = null)
+			where TPageItem : IItemWrapper
+			where TRenderingItem : IItemWrapper
+		{
+			return this.GetRenderingContextItems<TPageItem, TRenderingItem>(factory);
+		}
+
+		public virtual IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> ResolveRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem>(IItemFactory factory = null)
+			where TPageItem : IItemWrapper
+			where TRenderingItem : IItemWrapper
+			where TRenderingParametersItem : IRenderingParameterWrapper
+		{
+			return this.GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>(factory);
+		}
+
+		[Obsolete("This method is obsolete. Please use ResolveRenderingModel<TPageItem, TRenderingItem>() instead.")]
 		public virtual IRenderingModel<TPageItem, TRenderingItem> GetRenderingContextItems<TPageItem, TRenderingItem>(IItemFactory factory = null)
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper
@@ -187,6 +203,7 @@ namespace Fortis.Model
 			return new RenderingModel<TPageItem, TRenderingItem>(validPageWrapper, validRenderingWrapper, factory);
 		}
 
+		[Obsolete("This method is obsolete. Please use ResolveRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem>() instead.")]
 		public virtual IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>(IItemFactory factory = null)
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper
