@@ -22,7 +22,7 @@ namespace Fortis.Model
 			SpawnProvider = spawnProvider;
 		}
 
-		public Guid GetTemplateID(Type type)
+		public virtual Guid GetTemplateID(Type type)
 		{
 			if (SpawnProvider.TemplateMapProvider.InterfaceTemplateMap.ContainsKey(type))
 			{
@@ -31,7 +31,7 @@ namespace Fortis.Model
 			return Guid.Empty;
 		}
 
-		public Type GetInterfaceType(Guid templateId)
+		public virtual Type GetInterfaceType(Guid templateId)
 		{
 			if (SpawnProvider.TemplateMapProvider.TemplateMap.ContainsKey(templateId))
 			{
@@ -41,12 +41,12 @@ namespace Fortis.Model
 			return typeof(IItemWrapper);
 		}
 
-		public void Publish(IEnumerable<IItemWrapper> wrappers)
+		public virtual void Publish(IEnumerable<IItemWrapper> wrappers)
 		{
 			Publish(wrappers, false);
 		}
 
-		public void Publish(IEnumerable<IItemWrapper> wrappers, bool children)
+		public virtual void Publish(IEnumerable<IItemWrapper> wrappers, bool children)
 		{
 			foreach (var wrapper in wrappers)
 			{
@@ -105,12 +105,12 @@ namespace Fortis.Model
 			}
 		}
 
-		public T Create<T>(IItemWrapper parent, string itemName) where T : IItemWrapper
+		public virtual T Create<T>(IItemWrapper parent, string itemName) where T : IItemWrapper
 		{
 			return Create<T>(parent.ItemID, itemName);
 		}
 
-		public T Create<T>(string parentPath, string itemName) where T : IItemWrapper
+		public virtual T Create<T>(string parentPath, string itemName) where T : IItemWrapper
 		{
 			var database = Factory.GetDatabase("master");
 			var parentItem = GetItem(parentPath, database);
@@ -118,7 +118,7 @@ namespace Fortis.Model
 			return Create<T>(parentItem, itemName);
 		}
 
-		public T Create<T>(Guid parentId, string itemName) where T : IItemWrapper
+		public virtual T Create<T>(Guid parentId, string itemName) where T : IItemWrapper
 		{
 			var database = Factory.GetDatabase("master");
 			var parentItem = GetItem(parentId, database);
@@ -147,14 +147,14 @@ namespace Fortis.Model
 			return (T)newItemObject;
 		}
 
-		public T GetSiteHome<T>() where T : IItemWrapper
+		public virtual T GetSiteHome<T>() where T : IItemWrapper
 		{
 			var item = GetItem(Sitecore.Context.Site.StartPath);
 			var wrapper = SpawnProvider.FromItem<T>(item);
 			return (T)((wrapper is T) ? wrapper : null);
 		}
 
-		public T GetSiteRoot<T>() where T : IItemWrapper
+		public virtual T GetSiteRoot<T>() where T : IItemWrapper
 		{
 			var item = GetItem(Sitecore.Context.Site.RootPath);
 			// Make sure we have value item at this point
@@ -167,7 +167,7 @@ namespace Fortis.Model
 			return (T) ((wrapper is T) ? wrapper : null);
 		}
 
-		public T GetContextItem<T>() where T : IItemWrapper
+		public virtual T GetContextItem<T>() where T : IItemWrapper
 		{
 			var item = ContextProvider.PageContextItem;
 			var wrapper = SpawnProvider.FromItem<T>(item);
@@ -175,6 +175,22 @@ namespace Fortis.Model
 			return (T)((wrapper is T) ? wrapper : null);
 		}
 
+		public virtual IRenderingModel<TPageItem, TRenderingItem> ResolveRenderingModel<TPageItem, TRenderingItem>(IItemFactory factory = null)
+			where TPageItem : IItemWrapper
+			where TRenderingItem : IItemWrapper
+		{
+			return this.GetRenderingContextItems<TPageItem, TRenderingItem>(factory);
+		}
+
+		public virtual IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> ResolveRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem>(IItemFactory factory = null)
+			where TPageItem : IItemWrapper
+			where TRenderingItem : IItemWrapper
+			where TRenderingParametersItem : IRenderingParameterWrapper
+		{
+			return this.GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>(factory);
+		}
+
+		[Obsolete("This method is obsolete. Please use ResolveRenderingModel<TPageItem, TRenderingItem>() instead.")]
 		public virtual IRenderingModel<TPageItem, TRenderingItem> GetRenderingContextItems<TPageItem, TRenderingItem>(IItemFactory factory = null)
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper
@@ -187,6 +203,7 @@ namespace Fortis.Model
 			return new RenderingModel<TPageItem, TRenderingItem>(validPageWrapper, validRenderingWrapper, factory);
 		}
 
+		[Obsolete("This method is obsolete. Please use ResolveRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem>() instead.")]
 		public virtual IRenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem> GetRenderingContextItems<TPageItem, TRenderingItem, TRenderingParametersItem>(IItemFactory factory = null)
 			where TPageItem : IItemWrapper
 			where TRenderingItem : IItemWrapper
@@ -202,7 +219,7 @@ namespace Fortis.Model
 			return new RenderingModel<TPageItem, TRenderingItem, TRenderingParametersItem>(validPageWrapper, validRenderingWrapper, validRenderingParametersWrapper, factory);
 		}
 
-		public T GetContextItemsItem<T>(string key) where T : IItemWrapper
+		public virtual T GetContextItemsItem<T>(string key) where T : IItemWrapper
 		{
 			IItemWrapper wrapper = null;
 
@@ -215,27 +232,27 @@ namespace Fortis.Model
 		}
 
 
-		public T Select<T>(string path) where T : IItemWrapper
+		public virtual T Select<T>(string path) where T : IItemWrapper
 		{
 			return Select<T>(path, Sitecore.Context.Database);
 		}
 
-		public T Select<T>(Guid id) where T : IItemWrapper
+		public virtual T Select<T>(Guid id) where T : IItemWrapper
 		{
 			return SpawnFromItem<T>(GetItem(id, null));
 		}
 
-		public T Select<T>(string path, string database) where T : IItemWrapper
+		public virtual T Select<T>(string path, string database) where T : IItemWrapper
 		{
 			return Select<T>(path, Factory.GetDatabase(database));
 		}
 
-		public T Select<T>(Guid id, string database) where T : IItemWrapper
+		public virtual T Select<T>(Guid id, string database) where T : IItemWrapper
 		{
 			return SpawnFromItem<T>(GetItem(id, Factory.GetDatabase(database)));
 		}
 
-		public T Select<T>(Guid id, string database, string language) where T : IItemWrapper
+		public virtual T Select<T>(Guid id, string database, string language) where T : IItemWrapper
 		{
 			Language lang = Sitecore.Context.Language;
 			if (!string.IsNullOrWhiteSpace(language))
@@ -275,12 +292,12 @@ namespace Fortis.Model
 			return default(T);
 		}
 
-		public IEnumerable<T> SelectAll<T>(string path) where T : IItemWrapper
+		public virtual IEnumerable<T> SelectAll<T>(string path) where T : IItemWrapper
 		{
 			return SelectAll<T>(Sitecore.Context.Database, path);
 		}
 
-		public IEnumerable<T> SelectAll<T>(string path, string database) where T : IItemWrapper
+		public virtual IEnumerable<T> SelectAll<T>(string path, string database) where T : IItemWrapper
 		{
 			return SelectAll<T>(Factory.GetDatabase(database), path);
 		}
@@ -296,31 +313,31 @@ namespace Fortis.Model
 			return Enumerable.Empty<T>();
 		}
 
-		public T SelectChild<T>(IItemWrapper item) where T : IItemWrapper
+		public virtual T SelectChild<T>(IItemWrapper item) where T : IItemWrapper
 		{
 			return SelectChild<T>(item.ItemID);
 		}
 
-		public T SelectChild<T>(string path) where T : IItemWrapper
+		public virtual T SelectChild<T>(string path) where T : IItemWrapper
 		{
 			var children = SelectChildren<T>(path);
 
 			return children.FirstOrDefault();
 		}
 
-		public T SelectChild<T>(Guid id) where T : IItemWrapper
+		public virtual T SelectChild<T>(Guid id) where T : IItemWrapper
 		{
 			var children = SelectChildren<T>(id);
 
 			return children.FirstOrDefault();
 		}
 
-		public T SelectChildRecursive<T>(string path) where T : IItemWrapper
+		public virtual T SelectChildRecursive<T>(string path) where T : IItemWrapper
 		{
 			return SelectChildRecursive<T>(SelectChildren<T>(path));
 		}
 
-		public T SelectChildRecursive<T>(Guid id) where T : IItemWrapper
+		public virtual T SelectChildRecursive<T>(Guid id) where T : IItemWrapper
 		{
 			return SelectChildRecursive<T>(SelectChildren<T>(id));
 		}
@@ -348,17 +365,17 @@ namespace Fortis.Model
 			return default(T);
 		}
 
-		public IEnumerable<T> SelectChildren<T>(IItemWrapper item) where T : IItemWrapper
+		public virtual IEnumerable<T> SelectChildren<T>(IItemWrapper item) where T : IItemWrapper
 		{
 			return SelectChildren<T>(item.ItemID);
 		}
 
-		public IEnumerable<T> SelectChildren<T>(string path) where T : IItemWrapper
+		public virtual IEnumerable<T> SelectChildren<T>(string path) where T : IItemWrapper
 		{
 			return SelectChildren<T>(SelectSingleItem(path));
 		}
 
-		public IEnumerable<T> SelectChildren<T>(Guid id) where T : IItemWrapper
+		public virtual IEnumerable<T> SelectChildren<T>(Guid id) where T : IItemWrapper
 		{
 			return SelectChildren<T>(GetItem(id, null));
 		}
@@ -375,7 +392,7 @@ namespace Fortis.Model
 			}
 		}
 
-		public IEnumerable<T> SelectChildrenRecursive<T>(IItemWrapper wrapper) where T : IItemWrapper
+		public virtual IEnumerable<T> SelectChildrenRecursive<T>(IItemWrapper wrapper) where T : IItemWrapper
 		{
 			var children = SelectChildren<IItemWrapper>(wrapper);
 
@@ -398,7 +415,7 @@ namespace Fortis.Model
 			}
 		}
 
-		public T SelectSibling<T>(IItemWrapper wrapper) where T : IItemWrapper
+		public virtual T SelectSibling<T>(IItemWrapper wrapper) where T : IItemWrapper
 		{
 			var parent = wrapper.Parent<IItemWrapper>();
 
@@ -410,7 +427,7 @@ namespace Fortis.Model
 			return default(T);
 		}
 
-		public IEnumerable<T> SelectSiblings<T>(IItemWrapper wrapper) where T : IItemWrapper
+		public virtual IEnumerable<T> SelectSiblings<T>(IItemWrapper wrapper) where T : IItemWrapper
 		{
 			var parent = wrapper.Parent<IItemWrapper>();
 
@@ -421,7 +438,7 @@ namespace Fortis.Model
 			return Enumerable.Empty<T>();
 		}
 
-		public T GetRenderingDataSource<T>(System.Web.UI.Control control) where T : IItemWrapper
+		public virtual T GetRenderingDataSource<T>(System.Web.UI.Control control) where T : IItemWrapper
 		{
 			var parent = control.Parent as Sublayout;
 			if (parent != null)
