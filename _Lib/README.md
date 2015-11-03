@@ -1,15 +1,21 @@
 Place the following assemblies in this folder
 
-* Sitecore.Kernel.dll
-* Sitecore.Logging
-* Sitecore.Mvc.dll
-* ITHit.WebDAV.Server.dll
 * ComponentArt.Web.UI.dll
 * HtmlAgilityPack.dll
-* Lucene.Net.dll
+* ITHit.WebDAV.Server.dll
+* Lucene.Net.dl
 * Mvp.Xml.dll
 * Newtonsoft.Json.dll
 * RadEditor.Net2.dll
+* Sitecore.ContentSearch.dll
+* Sitecore.ContentSearch.Linq.dll
+* Sitecore.ContentSearch.Linq.Lucene.dll
+* Sitecore.ContentSearch.Linq.Solr.dll
+* Sitecore.ContentSearch.LuceneProvider.dll
+* Sitecore.ContentSearch.SolrProvider.dll
+* Sitecore.Kernel.dll
+* Sitecore.Logging
+* Sitecore.Mvc.dll
 * Sitecore.NVelocity.dll
 * Sitecore.Zip.dll
 * Telerik.Web.UI.dll
