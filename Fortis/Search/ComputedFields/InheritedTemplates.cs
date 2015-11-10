@@ -33,22 +33,31 @@ namespace Fortis.Search.ComputedFields
 			Assert.ArgumentNotNull(item, "item");
 			Assert.IsNotNull(item.Template, "Item template not found.");
 
-			var templates = new List<string> { IdHelper.NormalizeGuid(item.TemplateID) };
+			var templateId = IdHelper.NormalizeGuid(item.TemplateID);
+			var templates = new Dictionary<string, string>
+			{
+				{templateId, templateId }
+			};
 
 			RecurseTemplates(templates, item.Template);
 
-			return templates;
+			return templates.Values.ToList();
 		}
 
-		private static void RecurseTemplates(List<string> list, TemplateItem template)
+		private static void RecurseTemplates(IDictionary<string, string> templates, TemplateItem template)
 		{
 			foreach (var baseTemplateItem in template.BaseTemplates)
 			{
-				list.Add(IdHelper.NormalizeGuid(baseTemplateItem.ID));
+				var templateId = IdHelper.NormalizeGuid(baseTemplateItem.ID);
+
+				if (!templates.ContainsKey(templateId))
+				{
+					templates.Add(templateId, templateId);
+				}
 
 				if (baseTemplateItem.ID != TemplateIDs.StandardTemplate)
 				{
-					RecurseTemplates(list, baseTemplateItem);
+					RecurseTemplates(templates, baseTemplateItem);
 				}
 			}
 		}
