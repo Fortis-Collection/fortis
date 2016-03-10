@@ -59,7 +59,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\ConfigurationTests.cs" />
     <EmbeddedResource Include="Configuration\TestXmlConfiguration.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

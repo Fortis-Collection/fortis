@@ -70,7 +70,7 @@
 
 			Assert.IsNotNullOrEmpty(name, "Model assembley node had empty or missing name attribute.");
 
-			var type = GetAttributeValue(configuration, "type");
+			var type = GetAttributeValue(configuration, "assembley");
 			Assert.IsNotNullOrEmpty(type, "Model assembley node had empty or missing type attribute.");
 
 			return new FortisModelConfiguration(name, type);
