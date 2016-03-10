@@ -15,7 +15,7 @@
 			Assert.IsNotEmpty(testProvider.DefaultConfiguration.Models);
 			Assert.IsNotNull(testProvider.DefaultConfiguration.Models.FirstOrDefault(x => x.Name == "Fortis.Model"));
 			Assert.IsNotNull(testProvider.DefaultConfiguration.Models.FirstOrDefault(x => x.Name == "Project.Model"));
-			Assert.IsNotNull(testProvider.DefaultConfiguration.Models.FirstOrDefault(x => x.Assembley == "Fortis.Model, Fortis"));
+			Assert.IsNotNull(testProvider.DefaultConfiguration.Models.FirstOrDefault(x => x.Assembley == "Fortis.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"));
 		}
 	}
 }

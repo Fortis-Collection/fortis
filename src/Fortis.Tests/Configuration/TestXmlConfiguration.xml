@@ -2,8 +2,8 @@
 	<configurationProvider type = "Fortis.Configuration.XmlConfigurationProvider, Fortis" ></configurationProvider>
 
 	<models>
-        <model name="Fortis.Model" type="Fortis.Model, Fortis" />
-		<model name = "Project.Model" type="Project.Model, Project" />
+		<model name="Fortis.Model" type="Fortis.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+		<model name="Project.Model" type="Project.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
 	</models>
 
 	<fieldTypes>
