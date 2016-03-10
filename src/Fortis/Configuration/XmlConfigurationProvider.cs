@@ -5,6 +5,8 @@
 	using System.Linq;
 	using System.Xml;
 
+	using Fortis.Exceptions;
+
 	using Sitecore.Configuration;
 	using Sitecore.Diagnostics;
 
@@ -48,20 +50,40 @@
 				return;
 			}
 
-			var nameChecker = new List<IFortisModelConfiguration>();
+			var modelAssemblies = new List<IFortisModelConfiguration>();
 			foreach (XmlElement element in modelNodes)
 			{
 				var model = LoadModelConfiguration(element);
 
-				if (nameChecker.Any(x => x.Name.Equals(model.Name, StringComparison.OrdinalIgnoreCase)))
+				if (modelAssemblies.Any(x => x.Name.Equals(model.Name, StringComparison.OrdinalIgnoreCase)))
 				{
 					throw new InvalidOperationException("The Fortis Model Assembley '" + model.Name + "' is defined twice. Model Assemblies should have unique names.");
 				}
 
-				nameChecker.Add(model);
+				modelAssemblies.Add(model);
 			}
 
-			_defaultConfiguration.Models = nameChecker;
+			var supportedFields = new List<ISupportedFieldType>();
+			var fieldNodes = configNode.SelectNodes("./fieldTypes/field");
+
+			if (fieldNodes == null || fieldNodes.Count == 0)
+			{
+				throw new FortisConfigurationException("No supported fields configured");
+			}
+
+			foreach (XmlElement field in fieldNodes)
+			{
+				var supportedField = LoadFieldTypeConfiguration(field);
+				if (supportedFields.Any(x => x.FieldName.Equals(supportedField.FieldName, StringComparison.InvariantCultureIgnoreCase)))
+				{
+					throw new InvalidOperationException("The Fortis Supported Field Type '" + supportedField.FieldName + "' is defined more than once.");
+				}
+
+				supportedFields.Add(supportedField);
+			}
+
+			_defaultConfiguration.Models = modelAssemblies;
+			_defaultConfiguration.Fields = supportedFields;
 		}
 
 		protected virtual IFortisModelConfiguration LoadModelConfiguration(XmlElement configuration)
@@ -74,6 +96,18 @@
 			Assert.IsNotNullOrEmpty(type, "Model assembley node had empty or missing type attribute.");
 
 			return new FortisModelConfiguration(name, type);
+		}
+
+		protected virtual ISupportedFieldType LoadFieldTypeConfiguration(XmlElement configuration)
+		{
+			var name = GetAttributeValue(configuration, "name");
+
+			Assert.IsNotNullOrEmpty(name, "Field type node had empty or missing name attribute.");
+
+			var type = GetAttributeValue(configuration, "type");
+			Assert.IsNotNullOrEmpty(type, "Field type node had empty or missing type attribute.");
+
+			return new SupportedFieldType(name, type);
 		}
 
 		/// <summary>

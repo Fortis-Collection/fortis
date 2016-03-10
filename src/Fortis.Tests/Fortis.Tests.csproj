@@ -51,6 +51,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,7 +65,7 @@
     </EmbeddedResource>
     <Compile Include="Configuration\TestXmlConfigurationProvider.cs" />
     <Compile Include="Configuration\XmlConfigurationProviderTests.cs" />
-    <Compile Include="ItemFactoryTests.cs" />
+    <Compile Include="Model\ItemFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +73,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Fortis.Mvc\Fortis.Mvc.csproj">
+      <Project>{56BC76C2-BE7A-429B-B1F5-F965EE0CB663}</Project>
+      <Name>Fortis.Mvc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fortis\Fortis.csproj">
       <Project>{48D2AA0D-B38B-4AA2-BE58-6F9C226B8D19}</Project>
       <Name>Fortis</Name>

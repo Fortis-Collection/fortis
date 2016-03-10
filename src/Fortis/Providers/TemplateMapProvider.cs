@@ -6,6 +6,8 @@ using Fortis.Model;
 
 namespace Fortis.Providers
 {
+	using Fortis.Configuration;
+
 	public class TemplateMapProvider : ITemplateMapProvider
 	{
 		private readonly IModelAssemblyProvider _modelAssemblyProvider;
@@ -161,46 +163,8 @@ namespace Fortis.Providers
 
 		public bool IsCompatibleFieldType(string scFieldType, Type fieldType)
 		{
-			switch (scFieldType.ToLower())
-			{
-				case "checkbox":
-					return fieldType == typeof(BooleanFieldWrapper);
-				case "image":
-					return fieldType == typeof(ImageFieldWrapper);
-				case "date":
-				case "datetime":
-					return fieldType == typeof(DateTimeFieldWrapper);
-				case "checklist":
-				case "treelist":
-				case "treelistex":
-				case "multilist":
-				case "multilist with search":
-				case "treelist with search":
-					return fieldType == typeof(ListFieldWrapper);
-				case "file":
-					return fieldType == typeof(FileFieldWrapper);
-				case "droplink":
-				case "droptree":
-					return fieldType == typeof(LinkFieldWrapper);
-				case "general link":
-				case "general link with search":
-					return fieldType == typeof(GeneralLinkFieldWrapper);
-				case "text":
-				case "single-line text":
-				case "multi-line text":
-				case "droplist":
-					return fieldType == typeof(TextFieldWrapper);
-				case "rich text":
-					return fieldType == typeof(RichTextFieldWrapper);
-				case "number":
-					return fieldType == typeof(NumberFieldWrapper);
-				case "integer":
-					return fieldType == typeof(IntegerFieldWrapper);
-				case "name value list":
-					return fieldType == typeof(NameValueListFieldWrapper);
-				default:
-					return false;
-			}
+			var supportedType = FortisConfigurationManager.Provider.DefaultConfiguration.Fields.FirstOrDefault(x => x.FieldName.Equals(scFieldType, StringComparison.InvariantCultureIgnoreCase));
+			return fieldType == supportedType?.FieldType;
 		}
 	}
 }

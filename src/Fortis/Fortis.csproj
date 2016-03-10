@@ -52,13 +52,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\SupportedFieldType.cs" />
     <Compile Include="Configuration\FortisConfiguration.cs" />
     <Compile Include="Configuration\FortisConfigurationManager.cs" />
     <Compile Include="Configuration\FortisModelConfiguration.cs" />
     <Compile Include="Configuration\IConfigurationProvider.cs" />
+    <Compile Include="Configuration\ISupportedFieldType.cs" />
     <Compile Include="Configuration\IFortisConfiguration.cs" />
     <Compile Include="Configuration\IFortisModelConfiguration.cs" />
     <Compile Include="Configuration\XmlConfigurationProvider.cs" />
+    <Compile Include="Exceptions\FortisConfigurationException.cs" />
     <Compile Include="Extensions\GuidExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtenstions.cs" />
     <Compile Include="Global.cs" />

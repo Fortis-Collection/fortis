@@ -1,7 +1,6 @@
 ﻿using Sitecore.Globalization;
 using Sitecore.Web.UI.WebControls;
 using Fortis.Providers;
-using Fortis.Search;
 using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Data.Items;
