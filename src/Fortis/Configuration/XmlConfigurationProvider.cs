@@ -39,11 +39,12 @@
 			Assert.IsNotNull(configNode, "Root Fortis config node not found. Missing Fortis.config?");
 
 			var modelNodes = configNode.SelectNodes("./models/model");
+			_defaultConfiguration = new FortisConfiguration();
 
 			// no model assemblies defined let's get outta here
 			if (modelNodes == null || modelNodes.Count == 0)
 			{
-				_defaultConfiguration = new FortisConfiguration();
+				_defaultConfiguration.Models = new List<IFortisModelConfiguration>();
 				return;
 			}
 

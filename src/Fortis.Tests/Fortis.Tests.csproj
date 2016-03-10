@@ -46,6 +46,9 @@
       <HintPath>..\packages\Sitecore.FakeDb.NSubstitute.1.0.1\lib\net45\Sitecore.FakeDb.NSubstitute.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Sitecore.Kernel">
+      <HintPath>..\..\_Lib\Sitecore.Kernel.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,12 +60,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\ConfigurationTests.cs" />
+    <EmbeddedResource Include="Configuration\TestXmlConfiguration.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Configuration\TestXmlConfigurationProvider.cs" />
+    <Compile Include="Configuration\XmlConfigurationProviderTests.cs" />
     <Compile Include="ItemFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fortis\Fortis.csproj">
+      <Project>{48D2AA0D-B38B-4AA2-BE58-6F9C226B8D19}</Project>
+      <Name>Fortis</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
