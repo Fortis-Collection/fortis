@@ -8,6 +8,8 @@ using Fortis.Providers;
 
 namespace Fortis.Model.Fields
 {
+	using System.Linq;
+
 	public class ListFieldWrapper : FieldWrapper, IListFieldWrapper
 	{
 		private const char _delimiter = '|';
@@ -80,6 +82,11 @@ namespace Fortis.Model.Fields
 
 				return _ids;
 			}
+		}
+
+		public override bool HasValue
+		{
+			get { return _ids != null && Value.Any(); }
 		}
 	}
 }

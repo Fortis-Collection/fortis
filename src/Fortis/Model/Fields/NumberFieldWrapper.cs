@@ -1,10 +1,5 @@
 ﻿using Fortis.Providers;
 using Sitecore.Data.Fields;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fortis.Model.Fields
 {
@@ -22,6 +17,11 @@ namespace Fortis.Model.Fields
 			: base(key, ref item, value.ToString(), spawnProvider)
 		{
 			_value = value;
+		}
+
+		public override bool HasValue
+		{
+			get { return _value.HasValue; }
 		}
 
 		public float Value

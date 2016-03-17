@@ -218,5 +218,10 @@ namespace Fortis.Model.Fields
 		{
 			get { return _field == null; }
 		}
+
+		public virtual bool HasValue
+		{
+			get { return !string.IsNullOrWhiteSpace(RawValue); }
+		}
 	}
 }

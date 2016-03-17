@@ -40,6 +40,11 @@ namespace Fortis.Model.RenderingParameters.Fields
 			SpawnProvider = spawnProvider;
 		}
 
+		public bool HasValue
+		{
+			get { return !string.IsNullOrWhiteSpace(RawValue); }
+		}
+
 		public virtual IHtmlString Render(string parameters = null, bool editing = false)
 		{
 			throw new NotImplementedException();

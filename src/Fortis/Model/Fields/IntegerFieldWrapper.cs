@@ -41,5 +41,10 @@ namespace Fortis.Model.Fields
 				return _value.Value;
 			}
 		}
+
+		public override bool HasValue
+		{
+			get { return _value.HasValue; }
+		}
 	}
 }

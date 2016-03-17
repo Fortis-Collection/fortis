@@ -9,6 +9,7 @@ namespace Fortis.Model
 		bool Modified { get; }
 		string ToString();
 		bool IsLazy { get; }
+		bool HasValue { get; }
 		IHtmlString Render(string parameters = null, bool editing = true);
 		IHtmlString Render(object parameters, bool editing = true);
 		IHtmlString RenderBeginField(object parameters, bool editing = true);

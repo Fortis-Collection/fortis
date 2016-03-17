@@ -42,6 +42,8 @@ namespace Fortis.Model
 		int ChildCount { get; }
 		string SearchTitle { get; }
 		void Save();
+		void Save(bool silent);
+		void Save(bool updateStatistics, bool silent);
 		void Delete();
 		void Publish();
 		void Publish(bool children);

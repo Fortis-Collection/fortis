@@ -307,6 +307,22 @@ namespace Fortis.Model
 			}
 		}
 
+		public void Save(bool silent)
+		{
+			if (Item.Editing.IsEditing)
+			{
+				Item.Editing.EndEdit(silent);
+			}
+		}
+
+		public void Save(bool updateStatistics, bool silent)
+		{
+			if (Item.Editing.IsEditing)
+			{
+				Item.Editing.EndEdit(updateStatistics, silent);
+			}
+		}
+
 		public void Delete()
 		{
 			Item.Delete();
