@@ -1,6 +1,5 @@
 ﻿using Fortis.Model.Fields;
 using Fortis.Providers;
-using Sitecore.Data.Fields;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
@@ -14,7 +13,7 @@ namespace Fortis.Model.RenderingParameters.Fields
 
 		public string Value
 		{
-			get { return ToString(); }
+			get { return RawValue; }
 		}
 	}
 }
