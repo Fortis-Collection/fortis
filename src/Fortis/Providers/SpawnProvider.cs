@@ -7,22 +7,19 @@ using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using Sitecore.Data.Managers;
 using Fortis.Model.Fields;
-using System.Reflection;
-using System.Collections.Specialized;
-using System.Web.Configuration;
 using Fortis.Model;
 
 namespace Fortis.Providers
 {
+	using Fortis.Configuration;
+
 	public class SpawnProvider : ISpawnProvider
 	{
-		private readonly ITemplateMapProvider _templateMapProvider;
-
-		public ITemplateMapProvider TemplateMapProvider { get { return _templateMapProvider; } }
+		public ITemplateMapProvider TemplateMapProvider { get; }
 
 		public SpawnProvider(ITemplateMapProvider templateMappingProvider)
 		{
-			_templateMapProvider = templateMappingProvider;
+			TemplateMapProvider = templateMappingProvider;
 		}
 
 		public IItemWrapper FromItem<T>(Guid itemId, Guid templateId) where T : IItemWrapper
@@ -76,7 +73,7 @@ namespace Fortis.Providers
 			return FromItem(item, typeof(T));
 		}
 
-		public IItemWrapper FromItem(Item item, Type template = null)
+		public IItemWrapper FromItem(Item item, Type template)
 		{
 			if (item != null)
 			{
@@ -135,13 +132,7 @@ namespace Fortis.Providers
 			foreach (var item in items)
 			{
                 var wrappedItem = FromItem<IItemWrapper>(item);
-
-			    if (wrappedItem == null)
-			    {
-			        continue;
-			    }
-
-                if (wrappedItem is T)
+				if (wrappedItem is T)
 			    {
                     yield return (T)wrappedItem;
 			    }
@@ -154,7 +145,7 @@ namespace Fortis.Providers
 			if (renderingItem != null)
 			{
 				var id = renderingItem["Parameters Template"];
-				ID templateId = null;
+				ID templateId;
 
 				if (ID.TryParse(id, out templateId))
 				{
@@ -195,41 +186,50 @@ namespace Fortis.Providers
 				return null;
 			}
 
-			switch (field.Type.ToLower())
+			var supportedType = FortisConfigurationManager.Provider.DefaultConfiguration.Fields.FirstOrDefault(x => x.FieldName.Equals(field.Type, StringComparison.InvariantCultureIgnoreCase));
+			if (supportedType == null)
 			{
-				case "checkbox":
-					return new BooleanFieldWrapper(field, this);
-				case "image":
-					return new ImageFieldWrapper(field, this);
-				case "date":
-				case "datetime":
-					return new DateTimeFieldWrapper(field, this);
-				case "checklist":
-				case "treelist":
-				case "treelistex":
-				case "multilist":
-					return new ListFieldWrapper(field, this);
-				case "file":
-					return new FileFieldWrapper(field, this);
-				case "droplink":
-				case "droptree":
-					return new LinkFieldWrapper(field, this);
-				case "general link":
-					return new GeneralLinkFieldWrapper(field, this);
-				case "text":
-				case "single-line text":
-				case "multi-line text":
-				case "droplist":
-					return new TextFieldWrapper(field, this);
-				case "rich text":
-					return new RichTextFieldWrapper(field, this);
-				case "number":
-					return new NumberFieldWrapper(field, this);
-				case "integer":
-					return new IntegerFieldWrapper(field, this);
-				default:
-					return null;
+				return null;
 			}
+
+			var fieldWrapper = (IFieldWrapper)Activator.CreateInstance(supportedType.FieldType, field, this);
+			return fieldWrapper;
+
+			//switch (field.Type.ToLower())
+			//{
+			//	case "checkbox":
+			//		return new BooleanFieldWrapper(field, this);
+			//	case "image":
+			//		return new ImageFieldWrapper(field, this);
+			//	case "date":
+			//	case "datetime":
+			//		return new DateTimeFieldWrapper(field, this);
+			//	case "checklist":
+			//	case "treelist":
+			//	case "treelistex":
+			//	case "multilist":
+			//		return new ListFieldWrapper(field, this);
+			//	case "file":
+			//		return new FileFieldWrapper(field, this);
+			//	case "droplink":
+			//	case "droptree":
+			//		return new LinkFieldWrapper(field, this);
+			//	case "general link":
+			//		return new GeneralLinkFieldWrapper(field, this);
+			//	case "text":
+			//	case "single-line text":
+			//	case "multi-line text":
+			//	case "droplist":
+			//		return new TextFieldWrapper(field, this);
+			//	case "rich text":
+			//		return new RichTextFieldWrapper(field, this);
+			//	case "number":
+			//		return new NumberFieldWrapper(field, this);
+			//	case "integer":
+			//		return new IntegerFieldWrapper(field, this);
+			//	default:
+			//		return null;
+			//}
 		}
 
 		public IEnumerable<T> FilterWrapperTypes<T>(IEnumerable<IItemWrapper> wrappers)

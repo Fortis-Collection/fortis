@@ -95,7 +95,7 @@ namespace Fortis.Model
 			}
 		}
 
-		public Database Database
+		internal Database Database
 		{
 			get
 			{

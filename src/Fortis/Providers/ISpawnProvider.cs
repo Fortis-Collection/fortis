@@ -14,7 +14,7 @@ namespace Fortis.Providers
 		IItemWrapper FromItem(Guid itemId, Guid templateId, Type template = null, Dictionary<string, object> lazyFields = null);
 		IItemWrapper FromItem(Item item);
 		IItemWrapper FromItem<T>(Item item) where T : IItemWrapper;
-		IItemWrapper FromItem(Item item, Type template = null);
+		IItemWrapper FromItem(Item item, Type template);
 		IEnumerable<IItemWrapper> FromItems(IEnumerable<Item> items);
 		IEnumerable<T> FromItems<T>(IEnumerable<Item> items) where T : IItemWrapper;
 		IRenderingParameterWrapper FromRenderingParameters<T>(Item renderingItem, Dictionary<string, string> parameters) where T : IRenderingParameterWrapper;
