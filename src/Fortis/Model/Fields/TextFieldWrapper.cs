@@ -13,7 +13,7 @@ namespace Fortis.Model.Fields
 
 		public string Value
 		{
-			get { return Render(editing: false).ToString(); }
+			get { return Value; }
 		}
 	}
 }

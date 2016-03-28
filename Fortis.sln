@@ -31,6 +31,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Forms", "Forms", "{1B2CAB86
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{18137FBC-7FBA-4B45-92CF-73D9A8849278}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{3DD2A306-7825-4F40-A13C-6467ABCF3B23}"
+	ProjectSection(SolutionItems) = preProject
+		src\Fortis\NuGet\Fortis.nuspec = src\Fortis\NuGet\Fortis.nuspec
+		src\Fortis\NuGet\readme.txt = src\Fortis\NuGet\readme.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +78,6 @@ Global
 		{7A3AD9DE-9F37-46D0-A83C-33432ABBF804} = {2064E476-AD32-4BD7-A14F-1A367B87456F}
 		{8380E745-F1B5-48DF-A29E-F58782389F06} = {2064E476-AD32-4BD7-A14F-1A367B87456F}
 		{11F1EADD-9F47-4EDD-A1E6-A9A746646B0C} = {18137FBC-7FBA-4B45-92CF-73D9A8849278}
+		{3DD2A306-7825-4F40-A13C-6467ABCF3B23} = {5FEF3769-F6CB-4242-B85D-1349C3EFA005}
 	EndGlobalSection
 EndGlobal
