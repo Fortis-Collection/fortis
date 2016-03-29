@@ -28,13 +28,13 @@ namespace Fortis.Providers
 
 						foreach (var model in models)
 						{
-							var assembley = assemblies.FirstOrDefault(assembly => assembly.FullName.Equals(model.Assembley));
-							if (assembley == null)
+							var assembly = assemblies.FirstOrDefault(a => a.FullName.Equals(model.Assembly));
+							if (assembly == null)
 							{
-								throw new Exception("Forits: Unable to find model assembly: " + model.Assembley);
+								throw new Exception("Forits: Unable to find model assembly: " + model.Assembly);
 							}
 
-							types.AddRange(assembley.GetTypes());
+							types.AddRange(assembly.GetTypes());
 						}
 
 						ModelTypes = types;

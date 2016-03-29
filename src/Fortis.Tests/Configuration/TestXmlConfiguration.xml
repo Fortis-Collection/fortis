@@ -2,8 +2,8 @@
 	<configurationProvider type = "Fortis.Configuration.XmlConfigurationProvider, Fortis" ></configurationProvider>
 
 	<models>
-		<model name="Fortis.Model" assembley="Fortis.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-		<model name="Project.Model" assembley="Project.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+		<model name="Fortis.Model" assembly="Fortis.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+		<model name="Project.Model" assembly="Project.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
 	</models>
 
 	<fieldTypes>

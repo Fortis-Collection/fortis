@@ -57,7 +57,7 @@
 
 				if (modelAssemblies.Any(x => x.Name.Equals(model.Name, StringComparison.OrdinalIgnoreCase)))
 				{
-					throw new InvalidOperationException("The Fortis Model Assembley '" + model.Name + "' is defined twice. Model Assemblies should have unique names.");
+					throw new InvalidOperationException("The Fortis Model Assembly '" + model.Name + "' is defined twice. Model Assemblies should have unique names.");
 				}
 
 				modelAssemblies.Add(model);
@@ -90,10 +90,10 @@
 		{
 			var name = GetAttributeValue(configuration, "name");
 
-			Assert.IsNotNullOrEmpty(name, "Model assembley node had empty or missing name attribute.");
+			Assert.IsNotNullOrEmpty(name, "Model assembly node had empty or missing name attribute.");
 
-			var type = GetAttributeValue(configuration, "assembley");
-			Assert.IsNotNullOrEmpty(type, "Model assembley node had empty or missing type attribute.");
+			var type = GetAttributeValue(configuration, "assembly");
+			Assert.IsNotNullOrEmpty(type, "Model assembly node had empty or missing type attribute.");
 
 			return new FortisModelConfiguration(name, type);
 		}

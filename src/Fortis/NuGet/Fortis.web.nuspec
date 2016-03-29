@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
-        <id>Fortis</id>
+        <id>Fortis.Web</id>
         <version>4.0.0-beta4</version>
         <title>Fortis</title>
         <authors>Jason Bert,Kern Herskind Nightingale,Richard Seal</authors>
@@ -10,15 +10,17 @@
         <projectUrl>http://fortis.ws/</projectUrl>
         <iconUrl>http://fortis.ws/wp-content/uploads/2014/11/Logo.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>A framework for creating a strongly typed model of the Sitecore API
-
-Requires: Sitecore 7.2+</description>
+        <description>The web project config for the Fortis package</description>
         <releaseNotes />
         <copyright>Copyright 2014-2016</copyright>
         <tags>Sitecore Fortis</tags>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="Fortis" version="4.0.0-beta4" />
+            </group>
+        </dependencies>
     </metadata>
     <files>
-        <file src="lib\net45\Fortis.dll" target="lib\net45\Fortis.dll" />
-        <file src="readme.txt" target="readme.txt" />
+        <file src="content\App_Config\Include\Fortis\Fortis.config" target="content\App_Config\Include\Fortis\Fortis.config" />
     </files>
 </package>

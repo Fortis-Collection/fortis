@@ -2,13 +2,13 @@
 {
 	public class FortisModelConfiguration : IFortisModelConfiguration
 	{
-		public FortisModelConfiguration(string name, string assembley)
+		public FortisModelConfiguration(string name, string assembly)
 		{
 			Name = name;
-			Assembley = assembley;
+			Assembly = assembly;
 		}
 
 		public string Name { get; }
-		public string Assembley { get; }
+		public string Assembly { get; }
 	}
 }

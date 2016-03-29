@@ -3,6 +3,6 @@
 	public interface IFortisModelConfiguration
 	{
 		string Name { get; }
-		string Assembley { get; }
+		string Assembly { get; }
 	}
 }
