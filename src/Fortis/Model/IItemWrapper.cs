@@ -38,6 +38,14 @@ namespace Fortis.Model
         string LongID { get; set; }
         [IndexField("_content")]
         string SearchContent { get; set; }
+
+		/// <summary>
+		/// Gets a value indicating whether the item has versions in the current context language.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance has version; otherwise, <c>false</c>.
+		/// </value>
+		bool HasVersion { get; }
 		bool HasChildren { get; }
 		int ChildCount { get; }
 		string SearchTitle { get; }
