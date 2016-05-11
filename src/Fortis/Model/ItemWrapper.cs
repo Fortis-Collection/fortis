@@ -99,7 +99,7 @@ namespace Fortis.Model
 		{
 			get
 			{
-				
+
 				return (Sitecore.Context.Database ?? Sitecore.Context.ContentDatabase) ?? Factory.GetDatabase(DatabaseName);
 			}
 		}
@@ -137,21 +137,21 @@ namespace Fortis.Model
 			set { _languageName = value; }
 		}
 
-	    private string _longID;
+		private string _longID;
 
-        /// <summary>
-        /// Gets/Sets the LongID of the item. This is all the Guids of the current items parents in a 
-        /// single string. It is used for limiting searchs to the descendants of a particular item.
-        /// </summary>
-	    [IndexField("_path")]
-	    public string LongID
-	    {
-	        get { return IsLazy && !string.IsNullOrWhiteSpace(_longID) ? _longID : Item.Paths.LongID; }
-            set { _longID = value; }
-	    }
+		/// <summary>
+		/// Gets/Sets the LongID of the item. This is all the Guids of the current items parents in a 
+		/// single string. It is used for limiting searchs to the descendants of a particular item.
+		/// </summary>
+		[IndexField("_path")]
+		public string LongID
+		{
+			get { return IsLazy && !string.IsNullOrWhiteSpace(_longID) ? _longID : Item.Paths.LongID; }
+			set { _longID = value; }
+		}
 
-        [IndexField("_content")]
-        public string SearchContent { get; set; }
+		[IndexField("_content")]
+		public string SearchContent { get; set; }
 
 		public string ItemLocation
 		{
@@ -238,6 +238,11 @@ namespace Fortis.Model
 			get { return Item.Children.Count; }
 		}
 
+		public bool HasVersion
+		{
+			get { return Item.Versions.Count > 0 || Item.InnerData.Version.Number > 0; }
+		}
+
 		public bool HasChildren
 		{
 			get { return Item.HasChildren; }
@@ -266,11 +271,11 @@ namespace Fortis.Model
 				{
 					var scField = Item.Fields[key];
 
-                    constructorArgs = new object[] { scField, _spawnProvider };
+					constructorArgs = new object[] { scField, _spawnProvider };
 				}
 				else
 				{
-                    constructorArgs = new object[] { key, this, _spawnProvider, lazyValue };
+					constructorArgs = new object[] { key, this, _spawnProvider, lazyValue };
 				}
 
 				Fields[key] = (IFieldWrapper)Activator.CreateInstance(typeOfT, constructorArgs);
@@ -290,7 +295,7 @@ namespace Fortis.Model
 				{
 					Fields[key] = _spawnProvider.FromField(Item.Fields[key]);
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					Sitecore.Diagnostics.Log.Error("Fortis: Unable to spawn field with key " + key, ex, this);
 				}
@@ -433,41 +438,41 @@ namespace Fortis.Model
 			return Parent<IItemWrapper>().Children<T>();
 		}
 
-        /// <summary>
-        /// Returns the Parent of the item if it implements T. If it does implement T the method returns null.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="ancestors"></param>
-        /// <returns></returns>
-        public virtual T Parent<T>(bool ancestors = true) where T : IItemWrapper
+		/// <summary>
+		/// Returns the Parent of the item if it implements T. If it does implement T the method returns null.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="ancestors"></param>
+		/// <returns></returns>
+		public virtual T Parent<T>(bool ancestors = true) where T : IItemWrapper
 		{
-            if (ancestors)
-            {
-                return Ancestor<T>(Item.Parent);
-            }
-            var wrapper = _spawnProvider.FromItem<T>(Item.Parent);
-            if (wrapper is T)
-            {
-                return (T)wrapper;
-            }
-            return (T)((wrapper is T) ? wrapper : null);
+			if (ancestors)
+			{
+				return Ancestor<T>(Item.Parent);
+			}
+			var wrapper = _spawnProvider.FromItem<T>(Item.Parent);
+			if (wrapper is T)
+			{
+				return (T)wrapper;
+			}
+			return (T)((wrapper is T) ? wrapper : null);
 		}
 
-        /// <summary>
-        /// Returns the Parent of the item if it implements T. If the item implements T, it is returned. If neither implement T the method returns null.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public virtual T ParentOrSelf<T>() where T : IItemWrapper
-        {
-            if (this is T)
-            {
-                return (T)(this as IItemWrapper);
-            }
-            return Ancestor<T>(Item.Parent);
-        }
+		/// <summary>
+		/// Returns the Parent of the item if it implements T. If the item implements T, it is returned. If neither implement T the method returns null.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public virtual T ParentOrSelf<T>() where T : IItemWrapper
+		{
+			if (this is T)
+			{
+				return (T)(this as IItemWrapper);
+			}
+			return Ancestor<T>(Item.Parent);
+		}
 
-        protected T Ancestor<T>(Item parent) where T : IItemWrapper
+		protected T Ancestor<T>(Item parent) where T : IItemWrapper
 		{
 			IItemWrapper wrapper = null;
 
@@ -486,28 +491,28 @@ namespace Fortis.Model
 			return (T)((wrapper is T) ? wrapper : null);
 		}
 
-        /// <summary>
-        /// Returns the first Ancestor of the item that implements T.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-	    public virtual T Ancestor<T>() where T : IItemWrapper
-	    {
-	        return this.Ancestor<T>(Item.Parent);
-	    }
+		/// <summary>
+		/// Returns the first Ancestor of the item that implements T.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public virtual T Ancestor<T>() where T : IItemWrapper
+		{
+			return this.Ancestor<T>(Item.Parent);
+		}
 
-        /// <summary>
-        /// Returns the first Ancestor of the item that implements T. If the item implements T, it is returned.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public virtual T AncestorOrSelf<T>() where T : IItemWrapper
-        {
-            if (this is T)
-            {
-                return (T)(this as IItemWrapper);
-            }
-            return Ancestor<T>(Item.Parent);
-        }
+		/// <summary>
+		/// Returns the first Ancestor of the item that implements T. If the item implements T, it is returned.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public virtual T AncestorOrSelf<T>() where T : IItemWrapper
+		{
+			if (this is T)
+			{
+				return (T)(this as IItemWrapper);
+			}
+			return Ancestor<T>(Item.Parent);
+		}
 	}
 }
