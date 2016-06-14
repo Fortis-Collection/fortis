@@ -12,8 +12,8 @@ namespace Fortis.Model.RenderingParameters.Fields
 			set { throw new NotImplementedException(); }
 		}
 
-		public BooleanFieldWrapper(string value, ISpawnProvider spawnProvider)
-			: base(value, spawnProvider)
+		public BooleanFieldWrapper(string fieldName, string value, ISpawnProvider spawnProvider)
+			: base(fieldName, value, spawnProvider)
 		{
 		}
 

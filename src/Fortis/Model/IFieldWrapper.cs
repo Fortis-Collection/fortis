@@ -1,11 +1,11 @@
 ﻿using System.Web;
-using Sitecore.Data;
 
 namespace Fortis.Model
 {
 	public interface IFieldWrapper : IWrapper, IHtmlString
 	{
 		string RawValue { get; set; }
+		string Name { get; }
 		bool Modified { get; }
 		string ToString();
 		bool IsLazy { get; }

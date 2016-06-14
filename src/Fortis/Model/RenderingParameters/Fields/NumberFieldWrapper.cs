@@ -7,8 +7,8 @@ namespace Fortis.Model.RenderingParameters.Fields
 	{
 		private new float? _value;
 
-		public NumberFieldWrapper(string value, ISpawnProvider spawnProvider)
-			: base(value, spawnProvider) { }
+		public NumberFieldWrapper(string fieldName, string value, ISpawnProvider spawnProvider)
+			: base(fieldName, value, spawnProvider) { }
 
 		public float Value
 		{
