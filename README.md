@@ -1,4 +1,4 @@
-# Fortis
+# Fortis 5
 ##A strongly typed, interface based, model ofthe Sitecore API.
 
 Fortis is a library that forms the basis of a strongly typed model of the Sitecore API. This enables us to develop reliable, maintainable sites more efficiently than with traditional, losely typed Sitecore development.
