@@ -28,23 +28,31 @@ namespace Fortis.Model.Fields
 		{
 			get
 			{
-				if (!IsLazy && !_value.HasValue)
-				{
-					long parsedValue;
-
-					if (long.TryParse(RawValue, out parsedValue))
-					{
-						_value = parsedValue;
-					}
-				}
-
-				return _value.Value;
+			    InitializeValue();
+                return _value.Value;
 			}
 		}
 
 		public override bool HasValue
 		{
-			get { return _value.HasValue; }
+		    get
+		    {
+                InitializeValue();
+                return _value.HasValue;
+		    }
 		}
+
+	    protected void InitializeValue()
+	    {
+            if (!IsLazy && !_value.HasValue)
+            {
+                long parsedValue;
+
+                if (long.TryParse(RawValue, out parsedValue))
+                {
+                    _value = parsedValue;
+                }
+            }
+        }
 	}
 }
