@@ -25,7 +25,14 @@ namespace Fortis.Search.ComputedFields
 
 		public object ComputeFieldValue(IIndexable indexable)
 		{
-			return GetAllTemplates(indexable as SitecoreIndexableItem);
+			var indexableItem = indexable as SitecoreIndexableItem;
+
+			if (indexableItem == null)
+			{
+				return null;
+			}
+
+			return GetAllTemplates(indexableItem);
 		}
 
 		private static List<string> GetAllTemplates(Item item)
