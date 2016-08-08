@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{48D2AA0D-B38B-4AA2-BE58-6F9C226B8D19}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fortis</RootNamespace>
+    <AssemblyName>Fortis</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Sitecore.ContentSearch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SC.Sitecore.ContentSearch.8.1.3\lib\Sitecore.ContentSearch.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sitecore.ContentSearch.Linq, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SC.Sitecore.ContentSearch.Linq.8.1.3\lib\Sitecore.ContentSearch.Linq.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sitecore.Kernel, Version=8.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SC.Sitecore.Kernel.8.1.3\lib\Sitecore.Kernel.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Configuration\SupportedFieldType.cs" />
+    <Compile Include="Configuration\FortisConfiguration.cs" />
+    <Compile Include="Configuration\FortisConfigurationManager.cs" />
+    <Compile Include="Configuration\FortisModelConfiguration.cs" />
+    <Compile Include="Configuration\IConfigurationProvider.cs" />
+    <Compile Include="Configuration\ISupportedFieldType.cs" />
+    <Compile Include="Configuration\IFortisConfiguration.cs" />
+    <Compile Include="Configuration\IFortisModelConfiguration.cs" />
+    <Compile Include="Configuration\XmlConfigurationProvider.cs" />
+    <Compile Include="Exceptions\FortisConfigurationException.cs" />
+    <Compile Include="Extensions\GuidExtensions.cs" />
+    <Compile Include="Extensions\IEnumerableExtenstions.cs" />
+    <Compile Include="Global.cs" />
+    <Compile Include="Helpers\TypeExtensions.cs" />
+    <Compile Include="Helpers\TypeHelper.cs" />
+    <Compile Include="Model\Fields\IBooleanFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IDateTimeFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IFileFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IGeneralLinkFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IImageFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IIntegerFieldWrapper.cs" />
+    <Compile Include="Model\Fields\ILinkFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IListFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IntegerFieldWrapper.cs" />
+    <Compile Include="Model\Fields\INumberFieldWrapper.cs" />
+    <Compile Include="Model\Fields\IRichTextFieldWrapper.cs" />
+    <Compile Include="Model\Fields\INameValueListFieldWrapper.cs" />
+    <Compile Include="Model\Fields\ITextFieldWrapper.cs" />
+    <Compile Include="Model\Fields\NumberFieldWrapper.cs" />
+    <Compile Include="Model\Fields\NameValueListFieldWrapper.cs" />
+    <Compile Include="Model\IRenderingContext.cs" />
+    <Compile Include="Model\RenderingContext.cs" />
+    <Compile Include="Model\RenderingParameters\Fields\NumberFieldWrapper.cs" />
+    <Compile Include="Model\RenderingParameters\Fields\IntegerFieldWrapper.cs" />
+    <Compile Include="Pipelines\RenderField\LinkRenderer.cs" />
+    <Compile Include="Providers\IContextProvider.cs" />
+    <Compile Include="Model\IRenderingModel.cs" />
+    <Compile Include="Model\Events\ItemCreated.cs" />
+    <Compile Include="Model\Fields\BooleanFieldWrapper.cs" />
+    <Compile Include="Model\Fields\DateTimeFieldWrapper.cs" />
+    <Compile Include="Model\Fields\FieldWrapper.cs" />
+    <Compile Include="Model\Fields\FileFieldWrapper.cs" />
+    <Compile Include="Model\Fields\GeneralLinkFieldWrapper.cs" />
+    <Compile Include="Model\Fields\ImageFieldWrapper.cs" />
+    <Compile Include="Model\Fields\ImageFieldWrapperOptions.cs" />
+    <Compile Include="Model\Fields\LinkFieldWrapper.cs" />
+    <Compile Include="Model\Fields\LinkFieldWrapperOptions.cs" />
+    <Compile Include="Model\Fields\ListFieldWrapper.cs" />
+    <Compile Include="Model\Fields\RichTextFieldWrapper.cs" />
+    <Compile Include="Model\Fields\TextFieldWrapper.cs" />
+    <Compile Include="Model\IFieldWrapper.cs" />
+    <Compile Include="Model\IItemFactory.cs" />
+    <Compile Include="Model\IItemWrapper.cs" />
+    <Compile Include="Model\ItemFactory.cs" />
+    <Compile Include="Model\ItemWrapper.cs" />
+    <Compile Include="Model\IWrapper.cs" />
+    <Compile Include="Model\Pipelines\HttpRequestPipeline.cs" />
+    <Compile Include="Model\RenderingModel.cs" />
+    <Compile Include="Model\RenderingParameters\Fields\BooleanFieldWrapper.cs" />
+    <Compile Include="Model\RenderingParameters\Fields\FieldWrapper.cs" />
+    <Compile Include="Model\RenderingParameters\Fields\LinkFieldWrapper.cs" />
+    <Compile Include="Model\RenderingParameters\Fields\ListFieldWrapper.cs" />
+    <Compile Include="Model\RenderingParameters\Fields\TextFieldWrapper.cs" />
+    <Compile Include="Model\IRenderingParameterFactory.cs" />
+    <Compile Include="Model\IRenderingParameterWrapper.cs" />
+    <Compile Include="Model\RenderingParameterFactory.cs" />
+    <Compile Include="Model\RenderingParameterWrapper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Model\TemplateMappingAttribute.cs" />
+    <Compile Include="Providers\IModelAssemblyProvider.cs" />
+    <Compile Include="Providers\ISpawnProvider.cs" />
+    <Compile Include="Providers\ITemplateMapProvider.cs" />
+    <Compile Include="Providers\ModelAssemblyProvider.cs" />
+    <Compile Include="Providers\SpawnProvider.cs" />
+    <Compile Include="Providers\TemplateMapProvider.cs" />
+    <Compile Include="Renderers\LinkRenderer.cs" />
+    <Compile Include="Search\ComputedFields\CopyFields.cs" />
+    <Compile Include="Search\ComputedFields\InheritedTemplates.cs" />
+    <Compile Include="Search\ComputedFields\CopyIdFields.cs" />
+    <Compile Include="Search\ComputedFields\IsStandardValues.cs" />
+    <Compile Include="Search\DefaultDocumentMapperObjectFactory.cs" />
+    <Compile Include="Search\IItemSearchFactory.cs" />
+    <Compile Include="Search\ISearchHit.cs" />
+    <Compile Include="Search\ISearchResults.cs" />
+    <Compile Include="Search\ISearchResultsAdapter.cs" />
+    <Compile Include="Search\ItemSearchFactory.cs" />
+    <Compile Include="Search\SearchExtensions.cs" />
+    <Compile Include="Search\SearchHit.cs" />
+    <Compile Include="Search\SearchResults.cs" />
+    <Compile Include="Search\SearchResultsAdapter.cs" />
+    <Compile Include="Search\Templates.cs" />
+    <Compile Include="SitecoreExtensions\IEnumerableExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Configuration\SampleConfigurationFiles\Fortis.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Fortis.Web</id>
+        <version>4.0.0-beta4</version>
+        <title>Fortis Web</title>
+        <authors>Jason Bert,Kern Herskind Nightingale,Richard Seal</authors>
+        <owners>Fortis Collections</owners>
+        <licenseUrl>https://github.com/Fortis-Collection/fortis/blob/master/license.txt</licenseUrl>
+        <projectUrl>http://fortis.ws/</projectUrl>
+        <iconUrl>http://fortis.ws/wp-content/uploads/2014/11/Logo.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>The web project config for the Fortis package</description>
+        <releaseNotes />
+        <copyright>Copyright 2014-2016</copyright>
+        <tags>Sitecore Fortis</tags>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="Fortis" version="4.0.0-beta4" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="content\App_Config\Include\Fortis\Fortis.config" target="content\App_Config\Include\Fortis\Fortis.config" />
+    </files>
+</package>

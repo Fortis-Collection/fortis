@@ -1,6 +1,8 @@
 # Fortis
 ##A strongly typed, interface based, model ofthe Sitecore API.
 
+[![NuGet version](http://img.shields.io/nuget/v/Fortis.svg)](https://www.nuget.org/packages/Fortis/)
+
 Fortis is a library that forms the basis of a strongly typed model of the Sitecore API. This enables us to develop reliable, maintainable sites more efficiently than with traditional, losely typed Sitecore development.
 
 Key Benefits:

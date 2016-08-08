@@ -50,3 +50,6 @@ public class ProjectHeader
 }
 */
 #>
+using Sitecore.Data.Items;
+using Sitecore.ContentSearch;
+using Sitecore.ContentSearch.Linq.Common;
