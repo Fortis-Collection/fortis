@@ -49,23 +49,35 @@ namespace Fortis.Model.Fields
 		{
 			get
 			{
-				if (_value == null)
-				{
-					if (string.IsNullOrWhiteSpace(this.RawValue))
-					{
-						return new NameValueCollection(0);
-					}
+			    InitializeValue();
 
-					this._value = HttpUtility.ParseQueryString(this.RawValue);
-				}
+                if (_value == null)
+			    {
+                    return new NameValueCollection();
+			    }
 
-				return _value;
+			    return _value;
 			}
 		}
 
-		public override bool HasValue
+        public override bool HasValue
 		{
-			get { return _value != null && _value.Count > 0;  }
+            get
+            {
+                InitializeValue();
+                return _value != null && _value.Count > 0;
+            }
 		}
+
+	    protected void InitializeValue()
+	    {
+            if (_value == null)
+            {
+                if (!string.IsNullOrWhiteSpace(this.RawValue))
+                {
+                    this._value = HttpUtility.ParseQueryString(this.RawValue);
+                }
+            }
+        }
 	}
 }

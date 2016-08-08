@@ -21,25 +21,34 @@ namespace Fortis.Model.Fields
 
 		public override bool HasValue
 		{
-			get { return _value.HasValue; }
+		    get
+		    {
+		        InitializeValue();
+                return _value.HasValue;
+		    }
 		}
 
 		public float Value
 		{
 			get
 			{
-				if (!IsLazy && !_value.HasValue)
-				{
-					float parsedValue;
+			    this.InitializeValue();
 
-					if (float.TryParse(RawValue, out parsedValue))
-					{
-						_value = parsedValue;
-					}
-				}
-
-				return _value.Value;
+                return _value.Value;
 			}
 		}
+
+	    protected void InitializeValue()
+	    {
+            if (!IsLazy && !_value.HasValue)
+            {
+                float parsedValue;
+
+                if (float.TryParse(RawValue, out parsedValue))
+                {
+                    _value = parsedValue;
+                }
+            }
+        }
 	}
 }
