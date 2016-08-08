@@ -316,15 +316,15 @@ namespace Fortis.Model
 
 		public virtual T SelectChildRecursive<T>(string path) where T : IItemWrapper
 		{
-			return SelectChildRecursive<T>(SelectChildren<T>(path));
+			return SelectChildRecursive<T>(SelectChildren<IItemWrapper>(path));
 		}
 
 		public virtual T SelectChildRecursive<T>(Guid id) where T : IItemWrapper
 		{
-			return SelectChildRecursive<T>(SelectChildren<T>(id));
+			return SelectChildRecursive<T>(SelectChildren<IItemWrapper>(id));
 		}
 
-		protected T SelectChildRecursive<T>(IEnumerable<T> children) where T : IItemWrapper
+		protected T SelectChildRecursive<T>(IEnumerable<IItemWrapper> children) where T : IItemWrapper
 		{
 			foreach (IItemWrapper item in children)
 			{

@@ -19,6 +19,12 @@ namespace Fortis.Search.ComputedFields
 		public object ComputeFieldValue(IIndexable indexable)
 		{
 			var item = (Item)(indexable as SitecoreIndexableItem);
+
+			if (item == null)
+			{
+				return null;
+			}
+
 			var isStandardValues = StandardValuesManager.IsStandardValuesHolder(item);
 
 			return isStandardValues;
