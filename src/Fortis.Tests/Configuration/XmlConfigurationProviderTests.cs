@@ -4,45 +4,44 @@
 
 	using Fortis.Model.Fields;
 
-	using NUnit.Framework;
+	using Xunit;
 
-	[TestFixture]
 	public class XmlConfigurationProviderTests
 	{
-		[Test]
+		[Fact]
 		public void ShouldLoadFortisModels()
 		{
 			var testProvider = new TestXmlConfigurationProvider();
 
-			Assert.IsNotEmpty(testProvider.DefaultConfiguration.Models);
-			Assert.IsNotNull(testProvider.DefaultConfiguration.Models.FirstOrDefault(x => x.Name == "Fortis.Model"));
-			Assert.IsNotNull(testProvider.DefaultConfiguration.Models.FirstOrDefault(x => x.Name == "Project.Model"));
-			Assert.IsNotNull(testProvider.DefaultConfiguration.Models.FirstOrDefault(x => x.Assembly == "Fortis.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"));
-			Assert.AreEqual(2, testProvider.DefaultConfiguration.Models.Count());
+			Assert.NotEmpty(testProvider.DefaultConfiguration.Models);
+			Assert.NotNull(testProvider.DefaultConfiguration.Models.FirstOrDefault(x => x.Name == "Fortis.Model"));
+			Assert.NotNull(testProvider.DefaultConfiguration.Models.FirstOrDefault(x => x.Name == "Project.Model"));
+			Assert.NotNull(testProvider.DefaultConfiguration.Models.FirstOrDefault(x => x.Assembly == "Fortis.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"));
+			Assert.Equal(2, testProvider.DefaultConfiguration.Models.Count());
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldLoadSupportedFieldTypes()
 		{
 			var testProvider = new TestXmlConfigurationProvider();
 
-			Assert.IsNotEmpty(testProvider.DefaultConfiguration.Fields);
-			Assert.IsNotNull(testProvider.DefaultConfiguration.Fields.FirstOrDefault(x => x.FieldName == "droplist"));
-			Assert.IsNotNull(testProvider.DefaultConfiguration.Fields.FirstOrDefault(x => x.FieldName == "single-line text"));
-			Assert.AreEqual(testProvider.DefaultConfiguration.Fields.Count(), 23);
+			Assert.NotEmpty(testProvider.DefaultConfiguration.Fields);
+			Assert.NotNull(testProvider.DefaultConfiguration.Fields.FirstOrDefault(x => x.FieldName == "droplist"));
+			Assert.NotNull(testProvider.DefaultConfiguration.Fields.FirstOrDefault(x => x.FieldName == "single-line text"));
+			Assert.Equal(testProvider.DefaultConfiguration.Fields.Count(), 23);
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldCompareSupportedFieldType()
 		{
 			var testProvider = new TestXmlConfigurationProvider();
 
-			Assert.IsNotEmpty(testProvider.DefaultConfiguration.Fields);
+			Assert.NotEmpty(testProvider.DefaultConfiguration.Fields);
 
 			var booleanFieldType = testProvider.DefaultConfiguration.Fields.FirstOrDefault(x => x.FieldName == "checkbox");
-			Assert.IsNotNull(booleanFieldType);
+			Assert.NotNull(booleanFieldType);
 
-			Assert.AreEqual(typeof (BooleanFieldWrapper), booleanFieldType.FieldType);
+			Assert.Equal(typeof (BooleanFieldWrapper), booleanFieldType.FieldType);
 		}
 	}
 }

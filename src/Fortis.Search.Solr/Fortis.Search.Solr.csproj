@@ -30,17 +30,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sitecore.ContentSearch">
-      <HintPath>..\_Lib\Sitecore.ContentSearch.dll</HintPath>
+    <Reference Include="Sitecore.ContentSearch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SC.Sitecore.ContentSearch.8.1.3\lib\Sitecore.ContentSearch.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="Sitecore.ContentSearch.Linq">
-      <HintPath>..\_Lib\Sitecore.ContentSearch.Linq.dll</HintPath>
+    <Reference Include="Sitecore.ContentSearch.Linq, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SC.Sitecore.ContentSearch.Linq.8.1.3\lib\Sitecore.ContentSearch.Linq.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sitecore.ContentSearch.Linq.Solr">
-      <HintPath>..\_Lib\Sitecore.ContentSearch.Linq.Solr.dll</HintPath>
+      <HintPath>..\..\_Lib\Sitecore.ContentSearch.Linq.Solr.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.ContentSearch.SolrProvider">
-      <HintPath>..\_Lib\Sitecore.ContentSearch.SolrProvider.dll</HintPath>
+      <HintPath>..\..\_Lib\Sitecore.ContentSearch.SolrProvider.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -62,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App_Config\Include\Fortis\Fortis.Search.Solr.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

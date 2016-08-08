@@ -1,5 +1,4 @@
-﻿using Sitecore.Data;
-
+﻿ // ReSharper disable once CheckNamespace
 namespace Fortis.Search
 {
 	using System;
@@ -12,18 +11,13 @@ namespace Fortis.Search
 
 	using Sitecore.ContentSearch.Linq.Common;
 	using Sitecore.ContentSearch.LuceneProvider;
+	using Sitecore.Data;
 	using Sitecore.Diagnostics;
-	using Sitecore.ContentSearch;
 	using Sitecore.ContentSearch.Linq.Methods;
 	using Sitecore.ContentSearch.Security;
 
 	public class LuceneDocumentTypeMapper : DefaultLuceneDocumentTypeMapper
 	{
-		protected override void MapFieldValuesToType<TElement>(IDictionary<string, object> fieldValues, TElement result, DocumentTypeMapInfo documentTypeMapInfo)
-		{
-			base.MapFieldValuesToType<TElement>(fieldValues, result, documentTypeMapInfo);
-		}
-
 		public override TElement MapToType<TElement>(Document document, SelectMethod selectMethod,
 			IEnumerable<IFieldQueryTranslator> virtualFieldProcessors,
 			IEnumerable<IExecutionContext> executionContexts,
@@ -43,10 +37,10 @@ namespace Fortis.Search
 
 			var fields = ExtractFieldsFromDocument(document, virtualFieldProcessors);
 
-			if (fields.ContainsKey("_group") &&
-				fields.ContainsKey("_template") &&
-				Guid.TryParse(fields["_group"].ToString(), out itemId) &&
-				Guid.TryParse(fields["_template"].ToString(), out templateId))
+			if (fields.ContainsKey(Templates.Fields.Group) &&
+				fields.ContainsKey(Templates.Fields.TemplateName) &&
+				Guid.TryParse(fields[Templates.Fields.Group].ToString(), out itemId) &&
+				Guid.TryParse(fields[Templates.Fields.TemplateName].ToString(), out templateId))
 			{
 				var item = Global.SpawnProvider.FromItem(itemId, templateId, typeOfTElement, fields);
 
@@ -56,9 +50,9 @@ namespace Fortis.Search
 				}
 			}
 
-			if (fields.ContainsKey("_uniqueid"))
+			if (fields.ContainsKey(Templates.Fields.UniqueId))
 			{
-				var id = fields["_uniqueid"].ToString();
+				var id = fields[Templates.Fields.UniqueId].ToString();
 
 				var uri = ItemUri.Parse(id);
 				var item = Sitecore.Context.Database.GetItem(uri.ToDataUri());
@@ -76,9 +70,9 @@ namespace Fortis.Search
 			return default(TElement);
 		}
 
-		public override TElement MapToType<TElement>(Document document, Sitecore.ContentSearch.Linq.Methods.SelectMethod selectMethod,
+		public override TElement MapToType<TElement>(Document document, SelectMethod selectMethod,
 			IEnumerable<IFieldQueryTranslator> virtualFieldProcessors,
-			Sitecore.ContentSearch.Security.SearchSecurityOptions securityOptions)
+			SearchSecurityOptions securityOptions)
 		{
 			var typeOfTElement = typeof(TElement);
 
@@ -92,10 +86,10 @@ namespace Fortis.Search
 
 			var fields = ExtractFieldsFromDocument(document, virtualFieldProcessors);
 
-			if (fields.ContainsKey("_group") &&
-				fields.ContainsKey("_template") &&
-				Guid.TryParse(fields["_group"].ToString(), out itemId) &&
-				Guid.TryParse(fields["_template"].ToString(), out templateId))
+			if (fields.ContainsKey(Templates.Fields.Group) &&
+				fields.ContainsKey(Templates.Fields.TemplateName) &&
+				Guid.TryParse(fields[Templates.Fields.Group].ToString(), out itemId) &&
+				Guid.TryParse(fields[Templates.Fields.TemplateName].ToString(), out templateId))
 			{
 				var item = Global.SpawnProvider.FromItem(itemId, templateId, typeOfTElement, fields);
 
@@ -105,9 +99,9 @@ namespace Fortis.Search
 				}
 			}
 
-			if (fields.ContainsKey("_uniqueid"))
+			if (fields.ContainsKey(Templates.Fields.UniqueId))
 			{
-				var id = fields["_uniqueid"].ToString();
+				var id = fields[Templates.Fields.UniqueId].ToString();
 
 				var uri = ItemUri.Parse(id);
 				var item = Sitecore.Context.Database.GetItem(uri.ToDataUri());
@@ -127,7 +121,7 @@ namespace Fortis.Search
 
 		private Dictionary<string, object> ExtractFieldsFromDocument(Document document, IEnumerable<IFieldQueryTranslator> virtualFieldProcessors)
 		{
-			Assert.ArgumentNotNull(document, "document");
+			Assert.ArgumentNotNull(document, nameof(document));
 
 			IDictionary<string, object> dictionary = new Dictionary<string, object>();
 

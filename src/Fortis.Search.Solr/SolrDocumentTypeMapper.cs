@@ -5,10 +5,8 @@ using Sitecore.ContentSearch.Security;
 using Sitecore.ContentSearch.SolrProvider.Mapping;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
+// ReSharper disable once CheckNamespace
 namespace Fortis.Search
 {
 	public class SolrDocumentTypeMapper : SolrDocumentPropertyMapper
@@ -25,10 +23,10 @@ namespace Fortis.Search
 			Guid itemId;
 			Guid templateId;
 
-			if (document.ContainsKey("_group") &&
-				document.ContainsKey("_template") &&
-				Guid.TryParse(document["_group"].ToString(), out itemId) &&
-				Guid.TryParse(document["_template"].ToString(), out templateId))
+			if (document.ContainsKey(Templates.Fields.Group) &&
+				document.ContainsKey(Templates.Fields.TemplateName) &&
+				Guid.TryParse(document[Templates.Fields.Group].ToString(), out itemId) &&
+				Guid.TryParse(document[Templates.Fields.TemplateName].ToString(), out templateId))
 			{
 				var item = Global.SpawnProvider.FromItem(itemId, templateId, typeOfTElement, document);
 

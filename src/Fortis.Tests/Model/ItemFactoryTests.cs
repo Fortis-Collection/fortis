@@ -3,15 +3,11 @@
 	using Fortis.Model;
 	using Fortis.Mvc.Providers;
 	using Fortis.Providers;
+	using Xunit;
 
-	using NUnit.Framework;
-
-	[TestFixture]
-    public class ItemFactoryTests
+	public class ItemFactoryTests
     {
-
-
-		[Test]
+		[Fact]
 		public void Select_HomeItem_IItemWrapper()
 		{
 			using (var db = new Sitecore.FakeDb.Db
