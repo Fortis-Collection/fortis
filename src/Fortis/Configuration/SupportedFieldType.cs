@@ -8,11 +8,9 @@
 		{
 			FieldName = name;
 			FieldType = Type.GetType(type);
-			FieldTypeName = type;
 		}
 
 		public string FieldName { get; }
 		public Type FieldType { get; }
-		public string FieldTypeName { get; }
 	}
 }

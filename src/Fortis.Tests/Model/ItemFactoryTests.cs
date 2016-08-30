@@ -1,8 +1,11 @@
 ﻿namespace Fortis.Tests.Model
 {
+	using System;
 	using Fortis.Model;
 	using Fortis.Mvc.Providers;
 	using Fortis.Providers;
+	using Sitecore.Data;
+	using Sitecore.FakeDb;
 	using Xunit;
 
 	public class ItemFactoryTests
@@ -10,22 +13,26 @@
 		[Fact]
 		public void Select_HomeItem_IItemWrapper()
 		{
-			using (var db = new Sitecore.FakeDb.Db
+			var homeItemId = new ID(new Guid("df640448-a780-4bae-ba30-a5cb02310feb"));
+			var mockItem = new DbItem("Home", homeItemId)
 			{
-				new Sitecore.FakeDb.DbItem("Home")
-				{
-					{ "Title", "Welcome!" }
-				}
-			})
+				{"Title", "Welcome!"}
+			};
+
+			using (var db = new Db())
 			{
+				db.Add(mockItem);
+
 				var contextProvider = new ContextProvider();
 				var spawnProvider = new SpawnProvider(new TemplateMapProvider(new ModelAssemblyProvider()));
 				var itemFactory = new ItemFactory(contextProvider, spawnProvider);
 
-				//var homeItemWrapper = 
+				var homeItemWrapper = itemFactory.Select<IItemWrapper>(homeItemId.Guid);
+				var home = db.GetItem(homeItemId);
 
-				//var home = db.GetItem("/sitecore/content/home");
-				//Assert.AreEqual("Welcome!", home["Title"]);
+				Assert.NotNull(homeItemWrapper);
+				Assert.NotNull(home);
+				Assert.Equal(homeItemWrapper.Name, home.Name);
 			}
 		}
     }
