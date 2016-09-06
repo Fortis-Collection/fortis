@@ -97,6 +97,7 @@ namespace Fortis.Model.Fields
 
 			_modified = false;
 			_field = field;
+			_key = field.Name;
 
 			SpawnProvider = spawnProvider;
 		}
@@ -153,6 +154,11 @@ namespace Fortis.Model.Fields
 				}
 				return Sitecore.Context.Database;
 			}
+		}
+
+		public string Name
+		{
+			get { return _key; }
 		}
 
 		public bool Modified

@@ -34,7 +34,7 @@ namespace Fortis.Model
 					switch (type)
 					{
 						case "checkbox":
-							_fields[key] = new BooleanFieldWrapper(parameterValue, SpawnProvider);
+							_fields[key] = new BooleanFieldWrapper(key, parameterValue, SpawnProvider);
 							break;
 						case "checklist":
 						case "treelist":
@@ -43,26 +43,26 @@ namespace Fortis.Model
 						case "multilist":
 						case "multilist with search":
 						case "tags":
-							_fields[key] = new ListFieldWrapper(parameterValue, SpawnProvider);
+							_fields[key] = new ListFieldWrapper(key, parameterValue, SpawnProvider);
 							break;
 						case "droplink":
 						case "droptree":
 						case "general link":
 						case "general link with search":
-							_fields[key] = new LinkFieldWrapper(parameterValue, SpawnProvider);
+							_fields[key] = new LinkFieldWrapper(key, parameterValue, SpawnProvider);
 							break;
 						case "single-line text":
 						case "multi-line text":
 						case "rich text":
 						case "droplist":
 						case "number":
-							_fields[key] = new TextFieldWrapper(parameterValue, SpawnProvider);
+							_fields[key] = new TextFieldWrapper(key, parameterValue, SpawnProvider);
 							break;
 						case "integer":
-							_fields[key] = new IntegerFieldWrapper(parameterValue, SpawnProvider);
+							_fields[key] = new IntegerFieldWrapper(key, parameterValue, SpawnProvider);
 							break;
 						default:
-							_fields[key] = new FieldWrapper(parameterValue, SpawnProvider);
+							_fields[key] = new FieldWrapper(key, parameterValue, SpawnProvider);
 							break;
 					}
 				}

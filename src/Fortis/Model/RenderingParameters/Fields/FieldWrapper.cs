@@ -6,7 +6,7 @@ using Sitecore.Data;
 
 namespace Fortis.Model.RenderingParameters.Fields
 {
-	public class FieldWrapper : IFieldWrapper
+	public class FieldWrapper : IRenderingParameterFieldWrapper
 	{
 		protected ISpawnProvider SpawnProvider;
 		protected string _value;
@@ -21,6 +21,8 @@ namespace Fortis.Model.RenderingParameters.Fields
 			get { return _value; }
 		}
 
+		public string Name { get; protected set; }
+
 		public string RawValue
 		{
 			get
@@ -33,8 +35,9 @@ namespace Fortis.Model.RenderingParameters.Fields
 			}
 		}
 
-		public FieldWrapper(string value, ISpawnProvider spawnProvider)
+		public FieldWrapper(string fieldName, string value, ISpawnProvider spawnProvider)
 		{
+			this.Name = fieldName;
 			_value = value;
 
 			SpawnProvider = spawnProvider;

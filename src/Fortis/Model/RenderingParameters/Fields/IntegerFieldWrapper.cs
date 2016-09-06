@@ -13,8 +13,8 @@ namespace Fortis.Model.RenderingParameters.Fields
 	{
 		private new long? _value;
 
-		public IntegerFieldWrapper(string value, ISpawnProvider spawnProvider)
-			: base(value, spawnProvider) { }
+		public IntegerFieldWrapper(string fieldName, string value, ISpawnProvider spawnProvider)
+			: base(fieldName, value, spawnProvider) { }
 
 		public long Value
 		{
