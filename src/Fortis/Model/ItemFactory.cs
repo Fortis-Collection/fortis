@@ -10,6 +10,8 @@ using System.Linq;
 
 namespace Fortis.Model
 {
+	using System.Diagnostics;
+
 	public partial class ItemFactory : IItemFactory
 	{
 		protected readonly IContextProvider ContextProvider;
@@ -89,7 +91,10 @@ namespace Fortis.Model
 			{
 				wrapper = SpawnProvider.FromItem<T>(item);
 			}
-			catch { }
+			catch
+			{
+				// ignored - we should probably _not_ ignore this?
+			}
 			return (T)((wrapper is T) ? wrapper : null);
 		}
 

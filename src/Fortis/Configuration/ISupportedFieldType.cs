@@ -6,6 +6,5 @@
 	{
 		string FieldName { get; }
 		Type FieldType { get; }
-		string FieldTypeName { get; }
 	}
 }
