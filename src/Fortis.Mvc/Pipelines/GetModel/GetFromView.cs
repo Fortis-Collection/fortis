@@ -8,11 +8,16 @@ using Sitecore.Mvc.Presentation;
 
 namespace Fortis.Mvc.Pipelines.GetModel
 {
+	using System.Web;
+	using System.Web.Caching;
+
 	public class GetFromView : GetModelProcessor
 	{
 		protected virtual object GetFromViewPath(Rendering rendering, GetModelArgs args)
 		{
-			var path = rendering.Renderer is ViewRenderer ? ((ViewRenderer)rendering.Renderer).ViewPath : rendering.ToString().Replace("View: ", string.Empty);
+			var path = rendering.Renderer is ViewRenderer 
+				? ((ViewRenderer)rendering.Renderer).ViewPath 
+				: rendering.ToString().Replace("View: ", string.Empty);
 
 			if (string.IsNullOrWhiteSpace(path))
 			{
@@ -44,14 +49,9 @@ namespace Fortis.Mvc.Pipelines.GetModel
 			var method = itemFactory.GetType().GetMethods().FirstOrDefault(m => string.Equals(m.Name, "GetRenderingContextItems")
 				&& m.GetGenericArguments().Count().Equals(modelGenericArgs.Count()));
 
-			if (method != null)
-			{
-				var genericMethod = method.MakeGenericMethod(modelGenericArgs);
+			var genericMethod = method?.MakeGenericMethod(modelGenericArgs);
 
-				return genericMethod.Invoke(itemFactory, new object[] { itemFactory });
-			}
-
-			return null;
+			return genericMethod?.Invoke(itemFactory, new object[] { itemFactory });
 		}
 
 		public override void Process(GetModelArgs args)
