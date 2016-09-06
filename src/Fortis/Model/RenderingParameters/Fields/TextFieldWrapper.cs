@@ -5,8 +5,8 @@ namespace Fortis.Model.RenderingParameters.Fields
 {
 	public class TextFieldWrapper : FieldWrapper, ITextFieldWrapper
 	{
-		public TextFieldWrapper(string value, ISpawnProvider spawnProvider)
-			: base(value, spawnProvider)
+		public TextFieldWrapper(string fieldName, string value, ISpawnProvider spawnProvider)
+			: base(fieldName, value, spawnProvider)
 		{
 
 		}

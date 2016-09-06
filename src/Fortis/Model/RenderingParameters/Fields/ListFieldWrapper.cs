@@ -9,8 +9,8 @@ namespace Fortis.Model.RenderingParameters.Fields
 {
 	public class ListFieldWrapper : FieldWrapper, IListFieldWrapper
 	{
-		public ListFieldWrapper(string value, ISpawnProvider spawnProvider)
-			: base(value, spawnProvider)
+		public ListFieldWrapper(string fieldName, string value, ISpawnProvider spawnProvider)
+			: base(fieldName, value, spawnProvider)
 		{
 		}
 

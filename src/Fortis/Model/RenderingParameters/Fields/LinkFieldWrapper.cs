@@ -35,8 +35,8 @@ namespace Fortis.Model.RenderingParameters.Fields
 			}
 		}
 
-		public LinkFieldWrapper(string value, ISpawnProvider spawnProvider)
-			: base(value, spawnProvider)
+		public LinkFieldWrapper(string fieldName, string value, ISpawnProvider spawnProvider)
+			: base(fieldName, value, spawnProvider)
 		{
 
 		}
