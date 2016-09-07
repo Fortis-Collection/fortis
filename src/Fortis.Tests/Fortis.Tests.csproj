@@ -162,6 +162,8 @@
     <Compile Include="Configuration\TestXmlConfigurationProvider.cs" />
     <Compile Include="Configuration\XmlConfigurationProviderTests.cs" />
     <Compile Include="Model\Fields\BooleanFieldWrapperTests.cs" />
+    <Compile Include="Model\Fields\DateTimeFieldWrapperTests.cs" />
+    <Compile Include="Model\Fields\FieldWrapperTestClass.cs" />
     <Compile Include="Model\ItemFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
