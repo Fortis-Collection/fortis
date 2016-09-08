@@ -3,7 +3,9 @@ using Fortis.Model.Fields;
 using Fortis.Providers;
 using NSubstitute;
 using Sitecore.Data;
+using Sitecore.Data.Items;
 using Sitecore.FakeDb;
+using Sitecore.FakeDb.Sites;
 
 namespace Fortis.Tests.Model.Fields
 {
@@ -30,15 +32,25 @@ namespace Fortis.Tests.Model.Fields
 			this.Field = new DbField(FieldName, ID.NewID);
 			item.Fields.Add(this.Field);
 			this.Db.Add(item);
+
+			// init sitecore context
+			Sitecore.Context.Site = new FakeSiteContext("website");
+			Sitecore.Context.Item = this.Item;
 		}
 
-		protected TFieldWrapper FieldWrapper
+	    protected Item Item
+	    {
+		    get { return this.Db.GetItem("/sitecore/content/Test"); }
+	    }
+
+	    protected TFieldWrapper FieldWrapper
 		{
 		    get
 		    {
-		        var item = this.Db.GetItem("/sitecore/content/Test");
-		        var field = item.Fields[FieldName];
-		        return (TFieldWrapper) Activator.CreateInstance(typeof (TFieldWrapper), field, this.SpawnProvider);
+		        return (TFieldWrapper) Activator.CreateInstance(
+					typeof (TFieldWrapper), 
+					this.Item.Fields[FieldName], 
+					this.SpawnProvider);
 		    }
 		}
 
