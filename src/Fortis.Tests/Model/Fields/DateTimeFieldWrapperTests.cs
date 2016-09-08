@@ -4,80 +4,68 @@ using Xunit;
 
 namespace Fortis.Tests.Model.Fields
 {
-	/// <summary>
-	/// Test Methods Syntax: [Testing method/property name]_[Input parameters if applicable]_[Expected behavior]
-	/// </summary>
-	/// <seealso cref="Fortis.Tests.Model.Fields.FieldWrapperTestClass{Fortis.Model.Fields.DateTimeFieldWrapper}" />
-	public class DateTimeFieldWrapperTests : FieldWrapperTestClass<DateTimeFieldWrapper>
+    /// <summary>
+    /// Test Methods Syntax: [Testing method/property name]_[given condition/input parameters]_[Expected behavior]
+    /// </summary>
+    /// <seealso cref="Fortis.Tests.Model.Fields.FieldWrapperTestClass{Fortis.Model.Fields.DateTimeFieldWrapper}" />
+    public class DateTimeFieldWrapperTests : FieldWrapperTestClass<DateTimeFieldWrapper>
 	{
 		[Fact]
-		public void ValueProperty_ValidRawValue_ReturnsExpectedDateTime()
+		public void Value_ValidRawValue_ReturnsExpectedDateTime()
 		{
 			this.Field.Value = "20160428T220000Z";
 
-			var fieldWrapper = this.CreateFieldWrapper();
-
-			var actual = fieldWrapper.Value;
+			var actual = this.FieldWrapper.Value;
 
 			Assert.Equal(new DateTime(2016, 4, 28, 22, 0, 0), actual);
 		}
 
 		[Fact]
-		public void ValueProperty_InvalidRawValue_ReturnsDefaultDateTime()
+		public void Value_InvalidRawValue_ReturnsDefaultDateTime()
 		{
 			this.Field.Value = "this is not a valid date time value";
 
-			var fieldWrapper = this.CreateFieldWrapper();
-
-			var actual = fieldWrapper.Value;
+			var actual = this.FieldWrapper.Value;
 
 			Assert.Equal(default(DateTime), actual);
 		}
 
 		[Fact]
-		public void ValueProperty_EmptyRawValue_ReturnsDefaultDateTime()
+		public void Value_EmptyRawValue_ReturnsDefaultDateTime()
 		{
 			this.Field.Value = "";
 
-			var fieldWrapper = this.CreateFieldWrapper();
-
-			var actual = fieldWrapper.Value;
+			var actual = this.FieldWrapper.Value;
 
 			Assert.Equal(default(DateTime), actual);
 		}
 
 		[Fact]
-		public void HasValueProperty_EmptyRawValue_ReturnsFalse()
+		public void HasValue_EmptyRawValue_ReturnsFalse()
 		{
 			this.Field.Value = "";
 
-			var fieldWrapper = this.CreateFieldWrapper();
-
-			var actual = fieldWrapper.HasValue;
+			var actual = this.FieldWrapper.HasValue;
 
 			Assert.Equal(false, actual);
 		}
 
 		[Fact]
-		public void HasValueProperty_ValidRawValue_ReturnsTrue()
+		public void HasValue_ValidRawValue_ReturnsTrue()
 		{
 			this.Field.Value = "20160428T220000Z";
 
-			var fieldWrapper = this.CreateFieldWrapper();
-
-			var actual = fieldWrapper.HasValue;
+			var actual = this.FieldWrapper.HasValue;
 
 			Assert.Equal(true, actual);
 		}
 
 		[Fact]
-		public void HasValueProperty_InvalidRawValue_ReturnsTrue()
+		public void HasValue_InvalidRawValue_ReturnsTrue()
 		{
 			this.Field.Value = "this is not a valid date time value";
 
-			var fieldWrapper = this.CreateFieldWrapper();
-
-			var actual = fieldWrapper.HasValue;
+			var actual = this.FieldWrapper.HasValue;
 
 			Assert.Equal(true, actual);
 		}

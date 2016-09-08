@@ -164,6 +164,12 @@
     <Compile Include="Model\Fields\BooleanFieldWrapperTests.cs" />
     <Compile Include="Model\Fields\DateTimeFieldWrapperTests.cs" />
     <Compile Include="Model\Fields\FieldWrapperTestClass.cs" />
+    <Compile Include="Model\Fields\IntegerFieldWrapperTests.cs" />
+    <Compile Include="Model\Fields\ListFieldWrapperTests.cs" />
+    <Compile Include="Model\Fields\NameValueListFieldWrapperTests.cs" />
+    <Compile Include="Model\Fields\NumberFieldWrapperTests.cs" />
+    <Compile Include="Model\Fields\RichTextFieldWrapperTests.cs" />
+    <Compile Include="Model\Fields\TextFieldWrapperTests.cs" />
     <Compile Include="Model\ItemFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

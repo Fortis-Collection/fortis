@@ -7,7 +7,11 @@ using Sitecore.FakeDb;
 
 namespace Fortis.Tests.Model.Fields
 {
-	public abstract class FieldWrapperTestClass<TFieldWrapper> where TFieldWrapper : FieldWrapper
+    /// <summary>
+    /// Base class for testing field wrappers
+    /// </summary>
+    /// <typeparam name="TFieldWrapper">The type of the field wrapper.</typeparam>
+    public abstract class FieldWrapperTestClass<TFieldWrapper> where TFieldWrapper : FieldWrapper
 	{
 		protected ISpawnProvider SpawnProvider;
 
@@ -28,14 +32,17 @@ namespace Fortis.Tests.Model.Fields
 			this.Db.Add(item);
 		}
 
-		protected TFieldWrapper CreateFieldWrapper()
+		protected TFieldWrapper FieldWrapper
 		{
-			var item = this.Db.GetItem("/sitecore/content/Test");
-			var field = item.Fields[FieldName];
-			return (TFieldWrapper)Activator.CreateInstance(typeof(TFieldWrapper), field, this.SpawnProvider);
+		    get
+		    {
+		        var item = this.Db.GetItem("/sitecore/content/Test");
+		        var field = item.Fields[FieldName];
+		        return (TFieldWrapper) Activator.CreateInstance(typeof (TFieldWrapper), field, this.SpawnProvider);
+		    }
 		}
 
-		// tst fixture tear down
+		// test fixture tear down
 		public void Dispose()
 		{
 			this.Db.Dispose();

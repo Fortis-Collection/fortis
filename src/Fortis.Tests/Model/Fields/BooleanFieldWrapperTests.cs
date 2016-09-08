@@ -3,23 +3,22 @@ using Xunit;
 
 namespace Fortis.Tests.Model.Fields
 {
-	/// <summary>
-	/// Test Methods Syntax: [Testing method/property name]_[Input parameters if applicable]_[Expected behavior]
-	/// </summary>
-	/// <seealso cref="System.IDisposable" />
-	public class BooleanFieldWrapperTests : FieldWrapperTestClass<BooleanFieldWrapper>
+    /// <summary>
+    /// Test Methods Syntax: [Testing method/property name]_[given condition/input parameters]_[Expected behavior]
+    /// </summary>
+    /// <seealso cref="Fortis.Tests.Model.Fields.FieldWrapperTestClass{Fortis.Model.Fields.BooleanFieldWrapper}" />
+    public class BooleanFieldWrapperTests : FieldWrapperTestClass<BooleanFieldWrapper>
 	{
 		[Theory]
 		[InlineData("", false)]
 		[InlineData("0", false)]
+		[InlineData("invalid boolean value", false)]
 		[InlineData("1", true)]
-		public void ValueProperty_SpecificRawValue_ReturnsExpectedBoolean(string fieldValue, bool expectedValue)
+		public void Value_SpecificRawValue_ReturnsExpectedBoolean(string fieldValue, bool expectedValue)
 		{
 			this.Field.Value = fieldValue;
 
-			var fieldWrapper = this.CreateFieldWrapper();
-
-			var actual = fieldWrapper.Value;
+			var actual = this.FieldWrapper.Value;
 
 			Assert.Equal(expectedValue, actual);
 		}
@@ -27,14 +26,13 @@ namespace Fortis.Tests.Model.Fields
 		[Theory]
 		[InlineData("", false)]
 		[InlineData("0", true)]
+		[InlineData("invalid boolean value", true)]
 		[InlineData("1", true)]
-		public void HasValueProperty_SpecificRawValue_ReturnsExpectedBoolean(string fieldValue, bool expectedValue)
+		public void HasValue_SpecificRawValue_ReturnsExpectedBoolean(string fieldValue, bool expectedValue)
 		{
 			this.Field.Value = fieldValue;
 
-			var fieldWrapper = this.CreateFieldWrapper();
-
-			var actual = fieldWrapper.HasValue;
+			var actual = this.FieldWrapper.HasValue;
 
 			Assert.Equal(expectedValue, actual);
 		}
