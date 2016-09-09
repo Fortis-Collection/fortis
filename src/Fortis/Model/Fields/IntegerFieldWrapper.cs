@@ -29,7 +29,7 @@ namespace Fortis.Model.Fields
 			get
 			{
 			    InitializeValue();
-                return _value.Value;
+                return _value ?? default(long);
 			}
 		}
 

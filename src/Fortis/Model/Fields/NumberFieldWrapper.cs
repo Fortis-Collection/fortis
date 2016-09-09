@@ -34,7 +34,7 @@ namespace Fortis.Model.Fields
 			{
 			    this.InitializeValue();
 
-                return _value.Value;
+                return _value ?? default(float);
 			}
 		}
 
