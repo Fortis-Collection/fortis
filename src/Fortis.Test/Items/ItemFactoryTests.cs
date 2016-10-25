@@ -9,6 +9,7 @@ using Fortis.Fields.BooleanField;
 using Fortis.Fields.DateTimeField;
 using System;
 using Fortis.Fields.Dynamics;
+using Fortis.Dynamics;
 
 namespace Fortis.Test.Items
 {
@@ -24,7 +25,8 @@ namespace Fortis.Test.Items
 			var itemFactory = new ItemFactory(
 				CreateMockFieldFactory(),
 				CreateMockPropertyInfoFieldNameParser(),
-				CreateMockAddFieldDynamicProperty()
+				CreateMockAddFieldDynamicProperty(),
+				new DynamicObjectCaster()
 			);
 			var item = itemFactory.Create<ITestModel>(Item);
 

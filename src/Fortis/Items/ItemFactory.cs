@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Fortis.Fields;
 using Fortis.Fields.Dynamics;
 using System;
-using ImpromptuInterface;
+using Fortis.Dynamics;
 
 namespace Fortis.Items
 {
@@ -14,15 +14,18 @@ namespace Fortis.Items
 		protected readonly IFieldFactory FieldFactory;
 		protected readonly IPropertyInfoFieldNameParser FieldNameParser;
 		protected readonly IAddFieldDynamicProperty AddFieldDynamicProperty;
+		protected readonly IDynamicObjectCaster DynamicObjectCaster;
 
 		public ItemFactory(
 			IFieldFactory fieldFactory,
 			IPropertyInfoFieldNameParser fieldNameParser,
-			IAddFieldDynamicProperty addFieldDynamicProperty)
+			IAddFieldDynamicProperty addFieldDynamicProperty,
+			IDynamicObjectCaster dynamicObjectCaster)
 		{
 			FieldFactory = fieldFactory;
 			FieldNameParser = fieldNameParser;
 			AddFieldDynamicProperty = addFieldDynamicProperty;
+			DynamicObjectCaster = dynamicObjectCaster;
 		}
 
 		public T Create<T>(Item item)
@@ -46,20 +49,18 @@ namespace Fortis.Items
 			var baseItemTypeProperties = baseItemType.GetProperties(); // TODO: Re-factor to dependency and add caching
 			var requestedItemTypeProperties = requestedItemType.GetPublicProperties().Where(rp => !baseItemTypeProperties.Any(bp => string.Equals(bp.Name, rp.Name)));  // TODO: Re-factor to dependency and add caching
 
-			var modelledFields = new Dictionary<string, IField>(); // temporary store for all the fields we're creating
+			var modelledFields = new Dictionary<string, IField>();
 
 			foreach (var property in requestedItemTypeProperties)
 			{
 				var sitecoreFieldName = FieldNameParser.Parse(property);
 
-				// Check if the field actually exists
 				if (!item.Fields.Any(f => string.Equals(f.Name, sitecoreFieldName, StringComparison.InvariantCultureIgnoreCase)))
 				{
-					// Do we add the property but make it null/default?
+					// Do we add the property but make it null/default if it doesn't exist as a field?
 					continue;
 				}
 
-				// Retrieve existing field or create it
 				IField modelledField = modelledFields.ContainsKey(sitecoreFieldName) ?
 										modelledFields[sitecoreFieldName] :
 										FieldFactory.Create(item.Fields[sitecoreFieldName]);
@@ -77,7 +78,7 @@ namespace Fortis.Items
 				AddFieldDynamicProperty.Add(modelledItem, property, modelledField);
 			}
 
-			T castedItem = Impromptu.ActLike(modelledItem); // Re-factor to its own dependency so to abstract away the usage of Impromptu
+			T castedItem = DynamicObjectCaster.Cast<T>(modelledItem);
 
 			return castedItem;
 		}

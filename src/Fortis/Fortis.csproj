@@ -52,7 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\Xml\XmlDictionaryConfiguration.cs" />
+    <Compile Include="Dynamics\DynamicObjectCaster.cs" />
     <Compile Include="Dynamics\FortisDynamicObject.cs" />
+    <Compile Include="Dynamics\IDynamicObjectCaster.cs" />
     <Compile Include="Dynamics\IFortisDynamicObject.cs" />
     <Compile Include="Extensions\GuidExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
