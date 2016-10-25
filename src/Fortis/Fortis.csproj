@@ -139,6 +139,7 @@
     <Compile Include="Items\IItem.cs" />
     <Compile Include="Items\IBaseItem.cs" />
     <Compile Include="Fields\Dynamics\IAddFieldDynamicProperty.cs" />
+    <Compile Include="Items\IItemFactory.cs" />
     <Compile Include="Items\ItemFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

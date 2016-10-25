@@ -22,12 +22,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void Create_TestModel_PropertiesHaveValues()
 		{
-			var itemFactory = new ItemFactory(
-				CreateMockFieldFactory(),
-				CreateMockPropertyInfoFieldNameParser(),
-				CreateMockAddFieldDynamicProperty(),
-				new DynamicObjectCaster()
-			);
+			var itemFactory = CreateItemFactory();
 			var item = itemFactory.Create<ITestModel>(Item);
 
 			Assert.NotNull(item);
@@ -68,6 +63,16 @@ namespace Fortis.Test.Items
 			DateTime TestDateTime { get; }
 			IBooleanField TestBooleanField { get; }
 			bool TestBoolean { get; }
+		}
+
+		public ItemFactory CreateItemFactory()
+		{
+			return new ItemFactory(
+				CreateMockFieldFactory(),
+				CreateMockPropertyInfoFieldNameParser(),
+				CreateMockAddFieldDynamicProperty(),
+				new DynamicObjectCaster()
+			);
 		}
 
 		public IFieldFactory CreateMockFieldFactory()

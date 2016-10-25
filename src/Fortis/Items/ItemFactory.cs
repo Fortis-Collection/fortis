@@ -9,7 +9,7 @@ using Fortis.Dynamics;
 
 namespace Fortis.Items
 {
-	public class ItemFactory
+	public class ItemFactory : IItemFactory
 	{
 		protected readonly IFieldFactory FieldFactory;
 		protected readonly IPropertyInfoFieldNameParser FieldNameParser;
