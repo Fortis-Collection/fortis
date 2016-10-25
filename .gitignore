@@ -46,6 +46,6 @@ _ReSharper*/
 BuiltFiles_*
 _notes/
 lib/
-src/packages/
+packages/
 *.Fakes.*
 NuGet/
