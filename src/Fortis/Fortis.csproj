@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{48D2AA0D-B38B-4AA2-BE58-6F9C226B8D19}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fortis</RootNamespace>
+    <AssemblyName>Fortis</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ImpromptuInterface, Version=6.2.2.0, Culture=neutral, PublicKeyToken=0b1781c923b2975b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImpromptuInterface.6.2.2\lib\net40\ImpromptuInterface.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sitecore.Kernel, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sitecore.Kernel.NoReferences.8.2.160729\lib\NET452\Sitecore.Kernel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Configuration\Xml\XmlDictionaryConfiguration.cs" />
+    <Compile Include="Dynamics\FortisDynamicObject.cs" />
+    <Compile Include="Dynamics\IFortisDynamicObject.cs" />
+    <Compile Include="Extensions\GuidExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Fields\BaseField.cs" />
+    <Compile Include="Fields\BooleanField\BooleanField.cs" />
+    <Compile Include="Fields\BooleanField\BooleanFieldFactory.cs" />
+    <Compile Include="Fields\BooleanField\IBooleanFieldFactory.cs" />
+    <Compile Include="Fields\DateTimeField\DateTimeField.cs" />
+    <Compile Include="Fields\DateTimeField\DateTimeFieldFactory.cs" />
+    <Compile Include="Fields\DateTimeField\IDateTimeFieldFactory.cs" />
+    <Compile Include="Fields\Dynamics\AddFieldDynamicProperty.cs" />
+    <Compile Include="Fields\Dynamics\AddFieldDynamicPropertyStrategies.cs" />
+    <Compile Include="Fields\Dynamics\AddFieldDynamicPropertyStrategy.cs" />
+    <Compile Include="Fields\Dynamics\AddFieldDynamicPropertyStrategy`1.cs" />
+    <Compile Include="Fields\Dynamics\AddValueFieldDynamicProperty.cs" />
+    <Compile Include="Fields\Dynamics\IAddFieldDynamicPropertyStrategies.cs" />
+    <Compile Include="Fields\Dynamics\IAddFieldDynamicPropertyStrategy.cs" />
+    <Compile Include="Fields\Dynamics\IAddValueFieldDynamicProperty.cs" />
+    <Compile Include="Fields\Dynamics\StringAddFieldDynamicPropertyStrategy.cs" />
+    <Compile Include="Fields\FieldAttribute.cs" />
+    <Compile Include="Fields\FieldFactory.cs" />
+    <Compile Include="Fields\FieldNameParser.cs" />
+    <Compile Include="Fields\FileField\FileField.cs" />
+    <Compile Include="Fields\FileField\FileFieldFactory.cs" />
+    <Compile Include="Fields\FileField\IFileFieldFactory.cs" />
+    <Compile Include="Fields\GeneralLinkField\GeneralLinkField.cs" />
+    <Compile Include="Fields\GeneralLinkField\GeneralLinkFieldFactory.cs" />
+    <Compile Include="Fields\GeneralLinkField\IGeneralLinkFieldFactory.cs" />
+    <Compile Include="Fields\IBooleanField.cs" />
+    <Compile Include="Fields\IDateTimeField.cs" />
+    <Compile Include="Fields\IField.cs" />
+    <Compile Include="Fields\IFieldFactory.cs" />
+    <Compile Include="Fields\IFieldNameParser.cs" />
+    <Compile Include="Fields\IField`1.cs" />
+    <Compile Include="Fields\ImageField\ImageFieldFactory.cs" />
+    <Compile Include="Fields\ImageField\IImageFieldFactory.cs" />
+    <Compile Include="Fields\ImageField\ImageField.cs" />
+    <Compile Include="Fields\IntegerField\IIntegerFieldFactory.cs" />
+    <Compile Include="Fields\IntegerField\IntegerField.cs" />
+    <Compile Include="Fields\IntegerField\IntegerFieldFactory.cs" />
+    <Compile Include="Fields\IPropertyInfoFieldNameParser.cs" />
+    <Compile Include="Fields\ITypedFieldFactories.cs" />
+    <Compile Include="Fields\ITypedFieldFactory.cs" />
+    <Compile Include="Fields\IFileField.cs" />
+    <Compile Include="Fields\IGeneralLinkField.cs" />
+    <Compile Include="Fields\IImageField.cs" />
+    <Compile Include="Fields\ImageField\IImageFieldUrlOptions.cs" />
+    <Compile Include="Fields\IIntegerField.cs" />
+    <Compile Include="Fields\ILinkField.cs" />
+    <Compile Include="Fields\ILinkListField.cs" />
+    <Compile Include="Fields\INameValueListField.cs" />
+    <Compile Include="Fields\INumberField.cs" />
+    <Compile Include="Fields\ITextField.cs" />
+    <Compile Include="Fields\ImageField\IImageFieldUrlGenerator.cs" />
+    <Compile Include="Fields\ITypedFieldFactory`1.cs" />
+    <Compile Include="Fields\LinkField\ILinkFieldFactory.cs" />
+    <Compile Include="Fields\LinkField\LinkField.cs" />
+    <Compile Include="Fields\LinkField\LinkFieldFactory.cs" />
+    <Compile Include="Fields\LinkListField\ILinkListFieldFactory.cs" />
+    <Compile Include="Fields\LinkListField\LinkListField.cs" />
+    <Compile Include="Fields\LinkListField\LinkListFieldFactory.cs" />
+    <Compile Include="Fields\NameValueListField\INameValueListFieldFactory.cs" />
+    <Compile Include="Fields\NameValueListField\NameValueListField.cs" />
+    <Compile Include="Fields\NameValueListField\NameValueListFieldFactory.cs" />
+    <Compile Include="Fields\NumberField\INumberFieldFactory.cs" />
+    <Compile Include="Fields\NumberField\NumberField.cs" />
+    <Compile Include="Fields\NumberField\NumberFieldFactory.cs" />
+    <Compile Include="Fields\PropertyInfoFieldNameParser.cs" />
+    <Compile Include="Fields\TextField\ITextFieldFactory.cs" />
+    <Compile Include="Fields\ITypedFieldFactoryConfiguration.cs" />
+    <Compile Include="Fields\ITypedFieldMappingValidator.cs" />
+    <Compile Include="Fields\TextField\TextField.cs" />
+    <Compile Include="Fields\TextField\TextFieldFactory.cs" />
+    <Compile Include="Fields\TypedFieldFactories.cs" />
+    <Compile Include="Fields\TypedFieldFactoryConfiguration.cs" />
+    <Compile Include="Fields\TypedFieldFactory`1.cs" />
+    <Compile Include="Fields\TypedFieldFactory`3.cs" />
+    <Compile Include="Fields\TypedFieldMappingValidator.cs" />
+    <Compile Include="Fields\TypedFieldsConfiguration.cs" />
+    <Compile Include="Items\BaseItem.cs" />
+    <Compile Include="Items\IItem.cs" />
+    <Compile Include="Items\IBaseItem.cs" />
+    <Compile Include="Fields\Dynamics\IAddFieldDynamicProperty.cs" />
+    <Compile Include="Items\ItemFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App_Config\Include\Fortis\Fields.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

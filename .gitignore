@@ -45,7 +45,7 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 BuiltFiles_*
 _notes/
-_Lib/
-packages/*
+lib/
+src/packages/
 *.Fakes.*
 NuGet/
