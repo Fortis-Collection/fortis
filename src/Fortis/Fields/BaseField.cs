@@ -10,6 +10,9 @@ namespace Fortis.Fields
 			set { Field.Value = value; }
 		}
 
+		public string Name => Field.Name;
+		public string Type => Field.Type;
+
 		public Field Field { get; set; }
 	}
 }
