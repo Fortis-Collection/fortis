@@ -15,6 +15,7 @@ namespace Fortis.Test.Items
 {
 	public class ItemFactoryTests : ItemTestAutoFixture
 	{
+		private const string itemName = "Test Item";
 		private const string testTextFieldValue = "Test Text Field Value";
 		private DateTime testDateTimeFieldValue = new DateTime(2016, 4, 28, 22, 0, 0);
 		private bool testBooleanFieldValue = true;
@@ -34,6 +35,21 @@ namespace Fortis.Test.Items
 			Assert.Equal(testBooleanFieldValue, item.TestBoolean);
 		}
 
+		public void Create_TestItemModel_PropertiesHaveValues()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITestItemModel>(Item);
+
+			Assert.NotNull(item);
+			Assert.NotNull(item.TestField);
+			Assert.Equal(testTextFieldValue, item.Test);
+			Assert.NotNull(item.TestDateTimeField);
+			Assert.Equal(testDateTimeFieldValue, item.TestDateTime);
+			Assert.NotNull(item.TestBooleanField);
+			Assert.Equal(testBooleanFieldValue, item.TestBoolean);
+			Assert.Equal(itemName, item.Name);
+		}
+
 		public override void SetField(ref DbField field)
 		{
 			field.Name = "Test";
@@ -43,6 +59,7 @@ namespace Fortis.Test.Items
 
 		public override void SetItem(ref DbItem item)
 		{
+			item.Name = itemName;
 			item.Fields.Add(new DbField("Test Date Time")
 			{
 				Type = "DateTime",
@@ -63,6 +80,11 @@ namespace Fortis.Test.Items
 			DateTime TestDateTime { get; }
 			IBooleanField TestBooleanField { get; }
 			bool TestBoolean { get; }
+		}
+
+		public interface ITestItemModel : IItem, ITestModel
+		{
+
 		}
 
 		public ItemFactory CreateItemFactory()
