@@ -93,6 +93,36 @@ namespace Fortis.Test.Items
 		}
 
 		[Fact]
+		public void Create_NonField_DefaultValue()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITestModel>(Item);
+
+			Assert.Equal(default(string), item.NonField);
+		}
+
+		[Fact]
+		public void Create_NonField_CanSet()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITestModel>(Item);
+
+			var expected = "Test";
+
+			item.NonField = expected;
+
+			Assert.Equal(expected, item.NonField);
+		}
+
+		[Fact]
+		public void Create_UnhandledReturnTypeForField_ThrowException()
+		{
+			var itemFactory = CreateItemFactory();
+
+			Assert.Throws(typeof(Exception), () => itemFactory.Create<IBadTestModel>(Item));
+		}
+
+		[Fact]
 		public void Create_TestItemModel_NotNull()
 		{
 			var itemFactory = CreateItemFactory();
@@ -126,13 +156,19 @@ namespace Fortis.Test.Items
 		public interface ITestModel
 		{
 			ITextField TestField { get; }
-			string Test { get; }
+			string Test { get; set; }
 			IDateTimeField TestDateTimeField { get; }
-			DateTime TestDateTime { get; }
+			DateTime TestDateTime { get; set; }
 			IBooleanField TestBooleanField { get; }
-			bool TestBoolean { get; }
+			bool TestBoolean { get; set; }
 			[Field("Test Boolean")]
 			bool Boolean { get; }
+			string NonField { get; set; }
+		}
+
+		public interface IBadTestModel
+		{
+			DateTime Test { get; set; }
 		}
 
 		public interface ITestItemModel : IItem, ITestModel

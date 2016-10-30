@@ -57,7 +57,11 @@ namespace Fortis.Items
 
 				if (!item.Fields.Any(f => string.Equals(f.Name, sitecoreFieldName, StringComparison.InvariantCultureIgnoreCase)))
 				{
-					// Do we add the property but make it null/default if it doesn't exist as a field?
+					var returnType = property.PropertyType;
+					object value = returnType.IsValueType ? Activator.CreateInstance(returnType) : null;
+
+					modelledItem.AddDynamicProperty(property.Name, value);
+
 					continue;
 				}
 
