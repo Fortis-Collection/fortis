@@ -145,6 +145,7 @@
     <Compile Include="Fields\BooleanFieldTests.cs" />
     <Compile Include="Fields\DateTimeFieldTests.cs" />
     <Compile Include="Fields\PropertyInfoFieldNameParserTests.cs" />
+    <Compile Include="Items\BaseItemTests.cs" />
     <Compile Include="ItemTestAutoFixture.cs" />
     <Compile Include="Fields\FileFieldTests.cs" />
     <Compile Include="Fields\GeneralLinkFieldTests.cs" />
