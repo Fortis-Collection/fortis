@@ -7,6 +7,8 @@ using Fortis.Fields.Dynamics;
 using System;
 using Fortis.Dynamics;
 using System.Reflection;
+using Sitecore.Data.Managers;
+using Sitecore.Data;
 
 namespace Fortis.Items
 {
@@ -38,12 +40,13 @@ namespace Fortis.Items
 
 		public T Create<T>(Item item)
 		{
-			// TODO:	Find best interface for the item otherwise use T
-			//			* This only happens if T has a template attribute on it
-			//			* This is for when there's template inheritance by interface heirachy
-			//			* We want to create an object which as best matches the item
-			//			* Look at the template of the item and its inheritance
-			var requestedItemType = typeof(T); // IItemTypeStrategy.Create<T>() > System.Type;
+			var requestedItemType = typeof(T);
+			var templateAttribute = requestedItemType.GetCustomAttribute<TemplateAttribute>();
+
+			if (templateAttribute != null && !ItemInheritsTemplate(templateAttribute.TemplateId, item))
+			{
+				return default(T);
+			}
 
 			var modelledItem = new BaseItem
 			{
@@ -112,6 +115,18 @@ namespace Fortis.Items
 		public IEnumerable<PropertyInfo> CreatePropertyDiff(Type requestedItemType)
 		{
 			return requestedItemType.GetPublicProperties().Where(rp => !BaseItemTypeProperties.Any(bp => string.Equals(bp.Name, rp.Name)));
+		}
+
+		public bool ItemInheritsTemplate(Guid templateId, Item item)
+		{
+			if (item.Template.ID.Guid == templateId)
+			{
+				return true;
+			}
+
+			var itemTemplate = TemplateManager.GetTemplate(item);
+
+			return itemTemplate != null && itemTemplate.DescendsFrom(new ID(templateId));
 		}
 	}
 }

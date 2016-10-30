@@ -141,6 +141,7 @@
     <Compile Include="Fields\Dynamics\IAddFieldDynamicProperty.cs" />
     <Compile Include="Items\IItemFactory.cs" />
     <Compile Include="Items\ItemFactory.cs" />
+    <Compile Include="Items\TemplateAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

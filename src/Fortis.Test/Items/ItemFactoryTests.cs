@@ -10,12 +10,14 @@ using Fortis.Fields.DateTimeField;
 using System;
 using Fortis.Fields.Dynamics;
 using Fortis.Dynamics;
+using Sitecore.Data;
 
 namespace Fortis.Test.Items
 {
 	public class ItemFactoryTests : ItemTestAutoFixture
 	{
 		private const string itemName = "Test Item";
+		private const string itemTemplateId = "{42f7627e-a0db-4f1e-bd5c-b6ad0763309a}";
 		private const string testTextFieldValue = "Test Text Field Value";
 		private DateTime testDateTimeFieldValue = new DateTime(2016, 4, 28, 22, 0, 0);
 		private bool testBooleanFieldValue = true;
@@ -36,6 +38,43 @@ namespace Fortis.Test.Items
 			var item = itemFactory.Create<ITestItemModel>(Item);
 
 			Assert.NotNull(item);
+		}
+
+		[Fact]
+		public void Create_TemplatedModel_NotNull()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITemplatedTestModel>(Item);
+
+			Assert.NotNull(item);
+		}
+
+		[Fact]
+		public void Create_InvalidTemplatedModel_Null()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<IInvalidTemplatedTestModel>(Item);
+
+			Assert.Null(item);
+		}
+
+		//[Fact]
+		//public void Create_ConcreteTestModel_NotNull()
+		//{
+		//	var itemFactory = CreateItemFactory();
+		//	var item = itemFactory.Create<ConcreteTestModel>(Item);
+
+		//	Assert.NotNull(item);
+		//}
+
+		[Fact]
+		public void Create_TestModel_ImplementsInterfaces()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITestModel>(Item);
+			var condition = item is IBooleanTestModel && item is IDateTimeTestModel;
+
+			Assert.True(condition);
 		}
 
 		[Fact]
@@ -132,7 +171,7 @@ namespace Fortis.Test.Items
 		}
 
 		[Fact]
-		public void Create_SameModel_TypePropertiesAreCached()
+		public void Create_TestModel_TypePropertiesAreCached()
 		{
 			var itemFactory = CreateItemFactory();
 			var item = itemFactory.Create<ITestModel>(Item);
@@ -153,6 +192,7 @@ namespace Fortis.Test.Items
 		public override void SetItem(ref DbItem item)
 		{
 			item.Name = itemName;
+			item.TemplateID = new ID(itemTemplateId);
 			item.Fields.Add(new DbField("Test Date Time")
 			{
 				Type = "DateTime",
@@ -165,7 +205,7 @@ namespace Fortis.Test.Items
 			});
 		}
 
-		public interface ITestModel
+		public class ConcreteTestModel
 		{
 			ITextField TestField { get; }
 			string Test { get; set; }
@@ -178,9 +218,42 @@ namespace Fortis.Test.Items
 			string NonField { get; set; }
 		}
 
+		public interface ITestModel : IBooleanTestModel, IDateTimeTestModel
+		{
+			ITextField TestField { get; }
+			string Test { get; set; }
+			string NonField { get; set; }
+		}
+
+		public interface IDateTimeTestModel
+		{
+			IDateTimeField TestDateTimeField { get; }
+			DateTime TestDateTime { get; set; }
+		}
+
+		public interface IBooleanTestModel
+		{
+			IBooleanField TestBooleanField { get; }
+			bool TestBoolean { get; set; }
+			[Field("Test Boolean")]
+			bool Boolean { get; }
+		}
+
 		public interface IBadTestModel
 		{
 			DateTime Test { get; set; }
+		}
+
+		[Template(itemTemplateId)]
+		public interface ITemplatedTestModel
+		{
+
+		}
+
+		[Template("{3453112b-6d83-4f60-93be-7c09e1416d00}")]
+		public interface IInvalidTemplatedTestModel
+		{
+
 		}
 
 		public interface ITestItemModel : IItem, ITestModel

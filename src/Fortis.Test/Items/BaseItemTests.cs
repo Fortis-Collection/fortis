@@ -176,6 +176,7 @@ namespace Fortis.Test.Items
 		public override void SetItem(ref DbItem item)
 		{
 			item.Name = "Test Item";
+			item.TemplateID = new ID("{42f7627e-a0db-4f1e-bd5c-b6ad0763309a}");
 		}
 	}
 }
