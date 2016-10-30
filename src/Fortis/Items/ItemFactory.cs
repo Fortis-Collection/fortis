@@ -6,6 +6,7 @@ using Fortis.Fields;
 using Fortis.Fields.Dynamics;
 using System;
 using Fortis.Dynamics;
+using System.Reflection;
 
 namespace Fortis.Items
 {
@@ -26,7 +27,14 @@ namespace Fortis.Items
 			FieldNameParser = fieldNameParser;
 			AddFieldDynamicProperty = addFieldDynamicProperty;
 			DynamicObjectCaster = dynamicObjectCaster;
+
+			BaseItemTypeProperties = typeof(BaseItem).GetProperties();
+			RequestedItemTypesProperties = new Dictionary<Type, IEnumerable<PropertyInfo>>();
 		}
+
+		public PropertyInfo[] BaseItemTypeProperties;
+		public Dictionary<Type, IEnumerable<PropertyInfo>> RequestedItemTypesProperties;
+		private object requestedItemTypesPropertiesLock = new object();
 
 		public T Create<T>(Item item)
 		{
@@ -36,19 +44,13 @@ namespace Fortis.Items
 			//			* We want to create an object which as best matches the item
 			//			* Look at the template of the item and its inheritance
 			var requestedItemType = typeof(T); // IItemTypeStrategy.Create<T>() > System.Type;
-			var baseItemType = typeof(BaseItem);
 
 			var modelledItem = new BaseItem
 			{
 				Item = item
 			};
 
-			// Find properties on interface that aren't part of the BaseItem class
-			// IFindRequestedItemTypeProperties.Find<T>();
-			//		IDiffProperties.Find(type baseType, type requestedType);
-			var baseItemTypeProperties = baseItemType.GetProperties(); // TODO: Re-factor to dependency and add caching
-			var requestedItemTypeProperties = requestedItemType.GetPublicProperties().Where(rp => !baseItemTypeProperties.Any(bp => string.Equals(bp.Name, rp.Name)));  // TODO: Re-factor to dependency and add caching
-
+			IEnumerable<PropertyInfo> requestedItemTypeProperties = GetPropertyDiff(requestedItemType);
 			var modelledFields = new Dictionary<string, IField>();
 
 			foreach (var property in requestedItemTypeProperties)
@@ -85,6 +87,31 @@ namespace Fortis.Items
 			T castedItem = DynamicObjectCaster.Cast<T>(modelledItem);
 
 			return castedItem;
+		}
+
+		public IEnumerable<PropertyInfo> GetPropertyDiff(Type requestedItemType)
+		{
+			if (RequestedItemTypesProperties.ContainsKey(requestedItemType))
+			{
+				return RequestedItemTypesProperties[requestedItemType];
+			}
+
+			lock(requestedItemTypesPropertiesLock)
+			{
+				if (RequestedItemTypesProperties.ContainsKey(requestedItemType))
+				{
+					return RequestedItemTypesProperties[requestedItemType];
+				}
+
+				var propertyDiff = RequestedItemTypesProperties[requestedItemType] = CreatePropertyDiff(requestedItemType);
+
+				return propertyDiff;
+			}
+		}
+
+		public IEnumerable<PropertyInfo> CreatePropertyDiff(Type requestedItemType)
+		{
+			return requestedItemType.GetPublicProperties().Where(rp => !BaseItemTypeProperties.Any(bp => string.Equals(bp.Name, rp.Name)));
 		}
 	}
 }

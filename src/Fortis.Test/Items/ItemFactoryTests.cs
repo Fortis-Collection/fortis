@@ -30,6 +30,15 @@ namespace Fortis.Test.Items
 		}
 
 		[Fact]
+		public void Create_TestItemModel_NotNull()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITestItemModel>(Item);
+
+			Assert.NotNull(item);
+		}
+
+		[Fact]
 		public void Create_TextFieldProperty_NotNull()
 		{
 			var itemFactory = CreateItemFactory();
@@ -123,12 +132,15 @@ namespace Fortis.Test.Items
 		}
 
 		[Fact]
-		public void Create_TestItemModel_NotNull()
+		public void Create_SameModel_TypePropertiesAreCached()
 		{
 			var itemFactory = CreateItemFactory();
-			var item = itemFactory.Create<ITestItemModel>(Item);
+			var item = itemFactory.Create<ITestModel>(Item);
 
-			Assert.NotNull(item);
+			var expected = true;
+			var actual = itemFactory.RequestedItemTypesProperties.ContainsKey(typeof(ITestModel));
+
+			Assert.Equal(expected, actual);
 		}
 
 		public override void SetField(ref DbField field)
