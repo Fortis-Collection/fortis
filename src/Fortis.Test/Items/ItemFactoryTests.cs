@@ -21,32 +21,84 @@ namespace Fortis.Test.Items
 		private bool testBooleanFieldValue = true;
 
 		[Fact]
-		public void Create_TestModel_PropertiesHaveValues()
+		public void Create_TestModel_NotNull()
 		{
 			var itemFactory = CreateItemFactory();
 			var item = itemFactory.Create<ITestModel>(Item);
 
 			Assert.NotNull(item);
+		}
+
+		[Fact]
+		public void Create_TextFieldProperty_NotNull()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITestModel>(Item);
+
 			Assert.NotNull(item.TestField);
+		}
+
+		[Fact]
+		public void Create_StringProperty_FieldValue()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITestModel>(Item);
+
 			Assert.Equal(testTextFieldValue, item.Test);
+		}
+
+		[Fact]
+		public void Create_DateTimeFieldProperty_NotNull()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITestModel>(Item);
+
 			Assert.NotNull(item.TestDateTimeField);
+		}
+
+		[Fact]
+		public void Create_DateTimeProperty_FieldValue()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITestModel>(Item);
+
 			Assert.Equal(testDateTimeFieldValue, item.TestDateTime);
+		}
+
+		[Fact]
+		public void Create_BooleanFieldProperty_NotNull()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITestModel>(Item);
+
 			Assert.NotNull(item.TestBooleanField);
+		}
+
+		[Fact]
+		public void Create_BooleanProperty_FieldValue()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITestModel>(Item);
+
 			Assert.Equal(testBooleanFieldValue, item.TestBoolean);
 		}
 
-		public void Create_TestItemModel_PropertiesHaveValues()
+		[Fact]
+		public void Create_AttributeProperty_FieldValue()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITestModel>(Item);
+
+			Assert.Equal(testBooleanFieldValue, item.Boolean);
+		}
+
+		[Fact]
+		public void Create_TestItemModel_NotNull()
 		{
 			var itemFactory = CreateItemFactory();
 			var item = itemFactory.Create<ITestItemModel>(Item);
 
 			Assert.NotNull(item);
-			Assert.NotNull(item.TestField);
-			Assert.Equal(testTextFieldValue, item.Test);
-			Assert.NotNull(item.TestDateTimeField);
-			Assert.Equal(testDateTimeFieldValue, item.TestDateTime);
-			Assert.NotNull(item.TestBooleanField);
-			Assert.Equal(testBooleanFieldValue, item.TestBoolean);
 		}
 
 		public override void SetField(ref DbField field)
@@ -79,6 +131,8 @@ namespace Fortis.Test.Items
 			DateTime TestDateTime { get; }
 			IBooleanField TestBooleanField { get; }
 			bool TestBoolean { get; }
+			[Field("Test Boolean")]
+			bool Boolean { get; }
 		}
 
 		public interface ITestItemModel : IItem, ITestModel
