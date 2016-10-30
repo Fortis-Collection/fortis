@@ -47,7 +47,7 @@ namespace Fortis.Test.Items
 			Assert.Equal(testDateTimeFieldValue, item.TestDateTime);
 			Assert.NotNull(item.TestBooleanField);
 			Assert.Equal(testBooleanFieldValue, item.TestBoolean);
-			Assert.Equal(itemName, item.Name);
+			Assert.Equal(itemName, item.ItemName);
 		}
 
 		public override void SetField(ref DbField field)

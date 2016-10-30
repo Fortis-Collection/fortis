@@ -4,7 +4,7 @@ namespace Fortis.Items
 {
 	public interface IItem
 	{
-		Guid Id { get; }
-		string Name { get; }
+		Guid ItemId { get; }
+		string ItemName { get; }
 	}
 }
