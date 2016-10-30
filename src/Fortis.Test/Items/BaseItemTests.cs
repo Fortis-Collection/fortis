@@ -53,6 +53,17 @@ namespace Fortis.Test.Items
 		}
 
 		[Fact]
+		public void ItemName_Item_ItemName()
+		{
+			var item = new BaseItem { Item = Item };
+
+			var expected = Item.Name;
+			var actual = item.ItemName;
+
+			Assert.Equal(expected, actual);
+		}
+
+		[Fact]
 		public void ItemDisplayName_Item_ItemDisplayName()
 		{
 			var item = new BaseItem { Item = Item };
