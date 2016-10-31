@@ -11,16 +11,13 @@ assembly_info:
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
+environment:
+  my_secret: 0+VzkYXigwy3FEyJ70odmw==
 before_build:
-- cmd: nuget restore
+- ps: nuget restore
 build:
   publish_nuget: true
   verbosity: minimal
-deploy:
-- provider: GitHub
-  tag: release/rtm/$(appveyor_build_version)
-  release: release
-  description: Release Build
-  auth_token:
-    secure: SjdWG5RSLacrssJD/npA2zCSJnqhmRO76buFXohGA2Bytl8qbidt2TbBDpKhTwhc
-  prerelease: true
+install:
+  - nuget install secure-file -ExcludeVersion
+  - secure-file\tools\secure-file -decrypt lib\License\license.xml.enc -secret %my_secret%
