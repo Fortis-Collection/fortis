@@ -1,9 +1,9 @@
-version: 4.2.{build}
+version: 5.0.{build}
 pull_requests:
   do_not_increment_build_number: true
 branches:
   only:
-  - master
+  - fortis-5
 configuration: Release
 assembly_info:
   patch: true
@@ -23,3 +23,4 @@ deploy:
   description: Release Build
   auth_token:
     secure: SjdWG5RSLacrssJD/npA2zCSJnqhmRO76buFXohGA2Bytl8qbidt2TbBDpKhTwhc
+  prerelease: true
