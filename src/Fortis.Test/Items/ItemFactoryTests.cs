@@ -11,13 +11,15 @@ using System;
 using Fortis.Fields.Dynamics;
 using Fortis.Dynamics;
 using Sitecore.Data;
+using System.Reflection;
 
 namespace Fortis.Test.Items
 {
 	public class ItemFactoryTests : ItemTestAutoFixture
 	{
-		private const string itemName = "Test Item";
-		private const string itemTemplateId = "{42f7627e-a0db-4f1e-bd5c-b6ad0763309a}";
+		private const string itemTemplateCId = "{42f7627e-a0db-4f1e-bd5c-b6ad0763309a}";
+		private const string itemTemplateBId = "{3453112b-6d83-4f60-93be-7c09e1416d00}";
+		private const string itemTemplateAId = "{d4d8da75-efff-4e1f-98d7-1b05df85160e}";
 		private const string testTextFieldValue = "Test Text Field Value";
 		private DateTime testDateTimeFieldValue = new DateTime(2016, 4, 28, 22, 0, 0);
 		private bool testBooleanFieldValue = true;
@@ -44,16 +46,26 @@ namespace Fortis.Test.Items
 		public void Create_TemplatedModel_NotNull()
 		{
 			var itemFactory = CreateItemFactory();
-			var item = itemFactory.Create<ITemplatedTestModel>(Item);
+			var item = itemFactory.Create<ITemplateCTestModel>(Item);
 
 			Assert.NotNull(item);
+		}
+
+		[Fact]
+		public void Create_BaseTemplatedModel_TemplatedTestModel()
+		{
+			var itemFactory = CreateItemFactory();
+			var item = itemFactory.Create<ITemplateATestModel>(Item);
+			var condition = item is ITemplateCTestModel;
+
+			Assert.True(condition);
 		}
 
 		[Fact]
 		public void Create_InvalidTemplatedModel_Null()
 		{
 			var itemFactory = CreateItemFactory();
-			var item = itemFactory.Create<IInvalidTemplatedTestModel>(Item);
+			var item = itemFactory.Create<ITemplateBTestModel>(Item);
 
 			Assert.Null(item);
 		}
@@ -182,29 +194,6 @@ namespace Fortis.Test.Items
 			Assert.Equal(expected, actual);
 		}
 
-		public override void SetField(ref DbField field)
-		{
-			field.Name = "Test";
-			field.Type = "Single-Line Text";
-			field.Value = testTextFieldValue;
-		}
-
-		public override void SetItem(ref DbItem item)
-		{
-			item.Name = itemName;
-			item.TemplateID = new ID(itemTemplateId);
-			item.Fields.Add(new DbField("Test Date Time")
-			{
-				Type = "DateTime",
-				Value = "20160428T220000Z"
-			});
-			item.Fields.Add(new DbField("Test Boolean")
-			{
-				Type = "Checkbox",
-				Value = "1"
-			});
-		}
-
 		public class ConcreteTestModel
 		{
 			ITextField TestField { get; }
@@ -244,14 +233,20 @@ namespace Fortis.Test.Items
 			DateTime Test { get; set; }
 		}
 
-		[Template(itemTemplateId)]
-		public interface ITemplatedTestModel
+		[Template(itemTemplateCId)]
+		public interface ITemplateCTestModel : ITemplateATestModel
 		{
 
 		}
 
-		[Template("{3453112b-6d83-4f60-93be-7c09e1416d00}")]
-		public interface IInvalidTemplatedTestModel
+		[Template(itemTemplateAId)]
+		public interface ITemplateATestModel
+		{
+
+		}
+
+		[Template(itemTemplateBId)]
+		public interface ITemplateBTestModel
 		{
 
 		}
@@ -267,7 +262,8 @@ namespace Fortis.Test.Items
 				CreateMockFieldFactory(),
 				CreateMockPropertyInfoFieldNameParser(),
 				CreateMockAddFieldDynamicProperty(),
-				new DynamicObjectCaster()
+				new DynamicObjectCaster(),
+				CreateMockItemTypeTemplateMatcher()
 			);
 		}
 
@@ -314,6 +310,19 @@ namespace Fortis.Test.Items
 								new StringAddFieldDynamicPropertyStrategy()
 							}
 						)
+				);
+		}
+
+		public IItemTypeTemplateMatcher CreateMockItemTypeTemplateMatcher()
+		{
+			var templateModelAssemblies = Substitute.For<ITemplateModelAssemblies>();
+
+			templateModelAssemblies.Assemblies.Returns(new List<Assembly> { GetType().Assembly });
+
+			return new ItemTypeTemplateMatcher(
+					new TemplateTypeMap(
+						templateModelAssemblies
+					)
 				);
 		}
 	}

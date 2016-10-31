@@ -140,11 +140,21 @@
     <Compile Include="Items\IBaseItem.cs" />
     <Compile Include="Fields\Dynamics\IAddFieldDynamicProperty.cs" />
     <Compile Include="Items\IItemFactory.cs" />
+    <Compile Include="Items\ITemplateModelAssembly.cs" />
+    <Compile Include="Items\ITemplateModelAssemblies.cs" />
     <Compile Include="Items\ItemFactory.cs" />
+    <Compile Include="Items\IItemTypeTemplateMatcher.cs" />
+    <Compile Include="Items\ITemplateTypeMap.cs" />
+    <Compile Include="Items\TemplateModelAssemblies.cs" />
+    <Compile Include="Items\TemplateModelAssembliesConfiguration.cs" />
+    <Compile Include="Items\TemplateModelAssembly.cs" />
     <Compile Include="Items\TemplateAttribute.cs" />
+    <Compile Include="Items\ItemTypeTemplateMatcher.cs" />
+    <Compile Include="Items\TemplateTypeMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App_Config\Include\Fortis\Templates.config" />
     <None Include="App_Config\Include\Fortis\Fields.config" />
     <None Include="packages.config" />
   </ItemGroup>

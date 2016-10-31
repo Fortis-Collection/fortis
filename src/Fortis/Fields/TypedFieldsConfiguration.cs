@@ -1,8 +1,5 @@
 ﻿using Fortis.Configuration.Xml;
-using Sitecore.Xml;
 using System.Collections.Generic;
-using System.Xml;
-using System;
 
 namespace Fortis.Fields
 {

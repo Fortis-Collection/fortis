@@ -7,8 +7,6 @@ using Fortis.Fields.Dynamics;
 using System;
 using Fortis.Dynamics;
 using System.Reflection;
-using Sitecore.Data.Managers;
-using Sitecore.Data;
 
 namespace Fortis.Items
 {
@@ -18,17 +16,20 @@ namespace Fortis.Items
 		protected readonly IPropertyInfoFieldNameParser FieldNameParser;
 		protected readonly IAddFieldDynamicProperty AddFieldDynamicProperty;
 		protected readonly IDynamicObjectCaster DynamicObjectCaster;
+		protected readonly IItemTypeTemplateMatcher ItemTypeTemplateMapper;
 
 		public ItemFactory(
 			IFieldFactory fieldFactory,
 			IPropertyInfoFieldNameParser fieldNameParser,
 			IAddFieldDynamicProperty addFieldDynamicProperty,
-			IDynamicObjectCaster dynamicObjectCaster)
+			IDynamicObjectCaster dynamicObjectCaster,
+			IItemTypeTemplateMatcher itemTypeTemplateMapper)
 		{
 			FieldFactory = fieldFactory;
 			FieldNameParser = fieldNameParser;
 			AddFieldDynamicProperty = addFieldDynamicProperty;
 			DynamicObjectCaster = dynamicObjectCaster;
+			ItemTypeTemplateMapper = itemTypeTemplateMapper;
 
 			BaseItemTypeProperties = typeof(BaseItem).GetProperties();
 			RequestedItemTypesProperties = new Dictionary<Type, IEnumerable<PropertyInfo>>();
@@ -40,10 +41,9 @@ namespace Fortis.Items
 
 		public T Create<T>(Item item)
 		{
-			var requestedItemType = typeof(T);
-			var templateAttribute = requestedItemType.GetCustomAttribute<TemplateAttribute>();
+			var requestedItemType = ItemTypeTemplateMapper.Find<T>(item);
 
-			if (templateAttribute != null && !ItemInheritsTemplate(templateAttribute.TemplateId, item))
+			if (requestedItemType == null)
 			{
 				return default(T);
 			}
@@ -70,9 +70,7 @@ namespace Fortis.Items
 					continue;
 				}
 
-				IField modelledField = modelledFields.ContainsKey(sitecoreFieldName) ?
-										modelledFields[sitecoreFieldName] :
-										FieldFactory.Create(item.Fields[sitecoreFieldName]);
+				IField modelledField;
 
 				if (modelledFields.ContainsKey(sitecoreFieldName))
 				{
@@ -87,7 +85,7 @@ namespace Fortis.Items
 				AddFieldDynamicProperty.Add(modelledItem, property, modelledField);
 			}
 
-			T castedItem = DynamicObjectCaster.Cast<T>(modelledItem);
+			T castedItem = DynamicObjectCaster.Cast<T>(modelledItem, requestedItemType);
 
 			return castedItem;
 		}
@@ -115,18 +113,6 @@ namespace Fortis.Items
 		public IEnumerable<PropertyInfo> CreatePropertyDiff(Type requestedItemType)
 		{
 			return requestedItemType.GetPublicProperties().Where(rp => !BaseItemTypeProperties.Any(bp => string.Equals(bp.Name, rp.Name)));
-		}
-
-		public bool ItemInheritsTemplate(Guid templateId, Item item)
-		{
-			if (item.Template.ID.Guid == templateId)
-			{
-				return true;
-			}
-
-			var itemTemplate = TemplateManager.GetTemplate(item);
-
-			return itemTemplate != null && itemTemplate.DescendsFrom(new ID(templateId));
 		}
 	}
 }

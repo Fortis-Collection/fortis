@@ -2,7 +2,7 @@
 
 namespace Fortis.Test.Fields
 {
-	public abstract class FieldTestAutoFixture<TField> : ItemTestAutoFixture
+	public abstract class FieldTestAutoFixture<TField> : FieldTestAutoFixture
 		where TField : BaseField
 	{
 		protected TField ModelledField
