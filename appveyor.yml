@@ -1,0 +1,25 @@
+version: 4.2.{build}
+pull_requests:
+  do_not_increment_build_number: true
+branches:
+  only:
+  - master
+configuration: Release
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+before_build:
+- cmd: nuget restore
+build:
+  publish_nuget: true
+  verbosity: minimal
+deploy:
+- provider: GitHub
+  tag: release/rtm/$(appveyor_build_version)
+  release: release
+  description: Release Build
+  auth_token:
+    secure: SjdWG5RSLacrssJD/npA2zCSJnqhmRO76buFXohGA2Bytl8qbidt2TbBDpKhTwhc
