@@ -12,7 +12,8 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 environment:
-  my_secret: 0+VzkYXigwy3FEyJ70odmw==
+  my_secret: 
+    secure: 0+VzkYXigwy3FEyJ70odmw==
 before_build:
 - ps: nuget restore
 build:
@@ -20,4 +21,4 @@ build:
   verbosity: minimal
 install:
   - nuget install secure-file -ExcludeVersion
-  - secure-file\tools\secure-file -decrypt lib\License\license.xml.enc -secret Fortis4Sitecore -out lib\License\license.xml
+  - secure-file\tools\secure-file -decrypt lib\License\license.xml.enc -secret %my_secret% -out lib\License\license.xml
