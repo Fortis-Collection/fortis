@@ -20,4 +20,4 @@ build:
   verbosity: minimal
 install:
   - nuget install secure-file -ExcludeVersion
-  - secure-file\tools\secure-file -decrypt .\lib\License\license.xml.enc -secret %my_secret% -out license.xml
+  - secure-file\tools\secure-file -decrypt .\lib\License\license.xml.enc -secret Fortis4Sitecore -out license.xml
