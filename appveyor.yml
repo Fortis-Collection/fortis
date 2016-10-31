@@ -22,10 +22,3 @@ build:
 install:
   - nuget install secure-file -ExcludeVersion
   - secure-file\tools\secure-file -decrypt lib\License\license.xml.enc -secret %my_secret% -out lib\License\license.xml
-deploy:
- - provider: GitHub
-   tag: release/rtm/$(appveyor_build_version)
-   release: release
-   description: Release Build
-   auth_token:
-     secure: SjdWG5RSLacrssJD/npA2zCSJnqhmRO76buFXohGA2Bytl8qbidt2TbBDpKhTwhc 
