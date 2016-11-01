@@ -49,3 +49,4 @@ lib/
 packages/
 *.Fakes.*
 NuGet/
+sitecorelicense/

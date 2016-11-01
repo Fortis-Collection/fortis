@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>sitecorelicense</id>
+        <version>1.0.2</version>
+        <authors>Richard Seal</authors>
+        <owners>Fortis Collection</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Sitecore license file for builds</description>
+    </metadata>
+    <files>
+        <file src="license.xml" target="content\license.xml" />
+    </files>
+</package>
