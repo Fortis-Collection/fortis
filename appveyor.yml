@@ -11,6 +11,8 @@ assembly_info:
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
+nuget:
+  account_feed: true
 environment:
   my_secret: 
     secure: 0+VzkYXigwy3FEyJ70odmw==
@@ -20,5 +22,4 @@ build:
   publish_nuget: true
   verbosity: minimal
 install:
-  - nuget install secure-file -ExcludeVersion
-  - secure-file\tools\secure-file -decrypt lib\License\license.xml.enc -secret %my_secret% -out lib\License\license.xml
+  - nuget install sitecorelicense -ExcludeVersion
