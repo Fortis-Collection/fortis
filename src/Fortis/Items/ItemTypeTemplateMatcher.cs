@@ -18,33 +18,32 @@ namespace Fortis.Items
 		public Type Find<T>(Item item)
 		{
 			var requestedItemType = typeof(T);
-			var requestedItemTypeTemplateId = TemplateTypeMap.Find(requestedItemType);
 
-			if (requestedItemTypeTemplateId == default(Guid))
+			if (!TemplateTypeMap.Contains(requestedItemType))
 			{
 				return requestedItemType;
 			}
+
+			var requestedItemTypeTemplateId = TemplateTypeMap.Find(requestedItemType);
 
 			if (!ItemInheritsTemplate(requestedItemTypeTemplateId, item))
 			{
 				return null;
 			}
 
-			if (TemplateTypeMap.Contains(item.TemplateID.Guid))
+			if (!TemplateTypeMap.Contains(item.TemplateID.Guid))
 			{
-				var exactMatchType = TemplateTypeMap.Find(item.TemplateID.Guid);
-
-				if (requestedItemType.IsAssignableFrom(exactMatchType))
-				{
-					return exactMatchType;
-				}
-				else
-				{
-					return requestedItemType;
-				}
+				return requestedItemType;
 			}
 
-			return null;
+			var exactMatchType = TemplateTypeMap.Find(item.TemplateID.Guid);
+
+			if (requestedItemType.IsAssignableFrom(exactMatchType))
+			{
+				return exactMatchType;
+			}
+
+			return requestedItemType;
 		}
 
 		public bool ItemInheritsTemplate(Guid templateId, Item item)

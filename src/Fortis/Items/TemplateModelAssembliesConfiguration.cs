@@ -1,13 +1,12 @@
-﻿using Fortis.Configuration.Xml;
+﻿using Sitecore.Configuration;
 using System.Collections.Generic;
 
 namespace Fortis.Items
 {
-	public class TemplateModelAssembliesConfiguration : XmlDictionaryConfiguration
+	public class TemplateModelAssembliesConfiguration : ITemplateModelAssembliesConfiguration
 	{
-		public Dictionary<string, string> Assemblies => Dictionary;
+		public IEnumerable<ITemplateModelAssembly> Assemblies => Configuration.Assemblies;
 
-		protected override string KeyAttributeName => "name";
-		protected override string ValueAttributeName => "assembly";
+		public SitecoreTemplateModelAssembliesConfiguration Configuration => Factory.CreateObject("fortis/templates/modelConfiguration", true) as SitecoreTemplateModelAssembliesConfiguration;
 	}
 }

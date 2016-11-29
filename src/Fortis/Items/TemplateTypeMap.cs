@@ -7,15 +7,15 @@ namespace Fortis.Items
 {
 	public class TemplateTypeMap : ITemplateTypeMap
 	{
-		protected readonly ITemplateModelAssemblies TemplateModelAssemblies;
+		protected readonly ITypesSource TypesSource;
 
 		private Dictionary<Guid, Type> TemplateType = new Dictionary<Guid, Type>();
 		private Dictionary<Type, Guid> TypeTemplate = new Dictionary<Type, Guid>();
 
 		public TemplateTypeMap(
-			ITemplateModelAssemblies templateModelAssemblies)
+			ITypesSource typesSource)
 		{
-			TemplateModelAssemblies = templateModelAssemblies;
+			TypesSource = typesSource;
 
 			ProcessMap();
 		}
@@ -42,21 +42,21 @@ namespace Fortis.Items
 
 		public void ProcessMap()
 		{
-			foreach (var assembly in TemplateModelAssemblies.Assemblies)
+			foreach (var type in TypesSource.Types)
 			{
-				var types = assembly.GetTypes();
+				var templateAttribute = type.GetCustomAttribute<TemplateAttribute>(false);
 
-				foreach (var type in types)
+				if (templateAttribute == null)
 				{
-					var templateAttribute = type.GetCustomAttribute<TemplateAttribute>(false);
-
-					if (templateAttribute == null)
-					{
-						continue;
-					}
-
-					TemplateType.Add(templateAttribute.TemplateId, type);
+					continue;
 				}
+
+				if (TemplateType.ContainsKey(templateAttribute.TemplateId))
+				{
+					throw new Exception($"Fortis: template has already been added | Type: {type.FullName} | ID: {templateAttribute.TemplateId}");
+				}
+
+				TemplateType.Add(templateAttribute.TemplateId, type);
 			}
 
 			TemplateType.Keys.ToList().ForEach(templateId => TypeTemplate.Add(TemplateType[templateId], templateId));

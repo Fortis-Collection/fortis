@@ -147,6 +147,9 @@
     <Compile Include="Fields\FieldTestAutoFixture.cs" />
     <Compile Include="Fields\PropertyInfoFieldNameParserTests.cs" />
     <Compile Include="Items\BaseItemTests.cs" />
+    <Compile Include="Items\ItemTypeTemplateMatcherTests.cs" />
+    <Compile Include="Items\TemplateModelAssembliesTests.cs" />
+    <Compile Include="Items\TemplateTypeMapTests.cs" />
     <Compile Include="ItemTestAutoFixture.cs" />
     <Compile Include="Fields\FileFieldTests.cs" />
     <Compile Include="Fields\GeneralLinkFieldTests.cs" />

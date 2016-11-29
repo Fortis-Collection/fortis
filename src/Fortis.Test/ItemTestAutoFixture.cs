@@ -7,6 +7,9 @@ namespace Fortis.Test
 {
 	public class ItemTestAutoFixture
 	{
+		protected const string ItemTemplateAId = "{d4d8da75-efff-4e1f-98d7-1b05df85160e}";
+		protected const string ItemTemplateBId = "{3453112b-6d83-4f60-93be-7c09e1416d00}";
+		protected const string ItemTemplateCId = "{42f7627e-a0db-4f1e-bd5c-b6ad0763309a}";
 		protected const string FieldName = "Test Field";
 		protected const string ItemName = "Test Item";
 		protected Db FakeDatabase;
@@ -18,7 +21,7 @@ namespace Fortis.Test
 
 		protected ItemTestAutoFixture()
 		{
-			FakeTemplateA = new DbTemplate("Template A", new ID("{d4d8da75-efff-4e1f-98d7-1b05df85160e}"));
+			FakeTemplateA = new DbTemplate("Template A", new ID(ItemTemplateAId));
 
 			FakeTemplateA.Add(new DbField("Test")
 			{
@@ -33,8 +36,8 @@ namespace Fortis.Test
 				Type = "Checkbox"
 			});
 
-			FakeTemplateB = new DbTemplate("Template B", new ID("{3453112b-6d83-4f60-93be-7c09e1416d00}"));
-			FakeTemplateC = new DbTemplate("Template C", new ID("{42f7627e-a0db-4f1e-bd5c-b6ad0763309a}")) { BaseIDs = new ID[] { FakeTemplateA.ID } };
+			FakeTemplateB = new DbTemplate("Template B", new ID(ItemTemplateBId));
+			FakeTemplateC = new DbTemplate("Template C", new ID(ItemTemplateCId)) { BaseIDs = new ID[] { FakeTemplateA.ID } };
 			FakeItem = new DbItem(ItemName) { TemplateID = FakeTemplateC.ID };
 
 			FakeItem.Fields.Add("Test", "Test Text Field Value");
