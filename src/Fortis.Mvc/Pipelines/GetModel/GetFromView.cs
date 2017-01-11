@@ -8,20 +8,34 @@ using Sitecore.Mvc.Presentation;
 
 namespace Fortis.Mvc.Pipelines.GetModel
 {
+	using System.Collections.Generic;
+	using System.IO;
 	using System.Web;
 	using System.Web.Caching;
 
 	public class GetFromView : GetModelProcessor
 	{
+
+
+		private const string RenderingModelField = "Model";
+
+		private List<string> validTypes = new List<string>
+		{
+			"Layout", "View", "r", string.Empty
+		};
+
 		protected virtual object GetFromViewPath(Rendering rendering, GetModelArgs args)
 		{
-			var path = rendering.Renderer is ViewRenderer 
-				? ((ViewRenderer)rendering.Renderer).ViewPath 
-				: rendering.ToString().Replace("View: ", string.Empty);
-
+			var path = this.GetViewPath(args);
 			if (string.IsNullOrWhiteSpace(path))
 			{
 				return null;
+			}
+
+			var filePath = HttpContext.Current.Server.MapPath(path);
+			if (File.Exists(filePath) == false)
+			{
+				return false;
 			}
 
 			// Retrieve the compiled view
@@ -56,10 +70,41 @@ namespace Fortis.Mvc.Pipelines.GetModel
 
 		public override void Process(GetModelArgs args)
 		{
-			if (args.Result == null)
+			if (this.IsValidView(args) == false)
 			{
-				args.Result = GetFromViewPath(args.Rendering, args);
+				return;
 			}
+
+			args.Result = this.GetFromViewPath(args.Rendering, args);
+		}
+
+		protected virtual string GetViewPath(GetModelArgs args)
+		{
+			var rendering = args.Rendering;
+
+			return rendering.Renderer is ViewRenderer
+				? ((ViewRenderer) rendering.Renderer).ViewPath
+				: rendering.ToString().Replace("View: ", string.Empty);
+		}
+
+		protected virtual  bool IsValidView(GetModelArgs args)
+		{
+			if (args == null)
+			{
+				return false;
+			}
+
+			if (Sitecore.Context.Site != null && Sitecore.Context.Site.Name.ToLowerInvariant() == "shell")
+			{
+				return false;
+			}
+
+			if (string.IsNullOrWhiteSpace(args.Rendering.RenderingItem.InnerItem[RenderingModelField]) == false)
+			{
+				return false;
+			}
+
+			return this.validTypes.Contains(args.Rendering.RenderingType);
 		}
 	}
 }
