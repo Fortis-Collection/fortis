@@ -1,0 +1,93 @@
+﻿<#@ Assembly Name="$(SolutionDir)\packages\Fortis.4.2.1\lib\net45\Fortis.dll" #>
+<#@ Assembly Name="$(SolutionDir)\packages\Sitecore.Kernel.NoReferences.8.2.161115\lib\net452\Sitecore.Kernel.dll" #>
+<#@ assembly name="$(SolutionDir)\packages\Rainbow.Core.1.4.1\lib\net452\Rainbow.dll" #>
+<#@ assembly name="$(SolutionDir)\packages\Rainbow.Storage.Yaml.1.4.1\lib\net452\Rainbow.Storage.Yaml.dll" #>
+<#@ assembly name="$(SolutionDir)\packages\Transitus.Rainbow.1.0.4.0\lib\net45\Transitus.Rainbow.dll" #>
+
+<#@ Assembly Name="System.Core" #>
+<#@ Assembly Name="System.Windows.Forms" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="Transitus.Rainbow" #>
+<#
+
+	var items = new List<IItem>();
+
+	foreach (var folder in folders)
+	{
+		var deserializedItems = Transitus.Rainbow.TransitusProvider.FolderDeserializer.Deserialize(folder);
+
+		items.AddRange(deserializedItems);
+	}
+
+	var templates = Transitus.Rainbow.TransitusProvider.TemplateFactory.Create(items);
+#>
+// ReSharper disable PartialTypeWithSinglePart
+// ReSharper disable RedundantExtendsListEntry
+// ReSharper disable RedundantNameQualifier
+
+using System;
+using System.Collections.Generic;
+using Sitecore.Data.Items;
+using Sitecore.ContentSearch;
+using Sitecore.ContentSearch.Linq.Common;
+using Fortis.Model;
+using Fortis.Model.Fields;
+using Fortis.Providers;
+
+<#
+
+	foreach (var template in templates)
+	{
+#>
+#region <#= template.Name #> (<#= RelativeNamespace(template.Path) #>)
+namespace <#= FullNamespace(template.Path) #>
+{
+	public class Test<#= template.Name #> 
+	{
+	}
+}
+#endregion
+<#
+	}	
+#>
+<#+
+bool IsSolr = false;
+string SitecoreSystemTemplatePath = "/sitecore/templates/System/";
+string ClientTemplatePath = "/sitecore/templates/Fortis/";
+string BaseNamespace = "LM.Model";
+string RelativeNameSpaceUserDefined = "FortisTemplates";
+string BaseRenderingParametersTemplateId = "{E13DB450-F493-42D5-B1C1-536A57AED2A6}";
+
+public string RelativeNamespace(string templatePath)
+{
+	var relativeNamespace = string.Empty;
+
+	if (templatePath.StartsWith(SitecoreSystemTemplatePath))
+	{
+		relativeNamespace = "ScSystem";
+	}
+	else if (templatePath.StartsWith(ClientTemplatePath))
+	{
+		relativeNamespace = RelativeNameSpaceUserDefined;
+	}
+	else
+	{
+		relativeNamespace = "Ignite";
+	}
+	
+	return relativeNamespace;
+}
+
+public string FullNamespace(string templatePath)
+{
+	return BaseNamespace + ".Templates." + RelativeNamespace(templatePath);
+}
+#>

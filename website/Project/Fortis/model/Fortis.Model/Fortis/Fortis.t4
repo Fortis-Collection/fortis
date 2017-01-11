@@ -1,0 +1,486 @@
+﻿<#@ Assembly Name="$(SolutionDir)\packages\Fortis.4.2.1\lib\net45\Fortis.dll" #>
+<#@ Assembly Name="$(SolutionDir)\packages\Sitecore.Kernel.NoReferences.8.2.161115\lib\net452\Sitecore.Kernel.dll" #>
+<#@ assembly name="$(SolutionDir)\packages\Rainbow.Core.1.4.1\lib\net452\Rainbow.dll" #>
+<#@ assembly name="$(SolutionDir)\packages\Rainbow.Storage.Yaml.1.4.1\lib\net452\Rainbow.Storage.Yaml.dll" #>
+<#@ assembly name="$(SolutionDir)\packages\Transitus.Rainbow.1.0.4.0\lib\net45\Transitus.Rainbow.dll" #>
+
+<#@ Assembly Name="System.Core" #>
+<#@ Assembly Name="System.Windows.Forms" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="Transitus.Rainbow" #>
+<#
+	bool IsSolr = false;
+	string SitecoreSystemTemplatePath = "/sitecore/templates/System/";
+	string ClientTemplatePath = "/sitecore/templates/Fortis/";
+	string BaseNamespace = "LM.Model";
+	string RelativeNameSpaceUserDefined = "FortisTemplates";
+	string BaseRenderingParametersTemplateId = "{E13DB450-F493-42D5-B1C1-536A57AED2A6}";
+
+	var items = new List<IItem>();
+
+	foreach (var folder in folders)
+	{
+		var deserializedItems = Transitus.Rainbow.TransitusProvider.FolderDeserializer.Deserialize(folder);
+
+		items.AddRange(deserializedItems);
+	}
+
+	var templates = Transitus.Rainbow.TransitusProvider.TemplateFactory.Create(items);
+#>
+// ReSharper disable PartialTypeWithSinglePart
+// ReSharper disable RedundantExtendsListEntry
+// ReSharper disable RedundantNameQualifier
+
+using System;
+using System.Collections.Generic;
+using Sitecore.Data.Items;
+using Sitecore.ContentSearch;
+using Sitecore.ContentSearch.Linq.Common;
+using Fortis.Model;
+using Fortis.Model.Fields;
+using Fortis.Providers;
+
+<#
+
+	foreach (var template in templates)
+	{
+		var isRenderingParametersTemplate = HasRenderingOptionsBase(template.BaseTemplateIds, template.Id);
+#>
+#region <#= template.Name #> (<#= RelativeNamespace(template.Path) #>)
+namespace <#= FullNamespace(template.Path) #>
+{
+<#
+	if (isRenderingParametersTemplate)
+	{
+		GenerateRenderingParametersTemplate(template);
+	}
+	else
+	{
+		GenerateTemplate(template);
+	}
+#>
+}
+#endregion
+<#
+	}	
+#>
+
+<#+
+public void GenerateTemplate(ITemplate template)
+{
+#>
+	/* 
+	 * Base Templates Count:	[<#= template.BaseTemplates.Count() #>] 
+	 * Base Template Ids Count: [<#= template.BaseTemplateIds.Count() #>] 
+	 */
+
+	/// <summary><para>Template: <#= template.Name #></para><para>ID: <#= template.Id #></para><para><#= template.Path #></para></summary>
+	[TemplateMapping("<#= template.Id #>", "InterfaceMap")]
+	public partial interface <#= InterfaceName(template.Name) #> : ICustomItemWrapper<#+
+	foreach (var baseTemplate in template.BaseTemplates)
+	{
+		#>, <#= FullNamespace(baseTemplate.Path) + "." + InterfaceName(baseTemplate.Name)  #><#+
+	}
+#>
+
+	{
+<#+
+		foreach(var field in template.LocalFields)
+		{
+#>
+
+    	/// <summary><para>Template: <#= template.Name #></para><para>Field: <#= field.Name #></para><para>Data type: <#= field.TypeName #></para></summary>
+<#+
+		if (IsSupportedSearchFieldType(field.TypeKey))
+		{
+#>
+		[IndexField("<#= GetFieldSearchKey(field.Key, field.TypeKey) #>")]
+<#+
+		}
+#>
+		I<#= GetFieldWrapperType(field.TypeKey) #> <#= TitleCase(field.Name) #> { get; }
+
+    	/// <summary><para>Template: <#= template.Name #></para><para>Field: <#= field.Name #></para><para>Data type: <#= field.TypeName #></para></summary>
+<#+
+		if (IsSupportedSearchFieldType(field.TypeKey))
+		{
+#>
+		[IndexField("<#= GetFieldSearchKey(field.Key, field.TypeKey) #>")]
+<#+
+		}
+#>
+		<#= GetReturnType(GetFieldWrapperType(field.TypeKey)) #> <#= TitleCase(field.Name) #>Value { get; }
+<#+
+		}
+#>
+	}
+	
+	[PredefinedQuery("TemplateId", ComparisonType.Equal, "<#= template.Id #>", typeof(Guid))]
+	[TemplateMapping("<#= template.Id #>")]
+	public partial class <#= ClassName(template.Name) #> : CustomItemWrapper, <#= InterfaceName(template.Name) #>
+	{
+		public <#= ClassName(template.Name) #>(Item item, ISpawnProvider spawnProvider)
+			: base(item, spawnProvider) { }
+
+		public <#= ClassName(template.Name) #>(Guid id, Dictionary<string, object> lazyFields, ISpawnProvider spawnProvider)
+			: base(id, lazyFields, spawnProvider) { }
+<#+
+        foreach(var field in template.CombinedFields)
+        {
+#>
+
+		/// <summary><para>Field: <#= TitleCase(field.Name) #></para><para>Data type: <#= field.TypeName #></para></summary>
+<#+ if (IsSupportedSearchFieldType(field.TypeKey)) { #>
+		[IndexField("<#= GetFieldSearchKey(field.Key, field.TypeKey) #>")]
+<#+ } #>
+		public virtual I<#= GetFieldWrapperType(field.TypeKey) #> <#= TitleCase(field.Name) #> => this.GetField<<#= GetFieldWrapperType(field.TypeKey) #>>("<#= field.Name #>");
+
+		/// <summary>
+		/// Enables searching on the <#= TitleCase(field.Name) #> field. DO NOT USE FOR POPULATING FIELDS OR RENDERING CONTENT. ONLY USE FOR SITECORE SEARCH API
+		/// </summary>
+<#+ if (IsSupportedSearchFieldType(field.TypeKey)) { #>
+		[IndexField("<#= GetFieldSearchKey(field.Key, field.TypeKey) #>")]
+<#+ } #>
+ 		public <#= GetReturnType(GetFieldWrapperType(field.TypeKey)) #> <#= TitleCase(field.Name) #>Value => this.<#= TitleCase(field.Name) #>.Value;
+<#+
+		}
+#>
+	}
+<#+
+}
+#>
+<#+
+public void GenerateRenderingParametersTemplate(ITemplate template)
+{
+#>
+	/// <summary>
+	/// <para>Template: <#= template.Name #></para>
+	/// <para>ID: <#= template.Id #></para>
+	/// <para><#= template.Path #></para>
+	/// </summary>
+	[TemplateMapping("<#= template.Id #>", "InterfaceRenderingParameterMap")]
+	public partial interface <#= InterfaceName(template.Name) #> : IRenderingParameterWrapper<#+
+	foreach (var baseTemplate in template.BaseTemplates)
+	{
+		#>, <#= FullNamespace(baseTemplate.Path) + "." + InterfaceName(baseTemplate.Name)  #><#+
+	}
+#>
+
+	{
+<#+
+		foreach(var field in template.LocalFields)
+		{
+#>
+    	/// <summary><para>Template: <#= template.Name #></para><para>Field: <#= field.Name #></para><para>Data type: <#= field.TypeName #></para></summary>
+		I<#= GetFieldWrapperType(field.TypeKey) #> <#= TitleCase(field.Name) #> { get; }
+<#+
+		}
+#>
+	}
+	
+	[TemplateMapping("<#= template.Id #>", "RenderingParameter")]
+	public partial class <#= ClassName(template.Name) #> : RenderingParameterWrapper, <#= InterfaceName(template.Name) #>
+	{
+		public <#= ClassName(template.Name) #>(Dictionary<string, string> parameters, ISpawnProvider spawnProvider)
+			: base(parameters, spawnProvider)
+		{ }
+<#+
+        foreach(var field in template.CombinedFields)
+        {
+#>
+
+		/// <summary><para>Field: <#= TitleCase(field.Name) #></para><para>Data type: <#= field.TypeName #></para></summary>
+		public virtual I<#= GetFieldWrapperType(field.TypeKey) #> <#= TitleCase(field.Name) #> => (Fortis.Model.RenderingParameters.Fields.<#= GetFieldWrapperType(field.TypeKey) #>)this.GetField("<#= field.Name #>", "<#= field.TypeKey #>");
+<#+
+		}
+#>	
+	}
+<#+
+}
+#>
+<#+
+public string RelativeNamespace(string templatePath)
+{
+	var relativeNamespace = string.Empty;
+
+	if (templatePath.StartsWith(SitecoreSystemTemplatePath))
+	{
+		relativeNamespace = "ScSystem";
+	}
+	else if (templatePath.StartsWith(ClientTemplatePath))
+	{
+		relativeNamespace = RelativeNameSpaceUserDefined;
+	}
+	else
+	{
+		relativeNamespace = "Ignite";
+	}
+	
+	return relativeNamespace;
+}
+
+public string FullNamespace(string templatePath)
+{
+	return BaseNamespace + ".Templates." + RelativeNamespace(templatePath);
+}
+
+public string TitleCase(string name)
+{
+	name = Regex.Replace(name, "([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))", "$1 ");
+	name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(name);
+	name = Regex.Replace(name, @"[^a-zA-Z0-9]", String.Empty);
+
+	var firstChar = 0;
+
+	if (int.TryParse(name.Substring(0, 1), out firstChar))
+	{
+		var numberToWord = string.Empty;
+
+		switch(firstChar)
+		{
+			case 0:
+				numberToWord = "Zero";
+				break;
+			case 1:
+				numberToWord = "One";
+				break;
+			case 2:
+				numberToWord = "Two";
+				break;
+			case 3:
+				numberToWord = "Three";
+				break;
+			case 4:
+				numberToWord = "Four";
+				break;
+			case 5:
+				numberToWord = "Five";
+				break;
+			case 6:
+				numberToWord = "Six";
+				break;
+			case 7:
+				numberToWord = "Seven";
+				break;
+			case 8:
+				numberToWord = "Eight";
+				break;
+			case 9:
+				numberToWord = "Nine";
+				break;
+		}
+
+		name = numberToWord + name.Remove(0, 1);
+	}
+	
+	return name;
+}
+
+public string InterfaceName(string name)
+{
+	return "I" + TitleCase(name);
+}
+
+public string ClassName(string name)
+{
+	return TitleCase(name);
+}
+
+public string GetFieldWrapperTypeInterface(string typeName)
+{
+	return "I" + GetFieldWrapperType(typeName);
+}
+
+public string GetReturnType(string fieldType)
+{
+	switch (fieldType)
+	{
+		case "BooleanFieldWrapper":
+		case "IBooleanFieldWrapper":
+			return "bool";
+		case "DateTimeFieldWrapper":
+		case "IDateTimeFieldWrapper":
+			return "DateTime";
+		case "ListFieldWrapper":
+		case "IListFieldWrapper":
+			return "IEnumerable<Guid>";
+		case "IntegerFieldWrapper":
+		case "IIntegerFieldWrapper":
+			return "long";
+		case "NumberFieldWrapper":
+		case "INumberFieldWrapper":
+			return "float";
+		case "LinkFieldWrapper":
+		case "ILinkFieldWrapper":
+			return "Guid";
+		default:
+			return "string";
+	}
+}
+
+public string GetFieldWrapperType(string typeName)
+{
+	var wrapperType = "FieldWrapper";
+	
+	switch (typeName.ToLower())
+	{
+		case "checkbox":
+			wrapperType = "BooleanFieldWrapper";
+			break;
+		case "image":
+			wrapperType = "ImageFieldWrapper";
+			break;
+		case "file":
+			wrapperType = "FileFieldWrapper";
+			break;
+		case "date":
+		case "datetime":
+			wrapperType = "DateTimeFieldWrapper";
+			break;
+		case "checklist":
+		case "treelist":
+		case "treelist with search":
+		case "treelistex":
+		case "multilist":
+		case "multilist with search":
+		case "tags":
+			wrapperType = "ListFieldWrapper";
+			break;
+		case "droplink":
+		case "droptree":
+			wrapperType = "LinkFieldWrapper";
+			break;
+		case "general link":
+		case "general link with search":
+			wrapperType = "GeneralLinkFieldWrapper";
+			break;
+		case "text":
+		case "single-line text":
+		case "multi-line text":
+			wrapperType = "TextFieldWrapper";
+			break;
+		case "rich text":
+			wrapperType = "RichTextFieldWrapper";
+			break;
+		case "number":
+			wrapperType = "NumberFieldWrapper";
+			break;
+		case "integer":
+			wrapperType = "IntegerFieldWrapper";
+			break;
+		case "color picker":
+			wrapperType = "FieldWrapper";
+			break;
+		default:
+			wrapperType = "TextFieldWrapper";
+			break;
+	}
+
+	return wrapperType;
+}
+
+public bool HasRenderingOptionsBase(IEnumerable<string> templateItemIds, string templateId)
+{
+	var renderingParameterTemplateId = BaseRenderingParametersTemplateId.ToLower();
+	return templateId.ToLower() == renderingParameterTemplateId || templateItemIds.Any(t => t.ToLower() == renderingParameterTemplateId);
+}
+
+// Search
+public string GetFieldSearchKey(string fieldKey, string fieldTypeKey)
+{
+	return fieldKey.Replace(" ", "_").ToLowerInvariant() + GetFieldTypeSearchAffix(fieldTypeKey);
+}
+
+public string GetFieldTypeSearchAffix(string typeName)
+{
+	string affix;
+
+	if (IsSolr == false)
+	{
+		return string.Empty;
+	}
+	
+	switch (typeName.ToLower())
+	{
+		case "checkbox":
+			affix = "_b";
+			break;
+		case "date":
+		case "datetime":
+			affix = "_tdt";
+			break;
+		case "checklist":
+		case "treelist":
+		case "treelist with search":
+		case "treelistex":
+		case "multilist":
+		case "multilist with search":
+		case "tags":
+			affix = "_sm";
+			break;
+		case "droplink":
+		case "droptree":
+			affix = "_s";
+			break;
+		case "general link":
+		case "general link with search":
+		case "text":
+		case "readonlytext":
+		case "single-line text":
+		case "multi-line text":
+		case "rich text":
+			affix = "_t";
+			break;
+		case "number":
+			affix = "_tf";
+			break;
+		case "integer":
+			affix = "_tl";
+			break;
+		default:
+			throw new Exception("No mapping for " + typeName);
+	}
+
+	return affix;
+}
+
+public bool IsSupportedSearchFieldType(string typeName)
+{
+	switch (typeName.ToLower())
+	{
+		case "checkbox":
+		case "date":
+		case "datetime":
+		case "checklist":
+		case "treelist":
+		case "treelist with search":
+		case "treelistex":
+		case "multilist":
+		case "multilist with search":
+		case "droplink":
+		case "droptree":
+		case "general link":
+		case "general link with search":
+		case "text":
+		case "readonlytext":
+		case "single-line text":
+		case "multi-line text":
+		case "rich text":
+		case "number":
+		case "integer":
+		case "tags":
+			return true;
+		default:
+			return false;
+	}
+}
+
+#>

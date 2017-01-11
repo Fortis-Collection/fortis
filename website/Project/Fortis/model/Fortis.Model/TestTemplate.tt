@@ -1,0 +1,43 @@
+﻿﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ assembly Name="System.Core" #>
+<#@ assembly Name="System.Windows.Forms" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Globalization" #>
+<#@ assembly name="EnvDTE" #>
+<#@ import namespace="EnvDTE" #>
+/*
+ * Fortis Template Models for Poker Central
+ *
+ * Generated at <#= DateTime.Now #>
+ *
+ */
+<#
+	var stopwatch = Stopwatch.StartNew();
+
+	var solutionsPath = this.Host.ResolveAssemblyReference("$(SolutionDir)");
+	var myFolder = solutionsPath + @"..\website\Project\Fortis\serialization";
+
+	var folders = new List<string>
+	{
+		myFolder + @"..\Fortis.Website.Templates"
+	};
+#>
+namespace <#= "Fortis.Model" #>
+{
+	public class HelloWorld
+	{
+	}
+}
+<#
+	stopwatch.Stop();
+#>
+<#+
+#>

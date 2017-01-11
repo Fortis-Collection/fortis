@@ -108,9 +108,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
+    <Compile Include="Extensions\FortisHelper.cs" />
     <Compile Include="Pipelines\GetModel\GetFromView.cs" />
     <Compile Include="Providers\ContextProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ui\FortisEditFrame.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fortis\Fortis.csproj">

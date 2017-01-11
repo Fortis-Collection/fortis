@@ -1,0 +1,45 @@
+﻿﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ assembly Name="System.Core" #>
+<#@ assembly Name="System.Windows.Forms" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Globalization" #>
+<#@ assembly name="EnvDTE" #>
+<#@ import namespace="EnvDTE" #>
+/*
+ * Fortis Template Models for Poker Central
+ *
+ * Generated at <#= DateTime.Now #>
+ */
+<#
+	var stopwatch = Stopwatch.StartNew();
+
+	string solutionsPath = this.Host.ResolveAssemblyReference("$(SolutionDir)");
+	var myFolder = solutionsPath + @"..\website\Project\Fortis\serialization";
+
+	var folders = new List<string>
+	{
+		myFolder + @"..\Fortis.Website.Templates"
+	};
+#>
+<#@ include file="Fortis/Fortis.t4" #>
+<#
+	stopwatch.Stop();
+#>
+// Generated in <#= stopwatch.ElapsedMilliseconds #>ms
+// Found <#= templates.Count() #> templates in <#= folders.Count() #> folders [<#= myFolder #>]
+<#+
+	bool IsSolr = false;
+	string SitecoreSystemTemplatePath = "/sitecore/templates/System/";
+	string ClientTemplatePath = "/sitecore/templates/User Defined/";
+	string BaseNamespace = "LM.Model";
+	string RelativeNameSpaceUserDefined = "PokerCentral";
+	string BaseRenderingParametersTemplateId = "{E13DB450-F493-42D5-B1C1-536A57AED2A6}";
+#>
