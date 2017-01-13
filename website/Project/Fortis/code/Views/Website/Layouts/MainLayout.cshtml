@@ -1,1 +1,46 @@
-﻿
+﻿@using Sitecore.Mvc
+@inherits WebViewPage
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<!--[if IE 9]><html lang="en" class="ie9 no-js"><![endif]-->
+<!--[if !IE]><!-->
+<html lang="@Sitecore.Context.Language.CultureInfo.TwoLetterISOLanguageName">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <link href="~/styles/vendor.min.css" rel="stylesheet" />
+    <link href="~/styles/default.min.css" rel="stylesheet" />
+    <link href="~/styles/niteflight.min.css" rel="stylesheet" />
+    <link href="~/styles/editor.min.css" rel="stylesheet" />
+
+    @if (!Sitecore.Context.PageMode.IsExperienceEditor)
+    {
+        @Html.Sitecore().Placeholder("head")
+    }
+</head>
+<body class="header-static">
+    <div id="main-container">
+        <header class="header-static">
+            @Html.Sitecore().Placeholder("header-top")
+
+            @Html.Sitecore().Placeholder("navbar")
+        </header>
+        <main role="main">
+            @Html.Sitecore().Placeholder("main")
+        </main>
+        <footer class="bg-dark">
+            <h3>Is Page Edit Mode: @Sitecore.Context.PageMode.IsExperienceEditor</h3>
+            @Html.Sitecore().Placeholder("footer")
+        </footer>
+
+        @Html.Sitecore().Placeholder("page-sidebar")
+    </div>
+
+</body>
+</html>

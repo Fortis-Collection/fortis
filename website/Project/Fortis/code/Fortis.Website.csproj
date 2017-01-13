@@ -47,12 +47,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Fortis, Version=3.5.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Fortis.3.5.0.1\lib\net45\Fortis.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Fortis.Mvc, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Fortis.Mvc-5.2.1.0.0\lib\net45\Fortis.Mvc.dll</HintPath>
+    <Reference Include="Fortis, Version=4.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Fortis.4.2.1\lib\net452\Fortis.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Kamsar.WebConsole, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -68,6 +64,14 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.DependencyInjection.1.0.0\lib\netstandard1.1\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
@@ -90,6 +94,18 @@
     </Reference>
     <Reference Include="Rainbow.Storage.Yaml, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Rainbow.Storage.Yaml.1.4.1\lib\net452\Rainbow.Storage.Yaml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SimpleInjector, Version=3.3.2.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\SimpleInjector.3.3.2\lib\net45\SimpleInjector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sitecore.Kernel, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Sitecore.Kernel.NoReferences.8.2.161221\lib\NET452\Sitecore.Kernel.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sitecore.Mvc, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Sitecore.Mvc.NoReferences.8.2.161221\lib\NET452\Sitecore.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -153,8 +169,14 @@
       <HintPath>..\..\..\packages\Unicorn.Core.3.3.2\lib\net452\Unicorn.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ContentController.cs" />
+    <Compile Include="DI\FortisConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -183,19 +205,31 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="styles\dayfrost.css" />
+    <Content Include="styles\dayfrost.min.css" />
+    <Content Include="styles\default.css" />
+    <Content Include="styles\default.min.css" />
+    <Content Include="styles\editor.css" />
+    <Content Include="styles\editor.min.css" />
+    <Content Include="styles\niteflight.css" />
+    <Content Include="styles\niteflight.min.css" />
+    <Content Include="styles\vendor.css" />
+    <Content Include="styles\vendor.min.css" />
+    <Content Include="styles\white-wonder.css" />
+    <Content Include="styles\white-wonder.min.css" />
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
     <Content Include="App_Config\Include\Project\Fortis.Website.config" />
     <Content Include="App_Config\Include\Project\Fortis.Website.Serialization.config" />
     <Content Include="App_Config\Include\Project\z.Fortis.DevSettings.config" />
     <Content Include="App_Config\Security\domains.config.transform" />
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Website\Layouts\MainLayout.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Content\MetaData.cshtml" />
+    <Content Include="Views\Content\PageList.cshtml" />
     <None Include="Web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -207,8 +241,19 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="App_Start\" />
-    <Folder Include="Controllers\" />
+    <Folder Include="css\" />
+    <Folder Include="Views\Shared\" />
     <Folder Include="Views\Website\Sublayouts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\Fortis.Mvc\Fortis.Mvc.csproj">
+      <Project>{56bc76c2-be7a-429b-b1f5-f965ee0cb663}</Project>
+      <Name>Fortis.Mvc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\model\Fortis.Model\Fortis.Model.csproj">
+      <Project>{689a32ef-1556-4a93-ab7f-ba656cf11b2e}</Project>
+      <Name>Fortis.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,0 +1,25 @@
+﻿---
+ID: "53a47e66-b7f9-45bd-90e4-6ea9248587a8"
+Parent: "b1a64f2c-32eb-4406-b60e-8a0d181f90e4"
+Template: "ab86861a-6030-46c5-b394-e8f99e8b87db"
+Path: /sitecore/templates/Fortis/Page Types/Content Page
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: ApplicationsV2/32x32/document_dirty.png
+- ID: "12c33f3f-86c5-43a5-aeb4-5598cec45116"
+  Hint: __Base template
+  Type: tree list
+  Value: "{704167FE-A2A0-44BC-9E40-A9BF79D02CB1}"
+- ID: "f7d48a55-2158-4f02-9356-756654404f73"
+  Hint: __Standard values
+  Value: "{FB5BB786-B383-4190-B69B-4CD13FF00496}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170111T193744Z

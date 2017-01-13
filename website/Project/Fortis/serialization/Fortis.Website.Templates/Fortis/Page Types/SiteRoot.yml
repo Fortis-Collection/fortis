@@ -1,0 +1,25 @@
+﻿---
+ID: "e2c4f1ff-88c7-48b5-b291-72ce8ecd9242"
+Parent: "b1a64f2c-32eb-4406-b60e-8a0d181f90e4"
+Template: "ab86861a-6030-46c5-b394-e8f99e8b87db"
+Path: /sitecore/templates/Fortis/Page Types/SiteRoot
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: Apps/32x32/Castle.png
+- ID: "12c33f3f-86c5-43a5-aeb4-5598cec45116"
+  Hint: __Base template
+  Type: tree list
+  Value: "{704167FE-A2A0-44BC-9E40-A9BF79D02CB1}"
+- ID: "f7d48a55-2158-4f02-9356-756654404f73"
+  Hint: __Standard values
+  Value: "{F10BB064-0578-4B7C-B5A6-A18B4D4FDD88}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170111T194012Z

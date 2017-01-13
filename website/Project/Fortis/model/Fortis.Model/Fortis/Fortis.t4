@@ -84,7 +84,7 @@ public void GenerateTemplate(ITemplate template)
 
 	/// <summary><para>Template: <#= template.Name #></para><para>ID: <#= template.Id #></para><para><#= template.Path #></para></summary>
 	[TemplateMapping("<#= template.Id #>", "InterfaceMap")]
-	public partial interface <#= InterfaceName(template.Name) #> : ICustomItemWrapper<#+
+	public partial interface <#= InterfaceName(template.Name) #> : IItemWrapper<#+
 	foreach (var baseTemplate in template.BaseTemplates)
 	{
 		#>, <#= FullNamespace(baseTemplate.Path) + "." + InterfaceName(baseTemplate.Name)  #><#+
@@ -125,7 +125,7 @@ public void GenerateTemplate(ITemplate template)
 	
 	[PredefinedQuery("TemplateId", ComparisonType.Equal, "<#= template.Id #>", typeof(Guid))]
 	[TemplateMapping("<#= template.Id #>")]
-	public partial class <#= ClassName(template.Name) #> : CustomItemWrapper, <#= InterfaceName(template.Name) #>
+	public partial class <#= ClassName(template.Name) #> : ItemWrapper, <#= InterfaceName(template.Name) #>
 	{
 		public <#= ClassName(template.Name) #>(Item item, ISpawnProvider spawnProvider)
 			: base(item, spawnProvider) { }
