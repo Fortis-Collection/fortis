@@ -14,7 +14,8 @@ Unicorn Users:
 * Download the T4 templates https://github.com/Fortis-Collection/fortis.codegen.transitus.rainbow/tree/master/Source/Fortis.Model and setup as in this blog post: http://www.sitecorenutsbolts.net/2015/10/14/Fortis-Model-Generation-with-Unicorn-3/
 * Right click Model.tt and click Run Custom Tool
 
-Add the model assembly binary to the Fortis.config file:
+Install Fortis.Web nuget package. This adds the configs to you website project. Then add the model assembly binary to the Fortis.config file:
+
     <model name="Fortis.Model" assembly="Fortis.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
 
 Install the version of the Fortis presentation layer you need:

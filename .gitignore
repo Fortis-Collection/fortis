@@ -49,3 +49,4 @@ _Lib/
 packages/*
 *.Fakes.*
 NuGet/
+website/packages/*

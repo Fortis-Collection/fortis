@@ -1,0 +1,14 @@
+﻿---
+ID: "c1a2cf98-7518-44da-9486-a759efeef44c"
+Parent: "1dcb8dfb-bd0b-424b-8943-1f36ad5474cc"
+Template: "e269fbb5-3750-427a-9149-7aa950b49301"
+Path: /sitecore/templates/Fortis/Content/Content/Data
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170111T035610Z

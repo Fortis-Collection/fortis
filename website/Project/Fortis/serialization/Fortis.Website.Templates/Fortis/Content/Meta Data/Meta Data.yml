@@ -1,0 +1,14 @@
+﻿---
+ID: "258565b7-edc2-430f-9aac-4953f277b32f"
+Parent: "744ecf2a-cc94-4754-8bda-4ec68ce14fba"
+Template: "e269fbb5-3750-427a-9149-7aa950b49301"
+Path: /sitecore/templates/Fortis/Content/Meta Data/Meta Data
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170111T035409Z

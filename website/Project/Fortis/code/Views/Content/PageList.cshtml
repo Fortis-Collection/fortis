@@ -1,0 +1,20 @@
+﻿@using Fortis.Mvc.Extensions
+@using Fortis.Mvc.Ui
+@using LM.Model.Templates.Ignite
+@using Sitecore.Mvc
+@model LM.Model.Templates.Ignite.IContentList
+
+@using (Html.BeginEditFrame("/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Multilist", Html.Sitecore().CurrentRendering.DataSource))
+{
+    <h2>Page List Component (@Html.Sitecore().CurrentRendering.DataSource)</h2>
+    <ul>
+        @foreach (IContentPage item in Model.Pages.GetItems<IContentPage>())
+        {
+            <li>@item.Name</li>
+        }
+    </ul>
+}
+<hr/>
+<div>
+    Title: @Html.Sitecore().Field("browser title", Sitecore.Context.Item)
+</div>
