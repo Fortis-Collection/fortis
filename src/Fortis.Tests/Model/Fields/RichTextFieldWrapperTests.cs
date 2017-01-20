@@ -10,22 +10,20 @@ namespace Fortis.Tests.Model.Fields
     /// <seealso cref="Fortis.Tests.Model.Fields.FieldWrapperTestClass{Fortis.Model.Fields.RichTextFieldWrapper}" />
     public class RichTextFieldWrapperTests : FieldWrapperTestClass<RichTextFieldWrapper>
     {
-        //[Theory]
-        //[InlineData("", "")]
-        //[InlineData("   ", "   ")]
-        //[InlineData("test", "test")]
-        //public void Value_SpecificRawValue_ReturnsExpectedHtmlStringValue(string rawValue, string expectedStringValue)
-        //{
-        //    var expectedValue = new HtmlString(expectedStringValue);
+		[Theory]
+		[InlineData("", "")]
+		[InlineData("   ", "   ")]
+		[InlineData("test", "test")]
+		public void Value_SpecificRawValue_ReturnsExpectedHtmlStringValue(string rawValue, string expectedValue)
+		{
+			this.Field.Value = rawValue;
 
-        //    this.Field.Value = rawValue;
+			var actual = this.FieldWrapper.Value;
+			// Unable to compare two HtmlString objects here, need to compare strings instead.
+			Assert.Equal(expectedValue, actual.ToHtmlString());
+		}
 
-        //    var actual = this.FieldWrapper.Value;
-
-        //    Assert.Equal(expectedValue, actual);
-        //}
-
-        [Theory]
+		[Theory]
         [InlineData("", false)]
         [InlineData("   ", false)]
         [InlineData("test", true)]

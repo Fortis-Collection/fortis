@@ -191,6 +191,7 @@
     </None>
     <None Include="App_Config\Include\Sitecore.FakeDb.82.config" />
     <None Include="App_Config\Include\Sitecore.FakeDb.AutoIncludeSample.config" />
+    <None Include="App_Config\Include\Sitecore.FakeDb.RenderFieldPipeline.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -62,31 +62,39 @@ namespace Fortis.Model.Fields
 		{
 			get
 			{
-				if (_ids == null)
-				{
-					var listField = (MultilistField)Field;
-					var ids = new List<Guid>();
-
-					foreach (var id in listField.Items)
-					{
-						Guid guid;
-
-						if (Guid.TryParse(id, out guid))
-						{
-							ids.Add(guid);
-						}
-					}
-
-					_ids = ids;
-				}
-
+			    this.InitializeValue();
 				return _ids;
 			}
 		}
 
 		public override bool HasValue
 		{
-			get { return _ids != null && Value.Any(); }
+		    get
+		    {
+                this.InitializeValue();
+                return _ids.Any();
+		    }
 		}
+
+	    private void InitializeValue()
+	    {
+            if (_ids == null)
+            {
+                var listField = (MultilistField)Field;
+                var ids = new List<Guid>();
+
+                foreach (var id in listField.Items)
+                {
+                    Guid guid;
+
+                    if (Guid.TryParse(id, out guid))
+                    {
+                        ids.Add(guid);
+                    }
+                }
+
+                _ids = ids;
+            }
+        }
 	}
 }
