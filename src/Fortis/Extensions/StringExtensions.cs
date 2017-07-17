@@ -1,6 +1,6 @@
 ﻿using Sitecore.Data;
+using Sitecore.Globalization;
 using System;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Fortis.Extensions
@@ -40,6 +40,18 @@ namespace Fortis.Extensions
 		public static string SpaceSeparatePascal(this string source)
 		{
 			return source.SeparatePascal(" ");
+		}
+
+		public static Language SafeParseLanguage(this string source)
+		{
+			Language parsedLanguage = null;
+
+			if (!Language.TryParse(source, out parsedLanguage))
+			{
+				throw new Exception($"Fortis: unable to parse language '{source}'");
+			}
+
+			return parsedLanguage;
 		}
 	}
 }

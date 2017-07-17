@@ -7,7 +7,12 @@ namespace Fortis.Extensions
 	{
 		public static string ToIdString(this Guid source)
 		{
-			return new ID(source).ToString();
+			return source.ToId().ToString();
+		}
+
+		public static ID ToId(this Guid source)
+		{
+			return new ID(source);
 		}
 	}
 }
