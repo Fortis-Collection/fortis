@@ -161,6 +161,7 @@
     <Compile Include="Items\IItemFactory.cs" />
     <Compile Include="Items\IItemGetter.cs" />
     <Compile Include="Items\IItemsFactory.cs" />
+    <Compile Include="Items\IItemsGetter.cs" />
     <Compile Include="Items\ISitecoreItemGetter.cs" />
     <Compile Include="Items\ISitecoreItemsGetter.cs" />
     <Compile Include="Items\ItemGetter.cs" />

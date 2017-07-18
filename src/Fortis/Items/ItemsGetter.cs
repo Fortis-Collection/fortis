@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Fortis.Items
 {
-	public class ItemsGetter
+	public class ItemsGetter : IItemsGetter
 	{
 		protected readonly ISitecoreItemsGetter SitecoreItemsGetter;
 		protected readonly IItemsFactory ItemsFactory;
