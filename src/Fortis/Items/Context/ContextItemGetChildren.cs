@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Fortis.Items.Context
 {
-	public class ContextItemGetChildren
+	public class ContextItemGetChildren : IContextItemGetChildren
 	{
 		protected readonly IContextItemGetter ContextItemGetter;
 

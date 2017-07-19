@@ -149,6 +149,7 @@
     <Compile Include="Items\Context\ContextItemGetChildren.cs" />
     <Compile Include="Items\Context\ContextItemGetter.cs" />
     <Compile Include="Items\Context\ContextItemsGetter.cs" />
+    <Compile Include="Items\Context\IContextItemGetChildren.cs" />
     <Compile Include="Items\Context\IContextItemGetter.cs" />
     <Compile Include="Items\Context\IContextItem.cs" />
     <Compile Include="Items\Context\IContextItemsGetter.cs" />

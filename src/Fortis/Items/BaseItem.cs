@@ -38,7 +38,6 @@ namespace Fortis.Items
 			}
 			set { item = value; }
 		}
-
 		private Guid? itemId;
 		public Guid ItemId
 		{
@@ -82,7 +81,38 @@ namespace Fortis.Items
 
 		public IEnumerable<T> GetChildren<T>()
 		{
-			return ItemFactory.Create<T>(Item.Children.AsEnumerable());
+			if (ItemHasChildren)
+			{
+				return ItemFactory.Create<T>(Item.Children.AsEnumerable());
+			}
+
+			return Enumerable.Empty<T>();
+		}
+		public IEnumerable<T> GetChildrenRecursive<T>()
+		{
+			return GetChildrenRecursive<T>(this);
+		}
+		public IEnumerable<T> GetChildrenRecursive<T>(IItem item)
+		{
+			var children = item.GetChildren<IItem>();
+
+			foreach (var child in children)
+			{
+				if (child is T)
+				{
+					yield return (T)child;
+				}
+
+				if (child.ItemHasChildren)
+				{
+					var innerChildren = GetChildrenRecursive<T>(child);
+
+					foreach (var innerChild in innerChildren)
+					{
+						yield return innerChild;
+					}
+				}
+			}
 		}
 	}
 }

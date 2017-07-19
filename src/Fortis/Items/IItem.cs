@@ -22,5 +22,6 @@ namespace Fortis.Items
 		int ItemChildrenCount { get; }
 		bool ItemHasChildren { get; }
 		IEnumerable<T> GetChildren<T>();
+		IEnumerable<T> GetChildrenRecursive<T>();
 	}
 }
