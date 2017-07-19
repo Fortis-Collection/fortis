@@ -11,7 +11,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemId_Item_ItemIDGuid()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.ID.Guid;
 			var actual = item.ItemId;
@@ -22,7 +22,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemLongId_Item_ItemPathsLongID()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.Paths.LongID;
 			var actual = item.ItemLongId;
@@ -33,7 +33,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemShortId_Item_ItemIDToShortID()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.ID.ToShortID().ToString();
 			var actual = item.ItemShortId;
@@ -44,7 +44,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemPath_Item_ItemPathsPath()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.Paths.Path;
 			var actual = item.ItemPath;
@@ -55,7 +55,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemName_Item_ItemName()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.Name;
 			var actual = item.ItemName;
@@ -66,7 +66,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemDisplayName_Item_ItemDisplayName()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.DisplayName;
 			var actual = item.ItemDisplayName;
@@ -77,7 +77,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemLanguage_Item_ItemLanguageName()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.Language.Name;
 			var actual = item.ItemLanguage;
@@ -88,7 +88,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemDatabase_Item_ItemDatabaseName()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.Database.Name;
 			var actual = item.ItemDatabase;
@@ -99,7 +99,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemTemplateId_Item_ItemTemplateIDGuid()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.TemplateID.Guid;
 			var actual = item.ItemTemplateId;
@@ -110,7 +110,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemTemplateName_Item_ItemTemplateName()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.TemplateName;
 			var actual = item.ItemTemplateName;
@@ -121,7 +121,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemTemplateIds_Item_ItemTemplateIDGuid()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.Template.BaseTemplates.Select(bt => bt.ID.Guid);
 			var actual = item.ItemTemplateIds;
@@ -132,7 +132,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemIslatestVersion_Item_ItemTemplateIDGuid()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.Versions.IsLatestVersion();
 			var actual = item.ItemIsLatestVersion;
@@ -143,7 +143,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemIsStandardValues_Item_StandardValuesManagerIsStandardValuesHolder()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = StandardValuesManager.IsStandardValuesHolder(Item);
 			var actual = item.ItemIsStandardValues;
@@ -154,7 +154,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemChildrenCount_Item_ItemChildrenCount()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.Children.Count;
 			var actual = item.ItemChildrenCount;
@@ -165,7 +165,7 @@ namespace Fortis.Test.Items
 		[Fact]
 		public void ItemHasChildren_Item_ItemHasChildren()
 		{
-			var item = new BaseItem { Item = Item };
+			var item = Create(Item);
 
 			var expected = Item.HasChildren;
 			var actual = item.ItemHasChildren;
@@ -177,6 +177,14 @@ namespace Fortis.Test.Items
 		{
 			item.Name = "Test Item";
 			item.TemplateID = new ID("{42f7627e-a0db-4f1e-bd5c-b6ad0763309a}");
+		}
+
+		public BaseItem Create(Sitecore.Data.Items.Item item)
+		{
+			return new BaseItem(null, null)
+			{
+				Item = item
+			};
 		}
 	}
 }

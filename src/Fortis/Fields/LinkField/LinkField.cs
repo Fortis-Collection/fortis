@@ -7,8 +7,8 @@ namespace Fortis.Fields.LinkField
 	{
 		public new Guid Value
 		{
-			get { return Field.Value.SafeParseIdGuid(); }
-			set { base.Value = value.ToIdString(); }
+			get { return Field.Value.SafeParseSitecoreIdGuid(); }
+			set { base.Value = value.ToSitecoreIdString(); }
 		}
 	}
 }

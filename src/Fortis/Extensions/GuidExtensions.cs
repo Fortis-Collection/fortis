@@ -5,12 +5,12 @@ namespace Fortis.Extensions
 {
 	public static class GuidExtensions
 	{
-		public static string ToIdString(this Guid source)
+		public static string ToSitecoreIdString(this Guid source)
 		{
-			return source.ToId().ToString();
+			return source.ToSitecoreId().ToString();
 		}
 
-		public static ID ToId(this Guid source)
+		public static ID ToSitecoreId(this Guid source)
 		{
 			return new ID(source);
 		}

@@ -2,9 +2,14 @@
 {
 	public static class IntExtensions
 	{
-		public static Sitecore.Data.Version ToVersion(this int source)
+		public static Sitecore.Data.Version SafeParseSitecoreVersion(this int source)
 		{
-			return Sitecore.Data.Version.Parse(source);
+			if (Sitecore.Data.Version.TryParse(source.ToString(), out Sitecore.Data.Version parsedVersion))
+			{
+				return parsedVersion;
+			}
+
+			return null;
 		}
 	}
 }

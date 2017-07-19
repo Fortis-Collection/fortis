@@ -12,6 +12,7 @@ namespace Fortis.Items
 {
 	public class ItemFactory : IItemFactory
 	{
+		protected readonly ISitecoreItemGetter SitecoreItemGetter;
 		protected readonly IFieldFactory FieldFactory;
 		protected readonly IPropertyInfoFieldNameParser FieldNameParser;
 		protected readonly IAddFieldDynamicProperty AddFieldDynamicProperty;
@@ -19,12 +20,14 @@ namespace Fortis.Items
 		protected readonly IItemTypeTemplateMatcher ItemTypeTemplateMapper;
 
 		public ItemFactory(
+			ISitecoreItemGetter sitecoreItemGetter,
 			IFieldFactory fieldFactory,
 			IPropertyInfoFieldNameParser fieldNameParser,
 			IAddFieldDynamicProperty addFieldDynamicProperty,
 			IDynamicObjectCaster dynamicObjectCaster,
 			IItemTypeTemplateMatcher itemTypeTemplateMapper)
 		{
+			SitecoreItemGetter = sitecoreItemGetter;
 			FieldFactory = fieldFactory;
 			FieldNameParser = fieldNameParser;
 			AddFieldDynamicProperty = addFieldDynamicProperty;
@@ -48,7 +51,7 @@ namespace Fortis.Items
 				return default(T);
 			}
 
-			var modelledItem = new BaseItem
+			var modelledItem = new BaseItem(SitecoreItemGetter, this)
 			{
 				Item = item
 			};
@@ -88,6 +91,12 @@ namespace Fortis.Items
 			T castedItem = DynamicObjectCaster.Cast<T>(modelledItem, requestedItemType);
 
 			return castedItem;
+		}
+
+		public IEnumerable<T> Create<T>(IEnumerable<Item> items)
+		{
+			return items.Select(i => Create<T>(i))
+						.Where(i => i != null).ToList();
 		}
 
 		public IEnumerable<PropertyInfo> GetPropertyDiff(Type requestedItemType)

@@ -16,9 +16,11 @@ namespace Fortis.Items
 		Guid ItemTemplateId { get; }
 		string ItemTemplateName { get; }
 		IEnumerable<Guid> ItemTemplateIds { get; }
+		int ItemVersion { get; }
 		bool ItemIsLatestVersion { get; }
 		bool ItemIsStandardValues { get; }
 		int ItemChildrenCount { get; }
 		bool ItemHasChildren { get; }
+		IEnumerable<T> GetChildren<T>();
 	}
 }

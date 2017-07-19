@@ -7,7 +7,7 @@ namespace Fortis.Extensions
 {
 	public static class StringExtensions
 	{
-		public static ID SafeParseId(this string source)
+		public static ID SafeParseSitecoreId(this string source)
 		{
 			if (string.IsNullOrWhiteSpace(source))
 			{
@@ -25,9 +25,9 @@ namespace Fortis.Extensions
 			return new ID(Guid.Empty);
 		}
 
-		public static Guid SafeParseIdGuid(this string source)
+		public static Guid SafeParseSitecoreIdGuid(this string source)
 		{
-			return source.SafeParseId().Guid;
+			return source.SafeParseSitecoreId().Guid;
 		}
 
 		public static string SeparatePascal(this string source, string separator)
@@ -42,16 +42,14 @@ namespace Fortis.Extensions
 			return source.SeparatePascal(" ");
 		}
 
-		public static Language SafeParseLanguage(this string source)
+		public static Language SafeParseSitecoreLanguage(this string source)
 		{
-			Language parsedLanguage = null;
-
-			if (!Language.TryParse(source, out parsedLanguage))
+			if (Language.TryParse(source, out Language parsedLanguage))
 			{
-				throw new Exception($"Fortis: unable to parse language '{source}'");
+				return parsedLanguage;
 			}
 
-			return parsedLanguage;
+			return null;
 		}
 	}
 }

@@ -12,6 +12,8 @@ using Fortis.Fields.Dynamics;
 using Fortis.Dynamics;
 using Sitecore.Data;
 using System.Reflection;
+using Fortis.Databases;
+using Sitecore.Abstractions;
 
 namespace Fortis.Test.Items
 {
@@ -256,11 +258,23 @@ namespace Fortis.Test.Items
 		public ItemFactory CreateItemFactory()
 		{
 			return new ItemFactory(
+				CreateMockSitecoreItemGetter(),
 				CreateMockFieldFactory(),
 				CreateMockPropertyInfoFieldNameParser(),
 				CreateMockAddFieldDynamicProperty(),
 				new DynamicObjectCaster(),
 				CreateMockItemTypeTemplateMatcher()
+			);
+		}
+
+		public ISitecoreItemGetter CreateMockSitecoreItemGetter()
+		{
+			var factory = Substitute.For<IFactory>();
+
+			factory.GetDatabase(DatabaseName).Returns(FakeDatabase.Database);
+
+			return new SitecoreItemGetter(
+				new SitecoreDatabaseFactory(factory)
 			);
 		}
 

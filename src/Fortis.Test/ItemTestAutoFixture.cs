@@ -12,6 +12,7 @@ namespace Fortis.Test
 		protected const string ItemTemplateCId = "{42f7627e-a0db-4f1e-bd5c-b6ad0763309a}";
 		protected const string FieldName = "Test Field";
 		protected const string ItemName = "Test Item";
+		protected const string DatabaseName = "master";
 		protected Db FakeDatabase;
 		protected DbTemplate FakeTemplateA;
 		protected DbTemplate FakeTemplateB;
@@ -45,7 +46,7 @@ namespace Fortis.Test
 			FakeItem.Fields.Add("Test Boolean", "1");
 
 			FakeField = new DbField(FieldName);
-			FakeDatabase = new Db();
+			FakeDatabase = new Db(DatabaseName);
 
 			SetField(ref FakeField);
 

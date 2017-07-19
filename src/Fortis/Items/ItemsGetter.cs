@@ -6,21 +6,21 @@ namespace Fortis.Items
 	public class ItemsGetter : IItemsGetter
 	{
 		protected readonly ISitecoreItemsGetter SitecoreItemsGetter;
-		protected readonly IItemsFactory ItemsFactory;
+		protected readonly IItemFactory ItemFactory;
 
 		public ItemsGetter(
 			ISitecoreItemsGetter sitecoreItemsGetter,
-			IItemsFactory itemsFactory)
+			IItemFactory itemFactory)
 		{
 			SitecoreItemsGetter = sitecoreItemsGetter;
-			ItemsFactory = itemsFactory;
+			ItemFactory = itemFactory;
 		}
 
 		public IEnumerable<T> GetItems<T>(string query, string database)
 		{
 			var items = SitecoreItemsGetter.GetItems(query, database).ToList();
 
-			return ItemsFactory.Create<T>(items);
+			return ItemFactory.Create<T>(items);
 		}
 	}
 }

@@ -8,23 +8,23 @@ namespace Fortis.Items.Context
 	{
 		protected readonly ISitecoreContextDatabase Context;
 		protected readonly ISitecoreItemsGetter SitecoreItemsGetter;
-		protected readonly IItemsFactory ItemsFactory;
+		protected readonly IItemFactory ItemFactory;
 
 		public ContextItemsGetter(
 			ISitecoreContextDatabase context,
 			ISitecoreItemsGetter sitecoreItemsGetter,
-			IItemsFactory itemsFactory)
+			IItemFactory itemFactory)
 		{
 			Context = context;
 			SitecoreItemsGetter = sitecoreItemsGetter;
-			ItemsFactory = itemsFactory;
+			ItemFactory = itemFactory;
 		}
 
 		public IEnumerable<T> GetItems<T>(string query)
 		{
 			var items = SitecoreItemsGetter.GetItems(query, Context.Database).ToList();
 
-			return ItemsFactory.Create<T>(items);
+			return ItemFactory.Create<T>(items);
 		}
 	}
 }

@@ -18,27 +18,51 @@ namespace Fortis.Items
 
 		public Item GetItem(Guid id, Database database)
 		{
-			return database.GetItem(id.ToId());
+			return GetItemById(id, null, null, database);
 		}
 
 		public Item GetItem(Guid id, string database)
 		{
-			return GetItem(id, DatabaseFactory.Create(database));
+			return GetItemById(id, null, null, database);
 		}
 
 		public Item GetItem(Guid id, string language, Database database)
 		{
-			return database.GetItem(id.ToId(), language.SafeParseLanguage());
+			return GetItemById(id, language, null, database);
 		}
 
 		public Item GetItem(Guid id, string language, string database)
 		{
-			return GetItem(id, language, DatabaseFactory.Create(database));
+			return GetItemById(id, language, null, database);
 		}
 
 		public Item GetItem(Guid id, string language, int version, Database database)
 		{
-			return database.GetItem(id.ToId(), language.SafeParseLanguage(), version.ToVersion());
+			return GetItemById(id, language, version, database);
+		}
+
+		public Item GetItemById(Guid id, string language, int? version, string database)
+		{
+			return GetItemById(id, language, version, DatabaseFactory.Create(database));
+		}
+
+		public Item GetItemById(Guid id, string language, int? version, Database database)
+		{
+			var sitecoreId = id.ToSitecoreId();
+			var parsedLanguage = language.SafeParseSitecoreLanguage();
+
+			if (parsedLanguage != null && version != null)
+			{
+				var parsedVersion = version.Value.SafeParseSitecoreVersion();
+
+				return database.GetItem(sitecoreId, parsedLanguage, parsedVersion);
+			}
+			else if (parsedLanguage != null)
+			{
+				return database.GetItem(sitecoreId, parsedLanguage);
+			}
+
+			return database.GetItem(sitecoreId);
 		}
 
 		public Item GetItem(Guid id, string language, int version, string database)
@@ -48,32 +72,55 @@ namespace Fortis.Items
 
 		public Item GetItem(string path, Database database)
 		{
-			return database.GetItem(path);
+			return GetItemByPath(path, null, null, database);
 		}
 
 		public Item GetItem(string path, string database)
 		{
-			return GetItem(path, DatabaseFactory.Create(database));
+			return GetItemByPath(path, null, null, database);
 		}
 
 		public Item GetItem(string path, string language, Database database)
 		{
-			return database.GetItem(path, language.SafeParseLanguage());
+			return GetItemByPath(path, language, null, database);
 		}
 
 		public Item GetItem(string path, string language, string database)
 		{
-			return GetItem(path, language, DatabaseFactory.Create(database));
+			return GetItemByPath(path, language, null, database);
 		}
 
 		public Item GetItem(string path, string language, int version, Database database)
 		{
-			return database.GetItem(path, language.SafeParseLanguage(), version.ToVersion());
+			return GetItemByPath(path, language, version, database);
 		}
 
 		public Item GetItem(string path, string language, int version, string database)
 		{
-			return GetItem(path, language, version, DatabaseFactory.Create(database));
+			return GetItemByPath(path, language, version, database);
+		}
+
+		public Item GetItemByPath(string path, string language, int? version, string database)
+		{
+			return GetItemByPath(path, language, version, DatabaseFactory.Create(database));
+		}
+
+		public Item GetItemByPath(string path, string language, int? version, Database database)
+		{
+			var parsedLanguage = language.SafeParseSitecoreLanguage();
+
+			if (parsedLanguage != null && version != null)
+			{
+				var parsedVersion = version.Value.SafeParseSitecoreVersion();
+
+				return database.GetItem(path, parsedLanguage, parsedVersion);
+			}
+			else if (parsedLanguage != null)
+			{
+				return database.GetItem(path, parsedLanguage);
+			}
+
+			return database.GetItem(path);
 		}
 	}
 }

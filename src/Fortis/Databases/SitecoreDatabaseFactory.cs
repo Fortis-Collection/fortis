@@ -1,13 +1,21 @@
 ﻿using Sitecore.Data;
-using Sitecore.Configuration;
+using Sitecore.Abstractions;
 
 namespace Fortis.Databases
 {
 	public class SitecoreDatabaseFactory : ISitecoreDatabaseFactory
 	{
+		protected readonly IFactory SitecoreFactory;
+
+		public SitecoreDatabaseFactory(
+			IFactory sitecoreFactory)
+		{
+			SitecoreFactory = sitecoreFactory;
+		}
+
 		public Database Create(string database)
 		{
-			return Factory.GetDatabase(database);
+			return SitecoreFactory.GetDatabase(database);
 		}
 	}
 }
