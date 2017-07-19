@@ -20,11 +20,10 @@ namespace Fortis.Fields
 				throw new Exception($"Fortis: {Name} - invalid field type for factory [ Item ID: {field.Item.ID} | Name: {field.Name} | Type: {field.Type} ]");
 			}
 
-			var typedField = new TConcreteField();
-
-			typedField.Field = field;
-
-			return typedField;
+			return new TConcreteField()
+			{
+				Field = field
+			};
 		}
 
 		TInterfaceField ITypedFieldFactory<TInterfaceField>.Create(Field field)

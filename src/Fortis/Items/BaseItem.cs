@@ -114,5 +114,44 @@ namespace Fortis.Items
 				}
 			}
 		}
+
+		public T GetParent<T>()
+		{
+			return ItemFactory.Create<T>(Item.Parent);
+		}
+		public T GetParentOrSelf<T>()
+		{
+			if (this is T)
+			{
+				return (T)(this as IItem);
+			}
+
+			return GetParent<T>();
+		}
+		public T GetAncestor<T>()
+		{
+			var parent = GetParent<IItem>();
+
+			while (parent != null)
+			{
+				if (parent is T)
+				{
+					return (T)parent;
+				}
+
+				parent = parent.GetParent<IItem>();
+			}
+
+			return default(T);
+		}
+		public T GetAncestorOrSelf<T>()
+		{
+			if (this is T)
+			{
+				return (T)(this as IItem);
+			}
+
+			return GetAncestor<T>();
+		}
 	}
 }

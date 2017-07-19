@@ -44,6 +44,11 @@ namespace Fortis.Items
 
 		public T Create<T>(Item item)
 		{
+			if (item == null)
+			{
+				return default(T);
+			}
+
 			var requestedItemType = ItemTypeTemplateMapper.Find<T>(item);
 
 			if (requestedItemType == null)
