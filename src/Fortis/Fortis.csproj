@@ -86,7 +86,6 @@
     <Compile Include="Fields\Dynamics\StringAddFieldDynamicPropertyStrategy.cs" />
     <Compile Include="Fields\FieldAttribute.cs" />
     <Compile Include="Fields\FieldFactory.cs" />
-    <Compile Include="Fields\FieldNameParser.cs" />
     <Compile Include="Fields\FileField\FileField.cs" />
     <Compile Include="Fields\FileField\FileFieldFactory.cs" />
     <Compile Include="Fields\FileField\IFileFieldFactory.cs" />
@@ -97,7 +96,6 @@
     <Compile Include="Fields\IDateTimeField.cs" />
     <Compile Include="Fields\IField.cs" />
     <Compile Include="Fields\IFieldFactory.cs" />
-    <Compile Include="Fields\IFieldNameParser.cs" />
     <Compile Include="Fields\IField`1.cs" />
     <Compile Include="Fields\ImageField\ImageFieldFactory.cs" />
     <Compile Include="Fields\ImageField\IImageFieldFactory.cs" />

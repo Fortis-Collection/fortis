@@ -4,13 +4,7 @@ namespace Fortis.Fields
 {
 	public class PropertyInfoFieldNameParser : IPropertyInfoFieldNameParser
 	{
-		protected readonly IFieldNameParser FieldNameParser;
-
-		public PropertyInfoFieldNameParser(
-			IFieldNameParser fieldNameParser)
-		{
-			FieldNameParser = fieldNameParser;
-		}
+		private const string affixPrefix = "Field";
 
 		public string Parse(PropertyInfo property)
 		{
@@ -21,7 +15,7 @@ namespace Fortis.Fields
 				return fieldAttribute.Name;
 			}
 
-			return FieldNameParser.Parse(property.Name);
+			return property.Name.Replace(affixPrefix, string.Empty);
 		}
 	}
 }

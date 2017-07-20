@@ -127,7 +127,6 @@
   <ItemGroup>
     <Compile Include="Extensions\StringExtensionsTexts.cs" />
     <Compile Include="Fields\FieldFactoryTests.cs" />
-    <Compile Include="Fields\FieldNameParserTests.cs" />
     <Compile Include="Fields\FieldTestAutoFixture`1.cs" />
     <Compile Include="Fields\BaseFieldTests.cs" />
     <Compile Include="Fields\BooleanFieldTests.cs" />

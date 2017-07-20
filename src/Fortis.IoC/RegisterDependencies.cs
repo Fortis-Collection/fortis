@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System;
 using Fortis.Items;
 using Fortis.Items.Context;
+using System.Collections.Specialized;
 
 namespace Fortis.IoC
 {
@@ -43,23 +44,11 @@ namespace Fortis.IoC
 
 			// Fields
 			serviceCollection.AddSingleton<IFieldFactory, FieldFactory>();
-			serviceCollection.AddSingleton<IFieldNameParser, FieldNameParser>();
 			serviceCollection.AddSingleton<IPropertyInfoFieldNameParser, PropertyInfoFieldNameParser>();
 			serviceCollection.AddSingleton<ITypedFieldFactories, TypedFieldFactories>();
 			serviceCollection.AddSingleton<ITypedFieldFactoryConfiguration, TypedFieldFactoryConfiguration>();
 			serviceCollection.AddSingleton<ITypedFieldMappingValidator, TypedFieldMappingValidator>();
 			// Fields - factories implementing ITypedFieldFactory
-			//serviceCollection.AddSingleton<IBooleanFieldFactory, BooleanFieldFactory>();
-			//serviceCollection.AddSingleton<IDateTimeFieldFactory, DateTimeFieldFactory>();
-			//serviceCollection.AddSingleton<IFileFieldFactory, FileFieldFactory>();
-			//serviceCollection.AddSingleton<IGeneralLinkFieldFactory, GeneralLinkFieldFactory>();
-			//serviceCollection.AddSingleton<IImageFieldFactory, ImageFieldFactory>();
-			//serviceCollection.AddSingleton<IIntegerFieldFactory, IntegerFieldFactory>();
-			//serviceCollection.AddSingleton<ILinkFieldFactory, LinkFieldFactory>();
-			//serviceCollection.AddSingleton<ILinkListFieldFactory, LinkListFieldFactory>();
-			//serviceCollection.AddSingleton<INameValueListFieldFactory, NameValueListFieldFactory>();
-			//serviceCollection.AddSingleton<INumberFieldFactory, NumberFieldFactory>();
-			//serviceCollection.AddSingleton<ITextFieldFactory, TextFieldFactory>();
 			serviceCollection.AddSingleton<ITypedFieldFactory, BooleanFieldFactory>();
 			serviceCollection.AddSingleton<ITypedFieldFactory, DateTimeFieldFactory>();
 			serviceCollection.AddSingleton<ITypedFieldFactory, FileFieldFactory>();
@@ -82,6 +71,9 @@ namespace Fortis.IoC
 					new AddFieldDynamicPropertyStrategy<int>(addValueFieldDynamicProperty),
 					new AddFieldDynamicPropertyStrategy<float>(addValueFieldDynamicProperty),
 					new AddFieldDynamicPropertyStrategy<DateTime>(addValueFieldDynamicProperty),
+					new AddFieldDynamicPropertyStrategy<Guid>(addValueFieldDynamicProperty),
+					new AddFieldDynamicPropertyStrategy<NameValueCollection>(addValueFieldDynamicProperty),
+					new AddFieldDynamicPropertyStrategy<IEnumerable<Guid>>(addValueFieldDynamicProperty),
 					new StringAddFieldDynamicPropertyStrategy()
 				}
 			));

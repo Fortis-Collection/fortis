@@ -303,9 +303,7 @@ namespace Fortis.Test.Items
 
 		public IPropertyInfoFieldNameParser CreateMockPropertyInfoFieldNameParser()
 		{
-			return new PropertyInfoFieldNameParser(
-					new FieldNameParser()
-				);
+			return new PropertyInfoFieldNameParser();
 		}
 
 		public IAddFieldDynamicProperty CreateMockAddFieldDynamicProperty()

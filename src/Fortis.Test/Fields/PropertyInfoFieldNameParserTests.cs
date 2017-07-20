@@ -9,7 +9,7 @@ namespace Fortis.Test.Fields
 		public void Parse_Attribute_SpecifiedAttributeName()
 		{
 			var propertyInfo = typeof(ITestModel).GetProperty("TestField");
-			var propertyInfoFieldNameParser = new PropertyInfoFieldNameParser(null);
+			var propertyInfoFieldNameParser = new PropertyInfoFieldNameParser();
 
 			var expected = "Test";
 			var actual = propertyInfoFieldNameParser.Parse(propertyInfo);

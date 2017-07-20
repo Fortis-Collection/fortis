@@ -14,7 +14,7 @@ namespace Fortis.Items
 	{
 		protected readonly ISitecoreItemGetter SitecoreItemGetter;
 		protected readonly IFieldFactory FieldFactory;
-		protected readonly IPropertyInfoFieldNameParser FieldNameParser;
+		protected readonly IPropertyInfoFieldNameParser PropertyFieldNameParser;
 		protected readonly IAddFieldDynamicProperty AddFieldDynamicProperty;
 		protected readonly IDynamicObjectCaster DynamicObjectCaster;
 		protected readonly IItemTypeTemplateMatcher ItemTypeTemplateMapper;
@@ -22,14 +22,14 @@ namespace Fortis.Items
 		public ItemFactory(
 			ISitecoreItemGetter sitecoreItemGetter,
 			IFieldFactory fieldFactory,
-			IPropertyInfoFieldNameParser fieldNameParser,
+			IPropertyInfoFieldNameParser propertyFieldNameParser,
 			IAddFieldDynamicProperty addFieldDynamicProperty,
 			IDynamicObjectCaster dynamicObjectCaster,
 			IItemTypeTemplateMatcher itemTypeTemplateMapper)
 		{
 			SitecoreItemGetter = sitecoreItemGetter;
 			FieldFactory = fieldFactory;
-			FieldNameParser = fieldNameParser;
+			PropertyFieldNameParser = propertyFieldNameParser;
 			AddFieldDynamicProperty = addFieldDynamicProperty;
 			DynamicObjectCaster = dynamicObjectCaster;
 			ItemTypeTemplateMapper = itemTypeTemplateMapper;
@@ -66,9 +66,10 @@ namespace Fortis.Items
 
 			foreach (var property in requestedItemTypeProperties)
 			{
-				var sitecoreFieldName = FieldNameParser.Parse(property);
+				var propertyFieldName = PropertyFieldNameParser.Parse(property);
+				var field = item.Fields.FirstOrDefault(f => string.Equals(f.Name.Replace(" ", string.Empty), propertyFieldName.Replace(" ", string.Empty), StringComparison.InvariantCultureIgnoreCase));
 
-				if (!item.Fields.Any(f => string.Equals(f.Name, sitecoreFieldName, StringComparison.InvariantCultureIgnoreCase)))
+				if (field == null)
 				{
 					var returnType = property.PropertyType;
 					object value = returnType.IsValueType ? Activator.CreateInstance(returnType) : null;
@@ -78,6 +79,7 @@ namespace Fortis.Items
 					continue;
 				}
 
+				var sitecoreFieldName = field.Name;
 				IField modelledField;
 
 				if (modelledFields.ContainsKey(sitecoreFieldName))
@@ -86,7 +88,7 @@ namespace Fortis.Items
 				}
 				else
 				{
-					modelledField = FieldFactory.Create(item.Fields[sitecoreFieldName]);
+					modelledField = FieldFactory.Create(field);
 					modelledFields.Add(sitecoreFieldName, modelledField);
 				}
 
