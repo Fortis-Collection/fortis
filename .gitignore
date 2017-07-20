@@ -50,3 +50,4 @@ packages/
 *.Fakes.*
 NuGet/
 sitecorelicense/
+testwebsite/_deploy
