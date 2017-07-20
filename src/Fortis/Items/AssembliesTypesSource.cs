@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace Fortis.Items
 {
-	public class TypesSource : ITypesSource
+	public class AssembliesTypesSource : ITypesSource
 	{
 		protected readonly ITemplateModelAssemblies TemplateModelAssemblies;
 
-		public TypesSource(
+		public AssembliesTypesSource(
 			ITemplateModelAssemblies templateModelAssemblies)
 		{
 			TemplateModelAssemblies = templateModelAssemblies;

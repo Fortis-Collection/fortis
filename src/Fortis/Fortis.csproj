@@ -187,7 +187,7 @@
     <Compile Include="Items\TemplateAttribute.cs" />
     <Compile Include="Items\ItemTypeTemplateMatcher.cs" />
     <Compile Include="Items\TemplateTypeMap.cs" />
-    <Compile Include="Items\TypesSource.cs" />
+    <Compile Include="Items\AssembliesTypesSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
