@@ -22,11 +22,13 @@ namespace Fortis.Website.Controllers
         public ViewResult Test()
         {
 			var contextItem = ContextItem.GetItem<IItem>();
-			var testItem = ItemGetter.GetItem<ITestTemplate>(new Guid("{62ED9278-F6DE-445C-BA36-68DB1565F3B3}"));
+			var testTemplate = ItemGetter.GetItem<ITestTemplate>(new Guid("{62ED9278-F6DE-445C-BA36-68DB1565F3B3}"));
+			var testTemplateItem = ItemGetter.GetItem<ITestTemplateItem>(new Guid("{62ED9278-F6DE-445C-BA36-68DB1565F3B3}"));
 			var model = new TestModel
 			{
 				ContextItemName = contextItem.ItemName,
-				TestTemplate = testItem
+				TestTemplate = testTemplate,
+				TestTemplateItem = testTemplateItem
 			};
 
             return View(model);

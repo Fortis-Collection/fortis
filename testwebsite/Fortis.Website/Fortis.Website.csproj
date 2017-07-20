@@ -115,6 +115,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RegisterDependencies.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Models\ITestTemplateItem.cs" />
     <Compile Include="Models\ITestTemplate.cs" />
     <Compile Include="Models\TestModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

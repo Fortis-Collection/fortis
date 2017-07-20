@@ -3,24 +3,109 @@
 <h1>Test Controller</h1>
 <ul>
 	<li>Item Name: @Model.ContextItemName</li>
-	<li>ITestTemplate:
+	<li>ITestTemplate (Primitive Types):
 		<ul>
-			<li>Simple Types
+			<li>Simple
 				<ul>
-					<li>TestCheckbox: @Model.TestTemplate.TestCheckbox</li>
-					<li>TestDate: @Model.TestTemplate.TestDate</li>
-					<li>TestDateTime: @Model.TestTemplate.TestDateTime</li>
-					<li>TestFile: @Model.TestTemplate.TestFile</li>
-					<li>TestImage: @Model.TestTemplate.TestImage</li>
-					<li>TestInteger: @Model.TestTemplate.TestInteger</li>
-					<li>TestMultiLineText: @Model.TestTemplate.TestMultiLineText</li>
-					<li>TestNumber: @Model.TestTemplate.TestNumber</li>
-					<li>TestPassword: @Model.TestTemplate.TestPassword</li>
-					<li>TestRichText: @Model.TestTemplate.TestRichText</li>
-					<li>TestSingleLineText: @Model.TestTemplate.TestSingleLineText</li>
+					<li>Checkbox: @Model.TestTemplate.TestCheckbox</li>
+					<li>Date: @Model.TestTemplate.TestDate</li>
+					<li>DateTime: @Model.TestTemplate.TestDateTime</li>
+					<li>File: @Model.TestTemplate.TestFile</li>
+					<li>Image: @Model.TestTemplate.TestImage</li>
+					<li>Integer: @Model.TestTemplate.TestInteger</li>
+					<li>MultiLine Text: @Model.TestTemplate.TestMultiLineText</li>
+					<li>Number: @Model.TestTemplate.TestNumber</li>
+					<li>Password: @Model.TestTemplate.TestPassword</li>
+					<li>Rich Text: @Model.TestTemplate.TestRichText</li>
+					<li>Single-Line Text: @Model.TestTemplate.TestSingleLineText</li>
 				</ul>
 			</li>
 			<li>List Types
+				<ul>
+					<li>Checklist:
+						<ul>
+							@foreach (var id in Model.TestTemplate.TestChecklist)
+							{
+								<li>@id</li>
+							}
+						</ul>
+					</li>
+					<li>Droplist: @Model.TestTemplate.TestDroplist</li>
+					<li>Grouped Droplink: @Model.TestTemplate.TestGroupedDroplink</li>
+					<li>Grouped Droplist: @Model.TestTemplate.TestGroupedDroplist</li>
+					<li>Multilist:
+						<ul>
+							@foreach (var id in Model.TestTemplate.TestMultilist)
+							{
+								<li>@id</li>
+							}
+						</ul>
+					</li>
+					<li>Multilist With Search:
+						<ul>
+							@foreach (var id in Model.TestTemplate.TestMultilistWithSearch)
+							{
+								<li>@id</li>
+							}
+						</ul>
+					</li>
+					<li>Name Lookup Value List:
+						<ul>
+							@foreach (var key in Model.TestTemplate.TestNameLookupValueList.AllKeys)
+							{
+								<li>@key: @Model.TestTemplate.TestNameLookupValueList[key]</li>
+							}
+						</ul>
+					</li>
+					<li>Name Value List:
+						<ul>
+							@foreach (var key in Model.TestTemplate.TestNameValueList.AllKeys)
+							{
+								<li>@key: @Model.TestTemplate.TestNameValueList[key]</li>
+							}
+						</ul>
+					</li>
+					<li>Treelist:
+						<ul>
+							@foreach (var id in Model.TestTemplate.TestTreelist)
+							{
+								<li>@id</li>
+							}
+						</ul>
+					</li>
+					<li>TreelistEx:
+						<ul>
+							@foreach (var id in Model.TestTemplate.TestTreelistEx)
+							{
+								<li>@id</li>
+							}
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li>
+		ITestTemplateItem (Fortis Types):
+		<ul>
+			<li>
+				Simple
+				<ul>
+					<li>Checkbox: @Model.TestTemplateItem.TestCheckbox.Value</li>
+					<li>Date: @Model.TestTemplateItem.TestDate.Value</li>
+					<li>DateTime: @Model.TestTemplateItem.TestDateTime.Value</li>
+					<li>File: @Model.TestTemplateItem.TestFile.Value</li>
+					<li>Image: @Model.TestTemplateItem.TestImage.Value</li>
+					<li>Integer: @Model.TestTemplateItem.TestInteger.Value</li>
+					<li>MultiLine Text: @Model.TestTemplateItem.TestMultiLineText.Value</li>
+					<li>Number: @Model.TestTemplateItem.TestNumber.Value</li>
+					<li>Password: @Model.TestTemplateItem.TestPassword.Value</li>
+					<li>Rich Text: @Model.TestTemplateItem.TestRichText.Value</li>
+					<li>Single-Line Text: @Model.TestTemplateItem.TestSingleLineText.Value</li>
+				</ul>
+			</li>
+			<li>
+				List Types
 
 			</li>
 		</ul>

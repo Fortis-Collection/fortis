@@ -1,0 +1,194 @@
+----item----
+version: 1
+id: {62ED9278-F6DE-445C-BA36-68DB1565F3B3}
+database: master
+path: /sitecore/content/Test Item
+parent: {0DE95AE4-41AB-4D01-9EB0-67441B7C2450}
+name: Test Item
+master: {00000000-0000-0000-0000-000000000000}
+template: {BD7E28B2-A9DB-4CB1-A0F3-C4D49B86FF89}
+templatekey: Test Template
+created: 20170720T142326Z
+
+----version----
+language: en
+version: 1
+revision: e9b204ab-74b6-4936-a17e-da95d55adbaa
+
+----field----
+field: {D9109CEE-662B-47BE-A26F-59D57C76F893}
+name: Test Checkbox
+key: test checkbox
+content-length: 1
+
+1
+----field----
+field: {D27264E7-3E81-4628-A798-B24ED692A170}
+name: Test Date
+key: test date
+content-length: 16
+
+20170719T230000Z
+----field----
+field: {EA2D9035-51A2-46E5-989F-0C4024512435}
+name: Test Datetime
+key: test datetime
+content-length: 16
+
+20170720T145500Z
+----field----
+field: {760DBE3B-02A3-4FF1-A989-F64C85E2FB8E}
+name: Test File
+key: test file
+content-length: 109
+
+<file mediaid="{6AA5AA9F-071A-4808-91AC-709FAAFFB310}" src="-/media/6AA5AA9F071A480891AC709FAAFFB310.ashx" />
+----field----
+field: {015EA0B3-999E-4793-BD36-89179FF7B34A}
+name: Test Image
+key: test image
+content-length: 58
+
+<image mediaid="{094AED03-02E7-4868-80CB-19926661FB77}" />
+----field----
+field: {F1680C64-A6A4-4EC9-A5F0-8DD30CD7AC0A}
+name: Test Integer
+key: test integer
+content-length: 3
+
+100
+----field----
+field: {24229D7A-6140-4A51-8BD6-B1191A465E04}
+name: Test Multi Line Text
+key: test multi line text
+content-length: 22
+
+Line 1
+Line 2
+Line 3
+----field----
+field: {137DC42C-766A-4BF8-A8A9-8EC89A3851C0}
+name: Test Number
+key: test number
+content-length: 5
+
+100.1
+----field----
+field: {9BA365E8-01E0-421C-A1EB-9987937FDFFA}
+name: Test Password
+key: test password
+content-length: 8
+
+password
+----field----
+field: {D1AB03B2-101D-44DD-9773-859A996BB89A}
+name: Test Rich Text
+key: test rich text
+content-length: 55
+
+Rich Text:<strong> Bold</strong> &amp; <em>Italics</em>
+----field----
+field: {4E5625BA-7C90-45BD-839B-F53D5F21B171}
+name: Test Single Line Text
+key: test single line text
+content-length: 16
+
+Single Line Text
+----field----
+field: {361C5C61-453F-4630-9BDA-312917174C8E}
+name: Test Checklist
+key: test checklist
+content-length: 116
+
+{75D27C2B-5F88-4CC8-B1DE-8412A1628408}|{E18F4BC6-46A2-4842-898B-B6613733F06F}|{75CC5CE4-8979-4008-9D3C-806477D57619}
+----field----
+field: {B38289F8-6DEA-44D8-9BAF-8A8447FC5992}
+name: Test Droplist
+key: test droplist
+content-length: 11
+
+Controllers
+----field----
+field: {3BA459A4-5DBE-45CC-8DEE-D222E9631BB3}
+name: Test Grouped Droplink
+key: test grouped droplink
+content-length: 38
+
+{FE5D7FDF-89C0-4D99-9AA3-B5FBD009C9F3}
+----field----
+field: {60D690B1-988D-4337-98AC-71F1C262F7E2}
+name: Test Grouped Droplist
+key: test grouped droplist
+content-length: 7
+
+Default
+----field----
+field: {351F11B2-BCC0-4385-876C-2E85878FD5A5}
+name: Test Multilist
+key: test multilist
+content-length: 116
+
+{75D27C2B-5F88-4CC8-B1DE-8412A1628408}|{E18F4BC6-46A2-4842-898B-B6613733F06F}|{75CC5CE4-8979-4008-9D3C-806477D57619}
+----field----
+field: {0BC3207D-8E61-4289-9560-B4BD2C614E98}
+name: Test Multilist With Search
+key: test multilist with search
+content-length: 116
+
+{11111111-1111-1111-1111-111111111111}|{0DE95AE4-41AB-4D01-9EB0-67441B7C2450}|{EB2E4FFD-2761-4653-B052-26A64D385227}
+----field----
+field: {D0D153B0-59BD-4D74-A6F6-A465C140A481}
+name: Test Name Lookup Value List
+key: test name lookup value list
+content-length: 156
+
+controllers=%7B75D27C2B-5F88-4CC8-B1DE-8412A1628408%7D&devices=%7BE18F4BC6-46A2-4842-898B-B6613733F06F%7D&layouts=%7B75CC5CE4-8979-4008-9D3C-806477D57619%7D
+----field----
+field: {22B81DE7-18BA-4DB9-B9FE-78BEFC21283A}
+name: Test Name Value List
+key: test name value list
+content-length: 35
+
+key1=value1&key2=value2&key3=value3
+----field----
+field: {9E2338A0-EACF-4667-BC22-94AE19C2F4C0}
+name: Test Treelist
+key: test treelist
+content-length: 116
+
+{75D27C2B-5F88-4CC8-B1DE-8412A1628408}|{E18F4BC6-46A2-4842-898B-B6613733F06F}|{75CC5CE4-8979-4008-9D3C-806477D57619}
+----field----
+field: {A597B1FD-4A1C-43FE-B454-59B68E323245}
+name: Test TreelistEx
+key: test treelistex
+content-length: 116
+
+{75D27C2B-5F88-4CC8-B1DE-8412A1628408}|{E18F4BC6-46A2-4842-898B-B6613733F06F}|{75CC5CE4-8979-4008-9D3C-806477D57619}
+----field----
+field: {25BED78C-4957-4165-998A-CA1B52F67497}
+name: __Created
+key: __created
+content-length: 16
+
+20170720T142326Z
+----field----
+field: {8CDC337E-A112-42FB-BBB4-4143751E123F}
+name: __Revision
+key: __revision
+content-length: 36
+
+e9b204ab-74b6-4936-a17e-da95d55adbaa
+----field----
+field: {D9CF14B1-FA16-4BA6-9288-E8A174D4D522}
+name: __Updated
+key: __updated
+content-length: 16
+
+20170720T154254Z
+----field----
+field: {BADD9CF9-53E0-4D0C-BCC0-2D784C282F6A}
+name: __Updated by
+key: __updated by
+content-length: 14
+
+sitecore\admin

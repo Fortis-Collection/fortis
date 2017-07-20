@@ -4,5 +4,6 @@
 	{
 		public string ContextItemName { get; set; }
 		public ITestTemplate TestTemplate { get; set; }
+		public ITestTemplateItem TestTemplateItem { get; set; }
 	}
 }
