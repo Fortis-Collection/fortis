@@ -61,6 +61,7 @@ namespace Fortis.IoC
 			serviceCollection.AddSingleton<INumberFieldFactory, NumberFieldFactory>();
 			serviceCollection.AddSingleton<ITextFieldFactory, TextFieldFactory>();
 			// Fields - dynamics
+			serviceCollection.AddSingleton<IAddFieldDynamicProperty, AddFieldDynamicProperty>();
 			var addValueFieldDynamicProperty = new AddValueFieldDynamicProperty();
 			serviceCollection.AddSingleton<IAddFieldDynamicPropertyStrategies>(service => new AddFieldDynamicPropertyStrategies(
 				new List<IAddFieldDynamicPropertyStrategy>
