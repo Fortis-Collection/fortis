@@ -39,6 +39,7 @@ Thumbs.db
 *.sbr
 *.sln.ide
 Sitecore.*
+.vs/
 obj/
 [Rr]elease*/
 _ReSharper*/
