@@ -153,5 +153,12 @@ namespace Fortis.Items
 
 			return GetAncestor<T>();
 		}
+
+		public IEnumerable<T> GetSiblings<T>()
+		{
+			var parent = GetParent<IItem>();
+
+			return parent.GetChildren<T>();
+		}
 	}
 }

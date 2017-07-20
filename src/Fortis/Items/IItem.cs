@@ -27,5 +27,6 @@ namespace Fortis.Items
 		T GetParentOrSelf<T>();
 		T GetAncestor<T>();
 		T GetAncestorOrSelf<T>();
+		IEnumerable<T> GetSiblings<T>();
 	}
 }
