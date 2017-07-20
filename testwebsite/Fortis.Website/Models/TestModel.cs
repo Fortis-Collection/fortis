@@ -2,6 +2,7 @@
 {
 	public class TestModel
 	{
-		public string ItemName { get; set; }
+		public string ContextItemName { get; set; }
+		public ITestTemplate TestTemplate { get; set; }
 	}
 }
