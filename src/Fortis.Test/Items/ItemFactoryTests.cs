@@ -269,7 +269,7 @@ namespace Fortis.Test.Items
 
 		public ISitecoreItemGetter CreateMockSitecoreItemGetter()
 		{
-			var factory = Substitute.For<IFactory>();
+			var factory = Substitute.For<BaseFactory>();
 
 			factory.GetDatabase(DatabaseName).Returns(FakeDatabase.Database);
 

@@ -5,10 +5,10 @@ namespace Fortis.Databases
 {
 	public class SitecoreDatabaseFactory : ISitecoreDatabaseFactory
 	{
-		protected readonly IFactory SitecoreFactory;
+		protected readonly BaseFactory SitecoreFactory;
 
 		public SitecoreDatabaseFactory(
-			IFactory sitecoreFactory)
+			BaseFactory sitecoreFactory)
 		{
 			SitecoreFactory = sitecoreFactory;
 		}
