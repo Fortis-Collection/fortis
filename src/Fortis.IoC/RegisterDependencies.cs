@@ -79,6 +79,8 @@ namespace Fortis.IoC
 				{
 					new AddFieldDynamicPropertyStrategy(),
 					new AddFieldDynamicPropertyStrategy<bool>(addValueFieldDynamicProperty),
+					new AddFieldDynamicPropertyStrategy<int>(addValueFieldDynamicProperty),
+					new AddFieldDynamicPropertyStrategy<float>(addValueFieldDynamicProperty),
 					new AddFieldDynamicPropertyStrategy<DateTime>(addValueFieldDynamicProperty),
 					new StringAddFieldDynamicPropertyStrategy()
 				}
