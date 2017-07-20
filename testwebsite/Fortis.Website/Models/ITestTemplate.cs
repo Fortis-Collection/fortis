@@ -7,6 +7,8 @@ namespace Fortis.Website.Models
 {
 	public interface ITestTemplate
 	{
+		// Standard
+		Guid ItemId { get; }
 		// Simple
 		bool TestCheckbox { get; }
 		DateTime TestDate { get; }
@@ -30,5 +32,10 @@ namespace Fortis.Website.Models
 		NameValueCollection TestNameValueList { get; }
 		IEnumerable<Guid> TestTreelist { get; }
 		IEnumerable<Guid> TestTreelistEx { get; }
+		// Link
+		Guid TestDroplink { get; }
+		Guid TestDroptree { get; }
+		string TestGeneralLink { get; }
+		string TestGeneralLinkWithSearch { get; }
 	}
 }

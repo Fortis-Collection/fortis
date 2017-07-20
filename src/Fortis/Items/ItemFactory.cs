@@ -66,6 +66,8 @@ namespace Fortis.Items
 
 			foreach (var property in requestedItemTypeProperties)
 			{
+				item.Fields.ReadAll();
+
 				var propertyFieldName = PropertyFieldNameParser.Parse(property);
 				var field = item.Fields.FirstOrDefault(f => string.Equals(f.Name.Replace(" ", string.Empty), propertyFieldName.Replace(" ", string.Empty), StringComparison.InvariantCultureIgnoreCase));
 

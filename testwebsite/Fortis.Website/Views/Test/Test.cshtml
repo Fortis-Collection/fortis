@@ -5,7 +5,14 @@
 	<li>Item Name: @Model.ContextItemName</li>
 	<li>ITestTemplate (Primitive Types):
 		<ul>
-			<li>Simple
+			<li>
+				Standard
+				<ul>
+					<li>ID: @Model.TestTemplate.ItemId</li>
+				</ul>
+			</li>
+			<li>
+				Simple
 				<ul>
 					<li>Checkbox: @Model.TestTemplate.TestCheckbox</li>
 					<li>Date: @Model.TestTemplate.TestDate</li>
@@ -20,9 +27,11 @@
 					<li>Single-Line Text: @Model.TestTemplate.TestSingleLineText</li>
 				</ul>
 			</li>
-			<li>List Types
+			<li>
+				List Types
 				<ul>
-					<li>Checklist:
+					<li>
+						Checklist:
 						<ul>
 							@foreach (var id in Model.TestTemplate.TestChecklist)
 							{
@@ -33,7 +42,8 @@
 					<li>Droplist: @Model.TestTemplate.TestDroplist</li>
 					<li>Grouped Droplink: @Model.TestTemplate.TestGroupedDroplink</li>
 					<li>Grouped Droplist: @Model.TestTemplate.TestGroupedDroplist</li>
-					<li>Multilist:
+					<li>
+						Multilist:
 						<ul>
 							@foreach (var id in Model.TestTemplate.TestMultilist)
 							{
@@ -41,7 +51,8 @@
 							}
 						</ul>
 					</li>
-					<li>Multilist With Search:
+					<li>
+						Multilist With Search:
 						<ul>
 							@foreach (var id in Model.TestTemplate.TestMultilistWithSearch)
 							{
@@ -49,7 +60,8 @@
 							}
 						</ul>
 					</li>
-					<li>Name Lookup Value List:
+					<li>
+						Name Lookup Value List:
 						<ul>
 							@foreach (var key in Model.TestTemplate.TestNameLookupValueList.AllKeys)
 							{
@@ -57,7 +69,8 @@
 							}
 						</ul>
 					</li>
-					<li>Name Value List:
+					<li>
+						Name Value List:
 						<ul>
 							@foreach (var key in Model.TestTemplate.TestNameValueList.AllKeys)
 							{
@@ -65,7 +78,8 @@
 							}
 						</ul>
 					</li>
-					<li>Treelist:
+					<li>
+						Treelist:
 						<ul>
 							@foreach (var id in Model.TestTemplate.TestTreelist)
 							{
@@ -73,7 +87,8 @@
 							}
 						</ul>
 					</li>
-					<li>TreelistEx:
+					<li>
+						TreelistEx:
 						<ul>
 							@foreach (var id in Model.TestTemplate.TestTreelistEx)
 							{
@@ -83,11 +98,48 @@
 					</li>
 				</ul>
 			</li>
+			<li>
+				Link
+				<ul>
+					<li>Droplink: @Model.TestTemplate.TestDroplink</li>
+					<li>Droptree: @Model.TestTemplate.TestDroptree</li>
+					<li>General Link: @Model.TestTemplate.TestGeneralLink</li>
+					<li>General Link With Search: @Model.TestTemplate.TestGeneralLinkWithSearch</li>
+				</ul>
+			</li>
 		</ul>
 	</li>
 	<li>
 		ITestTemplateItem (Fortis Types):
 		<ul>
+			<li>
+				Standard
+				<ul>
+					<li>Children Count: @Model.TestTemplateItem.ItemChildrenCount</li>
+					<li>Database: @Model.TestTemplateItem.ItemDatabase</li>
+					<li>Display Name: @Model.TestTemplateItem.ItemDisplayName</li>
+					<li>Has Children: @Model.TestTemplateItem.ItemHasChildren</li>
+					<li>ID: @Model.TestTemplateItem.ItemId</li>
+					<li>Is Latest Version: @Model.TestTemplateItem.ItemIsLatestVersion</li>
+					<li>Is Standard Values: @Model.TestTemplateItem.ItemIsStandardValues</li>
+					<li>Language: @Model.TestTemplateItem.ItemLanguage</li>
+					<li>Long ID: @Model.TestTemplateItem.ItemLongId</li>
+					<li>Name: @Model.TestTemplateItem.ItemName</li>
+					<li>Path: @Model.TestTemplateItem.ItemPath</li>
+					<li>Short ID: @Model.TestTemplateItem.ItemShortId</li>
+					<li>Template ID: @Model.TestTemplateItem.ItemTemplateId</li>
+					<li>Template IDs:
+						<ul>
+							@foreach (var id in Model.TestTemplateItem.ItemTemplateIds)
+							{
+								<li>@id</li>
+							}
+						</ul>
+					</li>
+					<li>Template Name: @Model.TestTemplateItem.ItemTemplateName</li>
+					<li>Version: @Model.TestTemplateItem.ItemVersion</li>
+				</ul>
+			</li>
 			<li>
 				Simple
 				<ul>
@@ -106,7 +158,83 @@
 			</li>
 			<li>
 				List Types
-
+				<ul>
+					<li>
+						Checklist:
+						<ul>
+							@foreach (var id in Model.TestTemplateItem.TestChecklist.Value)
+							{
+								<li>@id</li>
+							}
+						</ul>
+					</li>
+					<li>Droplist: @Model.TestTemplateItem.TestDroplist.Value</li>
+					<li>Grouped Droplink: @Model.TestTemplateItem.TestGroupedDroplink.Value</li>
+					<li>Grouped Droplist: @Model.TestTemplateItem.TestGroupedDroplist.Value</li>
+					<li>
+						Multilist:
+						<ul>
+							@foreach (var id in Model.TestTemplateItem.TestMultilist.Value)
+							{
+								<li>@id</li>
+							}
+						</ul>
+					</li>
+					<li>
+						Multilist With Search:
+						<ul>
+							@foreach (var id in Model.TestTemplateItem.TestMultilistWithSearch.Value)
+							{
+								<li>@id</li>
+							}
+						</ul>
+					</li>
+					<li>
+						Name Lookup Value List:
+						<ul>
+							@foreach (var key in Model.TestTemplateItem.TestNameLookupValueList.Value.AllKeys)
+							{
+								<li>@key: @Model.TestTemplateItem.TestNameLookupValueList.Value[key]</li>
+							}
+						</ul>
+					</li>
+					<li>
+						Name Value List:
+						<ul>
+							@foreach (var key in Model.TestTemplateItem.TestNameValueList.Value.AllKeys)
+							{
+								<li>@key: @Model.TestTemplateItem.TestNameValueList.Value[key]</li>
+							}
+						</ul>
+					</li>
+					<li>
+						Treelist:
+						<ul>
+							@foreach (var id in Model.TestTemplateItem.TestTreelist.Value)
+							{
+								<li>@id</li>
+							}
+						</ul>
+					</li>
+					<li>
+						TreelistEx:
+						<ul>
+							@foreach (var id in Model.TestTemplateItem.TestTreelistEx.Value)
+							{
+								<li>@id</li>
+							}
+						</ul>
+					</li>
+				</ul>
+			</li>
+			<li>
+				Link
+				<ul>
+					<li>Droplink: @Model.TestTemplateItem.TestDroplink.Value</li>
+					<li>Droptree: @Model.TestTemplateItem.TestDroptree.Value</li>
+					<li>General Link: @Model.TestTemplateItem.TestGeneralLink.Value</li>
+					<li>General Link With Search: @Model.TestTemplateItem.TestGeneralLinkWithSearch.Value</li>
+				</ul>
 			</li>
 		</ul>
 	</li>
