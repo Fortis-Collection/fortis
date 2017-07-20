@@ -44,6 +44,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Fortis">
+      <HintPath>..\lib\Fortis.dll</HintPath>
+    </Reference>
+    <Reference Include="Fortis.Mvc">
+      <HintPath>..\lib\Fortis.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -94,6 +100,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Config\Include\Fortis\Services.Mvc.config" />
+    <Content Include="App_Config\Include\Fortis\Services.config" />
+    <Content Include="App_Config\Include\Fortis\Fields.config" />
+    <Content Include="App_Config\Include\Fortis\Templates.config" />
     <None Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -112,10 +122,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Code\" />
     <Folder Include="App_Data\" />
     <Folder Include="App_Start\" />
     <Folder Include="Controllers\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fortis.Model\Fortis.Model.csproj">
+      <Project>{0940d26c-fd6d-4287-bf17-1b24a21c0d28}</Project>
+      <Name>Fortis.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
