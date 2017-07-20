@@ -4,7 +4,7 @@ using Sitecore.Mvc.Presentation;
 
 namespace Fortis.Mvc.Context
 {
-	public class SitecoreItemContext : ISitecoreContextItem
+	public class SitecoreContextItem : ISitecoreContextItem
 	{
 		public Item Item => PageContext.Current.Item;
 	}

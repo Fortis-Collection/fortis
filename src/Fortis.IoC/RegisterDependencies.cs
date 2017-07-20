@@ -33,7 +33,7 @@ namespace Fortis.IoC
 
 			// Context
 			serviceCollection.AddSingleton<ISitecoreContextDatabase, SitecoreContextDatabase>();
-			serviceCollection.AddSingleton<ISitecoreContextItem, SitecoreContextItem>();
+			//serviceCollection.AddSingleton<ISitecoreContextItem, SitecoreContextItem>();
 
 			// Databases
 			serviceCollection.AddSingleton<ISitecoreDatabaseFactory, SitecoreDatabaseFactory>();
