@@ -115,6 +115,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RegisterDependencies.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Models\TestModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -132,7 +133,6 @@
   <ItemGroup>
     <Folder Include="App_Code\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fortis.Model\Fortis.Model.csproj">
