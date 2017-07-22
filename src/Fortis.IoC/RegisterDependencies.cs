@@ -85,6 +85,8 @@ namespace Fortis.IoC
 			serviceCollection.AddSingleton<ITemplateModelAssembliesConfiguration, TemplateModelAssembliesConfiguration>();
 			serviceCollection.AddSingleton<ITemplateTypeMap, TemplateTypeMap>();
 			serviceCollection.AddSingleton<ITypesSource, AssembliesTypesSource>();
+			serviceCollection.AddSingleton<ISitecoreItemUrlGenerator, SitecoreItemUrlGenerator>();
+			serviceCollection.AddSingleton<ISitecoreMediaItemUrlGenerator, SitecoreMediaItemUrlGenerator>();
 			// Items - database
 			serviceCollection.AddSingleton<ISitecoreItemGetter, SitecoreItemGetter>();
 			serviceCollection.AddSingleton<ISitecoreItemsGetter, SitecoreItemsGetter>();

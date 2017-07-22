@@ -97,11 +97,11 @@ namespace Fortis.Test.Fields
 		[InlineData("<link linktype=\"media\" id=\"{094AED03-02E7-4868-80CB-19926661FB77}\" />", "")]
 		[InlineData("<link linktype=\"external\" url=\"http://www.external.com\" />", "http://www.external.com")]
 		[InlineData(null, "")]
-		public void Url_FieldValue_ReturnsExpectedValue(string fieldValue, string expected)
+		public void GenerateUrl_FieldValue_ReturnsExpectedValue(string fieldValue, string expected)
 		{
 			FakeField.Value = fieldValue;
 
-			var actual = ModelledField.Url;
+			var actual = ModelledField.GenerateUrl();
 
 			Assert.Equal(expected, actual);
 		}

@@ -8,13 +8,13 @@ namespace Fortis.Fields.DateTimeField
 	{
 		public new DateField Field
 		{
-			get { return base.Field; }
+			get => base.Field;
 		}
 
 		public new DateTime Value
 		{
-			get { return Field.DateTime; }
-			set { base.Value = DateUtil.ToIsoDate(value); }
+			get => Field.DateTime;
+			set => base.Value = DateUtil.ToIsoDate(value);
 		}
 	}
 }

@@ -167,6 +167,8 @@
     <Compile Include="Items\IItemsGetter.cs" />
     <Compile Include="Items\ISitecoreItemGetter.cs" />
     <Compile Include="Items\ISitecoreItemsGetter.cs" />
+    <Compile Include="Items\ISitecoreItemUrlGenerator.cs" />
+    <Compile Include="Items\ISitecoreMediaItemUrlGenerator.cs" />
     <Compile Include="Items\ItemGetChildren.cs" />
     <Compile Include="Items\ItemGetter.cs" />
     <Compile Include="Items\ITemplateModelAssembliesConfiguration.cs" />
@@ -179,6 +181,8 @@
     <Compile Include="Items\ITypesSource.cs" />
     <Compile Include="Items\SitecoreItemGetter.cs" />
     <Compile Include="Items\SitecoreItemsGetter.cs" />
+    <Compile Include="Items\SitecoreItemUrlGenerator.cs" />
+    <Compile Include="Items\SitecoreMediaItemUrlGenerator.cs" />
     <Compile Include="Items\TemplateModelAssemblies.cs" />
     <Compile Include="Items\SitecoreTemplateModelAssembliesConfiguration.cs" />
     <Compile Include="Items\TemplateModelAssembliesConfiguration.cs" />
