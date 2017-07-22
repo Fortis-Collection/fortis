@@ -92,6 +92,7 @@
     <Compile Include="Fields\GeneralLinkField\GeneralLinkField.cs" />
     <Compile Include="Fields\GeneralLinkField\GeneralLinkFieldFactory.cs" />
     <Compile Include="Fields\GeneralLinkField\IGeneralLinkFieldFactory.cs" />
+    <Compile Include="Fields\IBaseField.cs" />
     <Compile Include="Fields\IBooleanField.cs" />
     <Compile Include="Fields\IDateTimeField.cs" />
     <Compile Include="Fields\IField.cs" />

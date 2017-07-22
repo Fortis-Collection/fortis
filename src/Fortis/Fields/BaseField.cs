@@ -2,7 +2,7 @@
 
 namespace Fortis.Fields
 {
-	public class BaseField : IField
+	public class BaseField : IField, IBaseField
 	{
 		public string Value
 		{
@@ -12,7 +12,6 @@ namespace Fortis.Fields
 
 		public string Name => Field.Name;
 		public string Type => Field.Type;
-
 		public Field Field { get; set; }
 	}
 }

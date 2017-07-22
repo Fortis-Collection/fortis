@@ -20,9 +20,12 @@ namespace Fortis.Fields.Dynamics
 
 			if (strategy == null)
 			{
-				throw new Exception($"Fortis: no strategy found " +
+				var baseField = field as IBaseField;
+				var itemId = baseField == null ? "Unknown" : baseField.Field.ID.ToString();
+
+				throw new Exception($"Fortis: no dynamic field strategy found " +
 									$" [ Property Name: {property.Name} | Property Type: {property.PropertyType.Name} ] " +
-									$" [ Item ID: {field.Field.ID} | Field Name: {field.Name} | Field Type: {field.Type} ]");
+									$" [ Item ID: {itemId} | Field Name: {field.Name} | Field Type: {field.Type} ]");
 			}
 
 			strategy.Add(dynamicObject, property, field);
