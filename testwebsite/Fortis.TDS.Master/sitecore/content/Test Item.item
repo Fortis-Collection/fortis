@@ -61,11 +61,9 @@ content-length: 3
 field: {24229D7A-6140-4A51-8BD6-B1191A465E04}
 name: Test Multi Line Text
 key: test multi line text
-content-length: 22
+content-length: 0
 
-Line 1
-Line 2
-Line 3
+
 ----field----
 field: {137DC42C-766A-4BF8-A8A9-8EC89A3851C0}
 name: Test Number
