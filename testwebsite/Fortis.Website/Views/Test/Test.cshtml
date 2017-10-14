@@ -1,4 +1,4 @@
-﻿@model Fortis.Website.Models.TestModel
+﻿@inherits Fortis.Web.Mvc.FortisWebViewPage<Fortis.Website.Models.TestModel>
 <hr />
 <h1>Test Controller</h1>
 <ul>
@@ -238,5 +238,41 @@
 			</li>
 		</ul>
 	</li>
+    <li>
+        ITestTemplateItem (Fortis Types - Rendered):
+        <ul>
+            <li>
+                Simple
+                <ul>
+                    <li>Checkbox: @RenderEditableField(Model.TestTemplateItem.TestCheckbox)</li>
+                    <li>Date: @RenderEditableField(Model.TestTemplateItem.TestDate, new { format = "yyyy-MM-dd" })</li>
+                    <li>DateTime: @RenderEditableField(Model.TestTemplateItem.TestDateTime, new { format = "yyyy-MM-dd HH:mm" })</li>
+                    <li>File: @RenderEditableField(Model.TestTemplateItem.TestFile)</li>
+                    <li>Image: @RenderEditableField(Model.TestTemplateItem.TestImage)</li>
+                    <li>Image (Resized): @RenderEditableField(Model.TestTemplateItem.TestImage, new { width = 50, height = 50, @class = "test-image-style" })</li>
+                    <li>Integer: @RenderEditableField(Model.TestTemplateItem.TestInteger)</li>
+                    <li>MultiLine Text: @RenderEditableField(Model.TestTemplateItem.TestMultiLineText)</li>
+                    <li>Number: @RenderEditableField(Model.TestTemplateItem.TestNumber)</li>
+                    <li>Password: @RenderEditableField(Model.TestTemplateItem.TestPassword)</li>
+                    <li>Rich Text: @RenderEditableField(Model.TestTemplateItem.TestRichText)</li>
+                    <li>Single-Line Text: @RenderEditableField(Model.TestTemplateItem.TestSingleLineText)</li>
+                </ul>
+            </li>
+            <li>
+                Link
+                <ul>
+                    <li>General Link (Internal): @RenderField(Model.TestTemplateItem.TestGeneralLink, new { @class = "test-style" })</li>
+                    <li>General Link (Media): @RenderField(Model.TestTemplateItem.TestGeneralLinkMedia, new { @class = "test-style" })</li>
+                    <li>General Link (External): @RenderField(Model.TestTemplateItem.TestGeneralLinkWithSearch, new { @class = "test-style" })</li>
+                    <li>General Link With Image:
+                        @using (BeginRenderEditableField(Model.TestTemplateItem.TestGeneralLink, new { @class = "test-style", data_test = "test" }))
+                        {
+                            @RenderEditableField(Model.TestTemplateItem.TestImage)
+                        }
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
 </ul>
 <hr />

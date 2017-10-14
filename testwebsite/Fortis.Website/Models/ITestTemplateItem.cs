@@ -34,5 +34,6 @@ namespace Fortis.Website.Models
 		ILinkField TestDroptree { get; }
 		IGeneralLinkField TestGeneralLink { get; }
 		IGeneralLinkField TestGeneralLinkWithSearch { get; }
-	}
+        IGeneralLinkField TestGeneralLinkMedia { get; }
+    }
 }

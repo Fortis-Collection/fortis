@@ -44,11 +44,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Fortis">
+    <Reference Include="Fortis, Version=3.5.5.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Fortis.dll</HintPath>
     </Reference>
-    <Reference Include="Fortis.Mvc">
-      <HintPath>..\lib\Fortis.Mvc.dll</HintPath>
+    <Reference Include="Fortis.IoC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Fortis.IoC.dll</HintPath>
+    </Reference>
+    <Reference Include="Fortis.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Fortis.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Fortis.Web.Mvc, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Fortis.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Fortis.Web.Mvc.IoC">
+      <HintPath>..\lib\Fortis.Web.Mvc.IoC.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -135,12 +148,6 @@
   <ItemGroup>
     <Folder Include="App_Code\" />
     <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Fortis.Model\Fortis.Model.csproj">
-      <Project>{0940d26c-fd6d-4287-bf17-1b24a21c0d28}</Project>
-      <Name>Fortis.Model</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

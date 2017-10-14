@@ -78,9 +78,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\SitecoreContextItem.cs" />
+    <Compile Include="FortisWebViewPage`1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Fortis.Web\Fortis.Web.csproj">
+      <Project>{04F0DB0A-AE6C-480E-BD1C-78C50A4525DD}</Project>
+      <Name>Fortis.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fortis\Fortis.csproj">
       <Project>{48d2aa0d-b38b-4aa2-be58-6f9c226b8d19}</Project>
       <Name>Fortis</Name>

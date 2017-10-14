@@ -37,5 +37,6 @@ namespace Fortis.Website.Models
 		Guid TestDroptree { get; }
 		string TestGeneralLink { get; }
 		string TestGeneralLinkWithSearch { get; }
-	}
+        string TestGeneralLinkMedia { get; }
+    }
 }

@@ -9,21 +9,21 @@ namespace Fortis.Website.Controllers
     public class TestController : Controller
     {
 		protected readonly IContextItem ContextItem;
-		protected readonly IContextItemGetter ItemGetter;
+		protected readonly IContextItemGetter ContextItemGetter;
 
 		public TestController(
 			IContextItem contextItem,
-			IContextItemGetter itemGetter)
+			IContextItemGetter contextItemGetter)
 		{
 			ContextItem = contextItem;
-			ItemGetter = itemGetter;
+			ContextItemGetter = contextItemGetter;
 		}
 
         public ViewResult Test()
         {
 			var contextItem = ContextItem.GetItem<IItem>();
-			var testTemplate = ItemGetter.GetItem<ITestTemplate>(new Guid("{62ED9278-F6DE-445C-BA36-68DB1565F3B3}"));
-			var testTemplateItem = ItemGetter.GetItem<ITestTemplateItem>(new Guid("{62ED9278-F6DE-445C-BA36-68DB1565F3B3}"));
+			var testTemplate = ContextItemGetter.GetItem<ITestTemplate>(new Guid("{62ED9278-F6DE-445C-BA36-68DB1565F3B3}"));
+			var testTemplateItem = ContextItemGetter.GetItem<ITestTemplateItem>(new Guid("{62ED9278-F6DE-445C-BA36-68DB1565F3B3}"));
 			var model = new TestModel
 			{
 				ContextItemName = contextItem.ItemName,
