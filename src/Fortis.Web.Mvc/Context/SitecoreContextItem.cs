@@ -2,7 +2,7 @@
 using Sitecore.Data.Items;
 using Sitecore.Mvc.Presentation;
 
-namespace Fortis.Mvc.Context
+namespace Fortis.Web.Mvc.Context
 {
 	public class SitecoreContextItem : ISitecoreContextItem
 	{

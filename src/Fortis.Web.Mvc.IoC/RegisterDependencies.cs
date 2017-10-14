@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Fortis.Context;
 
-namespace Fortis.Mvc.IoC
+namespace Fortis.Web.Mvc.IoC
 {
 	public class RegisterDependencies : IServicesConfigurator
 	{

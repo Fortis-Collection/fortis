@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{25F61AF0-16E8-4932-B731-54FC861371BF}</ProjectGuid>
+    <ProjectGuid>{04F0DB0A-AE6C-480E-BD1C-78C50A4525DD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Fortis.Mvc.IoC</RootNamespace>
-    <AssemblyName>Fortis.Mvc.IoC</AssemblyName>
+    <RootNamespace>Fortis.Web</RootNamespace>
+    <AssemblyName>Fortis.Web</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,12 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Sitecore.Kernel, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Sitecore.Kernel.NoReferences.8.2.170614\lib\NET452\Sitecore.Kernel.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,21 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegisterDependencies.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Fortis.Mvc\Fortis.Mvc.csproj">
-      <Project>{56bc76c2-be7a-429b-b1f5-f965ee0cb663}</Project>
-      <Name>Fortis.Mvc</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fortis\Fortis.csproj">
-      <Project>{48D2AA0D-B38B-4AA2-BE58-6F9C226B8D19}</Project>
-      <Name>Fortis</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App_Config\Include\Fortis\Services.Mvc.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

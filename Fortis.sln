@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis", "src\Fortis\Fortis.csproj", "{48D2AA0D-B38B-4AA2-BE58-6F9C226B8D19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.Mvc", "src\Fortis.Mvc\Fortis.Mvc.csproj", "{56BC76C2-BE7A-429B-B1F5-F965EE0CB663}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.Web.Mvc", "src\Fortis.Web.Mvc\Fortis.Web.Mvc.csproj", "{56BC76C2-BE7A-429B-B1F5-F965EE0CB663}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.WebForms", "src\Fortis.WebForms\Fortis.WebForms.csproj", "{8E583E46-58D2-4DEC-969E-4B592E56CDA0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.Web.WebForms", "src\Fortis.Web.WebForms\Fortis.Web.WebForms.csproj", "{8E583E46-58D2-4DEC-969E-4B592E56CDA0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.Search.Lucene", "src\Fortis.Search.Lucene\Fortis.Search.Lucene.csproj", "{7A3AD9DE-9F37-46D0-A83C-33432ABBF804}"
 EndProject
@@ -19,7 +19,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.Test", "src\Fortis.T
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{BC6D1242-BA71-433F-B5CA-30DBAFEC2BD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.Mvc.IoC", "src\Fortis.Mvc.IoC\Fortis.Mvc.IoC.csproj", "{25F61AF0-16E8-4932-B731-54FC861371BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.Web.Mvc.IoC", "src\Fortis.Web.Mvc.IoC\Fortis.Web.Mvc.IoC.csproj", "{25F61AF0-16E8-4932-B731-54FC861371BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortis.Web", "src\Fortis.Web\Fortis.Web.csproj", "{04F0DB0A-AE6C-480E-BD1C-78C50A4525DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{25F61AF0-16E8-4932-B731-54FC861371BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25F61AF0-16E8-4932-B731-54FC861371BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25F61AF0-16E8-4932-B731-54FC861371BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04F0DB0A-AE6C-480E-BD1C-78C50A4525DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04F0DB0A-AE6C-480E-BD1C-78C50A4525DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04F0DB0A-AE6C-480E-BD1C-78C50A4525DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04F0DB0A-AE6C-480E-BD1C-78C50A4525DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
