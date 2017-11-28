@@ -112,208 +112,212 @@
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined.item">
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Home Page.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Home Page\__Standard Values.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Home Page\Page.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Home Page\Page\Title.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\__Standard Values.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Link Fields.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Link Fields\Test Droplink.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Link Fields\Test Droptree.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
+    <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Link Fields\Test General Link Media.item">
+      <ItemDeployment>AlwaysUpdate</ItemDeployment>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
+    </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Link Fields\Test General Link With Search.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Link Fields\Test General Link.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test List Fields.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test List Fields\Test Checklist.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test List Fields\Test Droplist.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test List Fields\Test Grouped Droplink.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test List Fields\Test Grouped Droplist.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test List Fields\Test Multilist With Search.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test List Fields\Test Multilist.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test List Fields\Test Name Lookup Value List.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test List Fields\Test Name Value List.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test List Fields\Test Treelist.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test List Fields\Test TreelistEx.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Simple Fields.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Simple Fields\Test Checkbox.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Simple Fields\Test Date.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Simple Fields\Test Datetime.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Simple Fields\Test File.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Simple Fields\Test Image.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Simple Fields\Test Integer.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Simple Fields\Test Multi Line Text.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Simple Fields\Test Number.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Simple Fields\Test Password.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Simple Fields\Test Rich Text.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>
     </SitecoreItem>
     <SitecoreItem Include="sitecore\templates\User Defined\Test Template\Test Simple Fields\Test Single Line Text.item">
-      <ChildItemSynchronization>NoChildSynchronization</ChildItemSynchronization>
+      <ChildItemSynchronization>KeepAllChildrenSynchronized</ChildItemSynchronization>
       <ExcludeItemFrom>
       </ExcludeItemFrom>
       <ItemDeployment>AlwaysUpdate</ItemDeployment>

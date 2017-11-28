@@ -24,6 +24,11 @@ namespace Fortis.Web.Fields
 
         public virtual IHtmlString RenderField(IField field, object parameters, bool editable)
         {
+			if (field == null)
+			{
+				throw new ArgumentNullException("field");
+			}
+
             var renderResult = RenderScField(field, parameters, editable);
 
             return new HtmlString(string.Concat(renderResult.FirstPart, renderResult.LastPart));
@@ -41,14 +46,24 @@ namespace Fortis.Web.Fields
 
         public virtual IFieldRenderResult BeginRenderField(IField field, TextWriter textWriter, object parameters, bool editable)
         {
-            var renderResult = RenderScField(field, parameters, editable);
+			if (field == null)
+			{
+				throw new ArgumentNullException("field");
+			}
+
+			var renderResult = RenderScField(field, parameters, editable);
 
             return new FieldRenderResult(textWriter, renderResult.FirstPart, renderResult.LastPart);
         }
 
         public virtual RenderFieldResult RenderScField(IField field, object parameters = null, bool editable = true)
         {
-            var scField = GetScField(field);
+			if (field == null)
+			{
+				throw new ArgumentNullException("field");
+			}
+
+			var scField = GetScField(field);
             var renderFieldArgs = new RenderFieldArgs
             {
                 Item = scField.Item,
@@ -71,7 +86,9 @@ namespace Fortis.Web.Fields
         {
             if (!(field is IBaseField))
             {
-                throw new Exception($"Fortis :: \"field\" must implement \"{typeof(IBaseField).FullName}\"");
+				var fieldType = field == null ? "field" : field.GetType().FullName;
+
+				throw new Exception($"Fortis :: \"{fieldType}\" must implement \"{typeof(IBaseField).FullName}\"");
             }
 
             var scField = ((IBaseField)field).Field;

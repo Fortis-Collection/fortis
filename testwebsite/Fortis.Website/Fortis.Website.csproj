@@ -149,6 +149,12 @@
     <Folder Include="App_Code\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fortis.Model\Fortis.Model.csproj">
+      <Project>{0940d26c-fd6d-4287-bf17-1b24a21c0d28}</Project>
+      <Name>Fortis.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

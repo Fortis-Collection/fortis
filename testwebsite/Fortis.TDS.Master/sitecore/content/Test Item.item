@@ -13,7 +13,7 @@ created: 20170720T142326Z
 ----version----
 language: en
 version: 1
-revision: e9b204ab-74b6-4936-a17e-da95d55adbaa
+revision: 57c872bf-c726-441f-be35-96b17ff83182
 
 ----field----
 field: {D9109CEE-662B-47BE-A26F-59D57C76F893}
@@ -47,9 +47,9 @@ content-length: 109
 field: {015EA0B3-999E-4793-BD36-89179FF7B34A}
 name: Test Image
 key: test image
-content-length: 58
+content-length: 171
 
-<image mediaid="{094AED03-02E7-4868-80CB-19926661FB77}" />
+<image id="{110D559F-DEA5-42EA-9C1C-8A5DF7E70EF9}" querystring="" target="" mediaid="{094AED03-02E7-4868-80CB-19926661FB77}" text="Test Description" linktype="internal" />
 ----field----
 field: {F1680C64-A6A4-4EC9-A5F0-8DD30CD7AC0A}
 name: Test Integer
@@ -163,6 +163,13 @@ content-length: 116
 
 {75D27C2B-5F88-4CC8-B1DE-8412A1628408}|{E18F4BC6-46A2-4842-898B-B6613733F06F}|{75CC5CE4-8979-4008-9D3C-806477D57619}
 ----field----
+field: {2517666F-BE92-4D18-9873-16F3E4831FAD}
+name: Test General Link
+key: test general link
+content-length: 121
+
+<link linktype="internal" text="Test Description" querystring="" target="" id="{110D559F-DEA5-42EA-9C1C-8A5DF7E70EF9}" />
+----field----
 field: {25BED78C-4957-4165-998A-CA1B52F67497}
 name: __Created
 key: __created
@@ -175,14 +182,14 @@ name: __Revision
 key: __revision
 content-length: 36
 
-e9b204ab-74b6-4936-a17e-da95d55adbaa
+57c872bf-c726-441f-be35-96b17ff83182
 ----field----
 field: {D9CF14B1-FA16-4BA6-9288-E8A174D4D522}
 name: __Updated
 key: __updated
 content-length: 16
 
-20170720T154254Z
+20171128T142400Z
 ----field----
 field: {BADD9CF9-53E0-4D0C-BCC0-2D784C282F6A}
 name: __Updated by
@@ -190,3 +197,10 @@ key: __updated by
 content-length: 14
 
 sitecore\admin
+----field----
+field: {001DD393-96C5-490B-924A-B0F25CD9EFD8}
+name: __Lock
+key: __lock
+content-length: 5
+
+<r />
