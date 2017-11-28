@@ -181,7 +181,7 @@ namespace Fortis.Test.Items
 
 		public BaseItem Create(Sitecore.Data.Items.Item item)
 		{
-			return new BaseItem(null, null)
+			return new BaseItem(null, null, null)
 			{
 				Item = item
 			};

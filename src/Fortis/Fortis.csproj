@@ -145,6 +145,7 @@
     <Compile Include="Fields\TypedFieldsConfiguration.cs" />
     <Compile Include="Items\BaseItem.cs" />
     <Compile Include="Context\ISitecoreContextDatabase.cs" />
+    <Compile Include="Items\BaseItemGetter.cs" />
     <Compile Include="Items\Context\ContextItemGetChildren.cs" />
     <Compile Include="Items\Context\ContextItemGetter.cs" />
     <Compile Include="Items\Context\ContextItemsGetter.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Items\Context\ContextItem.cs" />
     <Compile Include="Items\Context\ContextSiteHome.cs" />
     <Compile Include="Items\Context\ContextSiteRoot.cs" />
+    <Compile Include="Items\IBaseItemGetter.cs" />
     <Compile Include="Items\IItem.cs" />
     <Compile Include="Items\IBaseItem.cs" />
     <Compile Include="Fields\Dynamics\IAddFieldDynamicProperty.cs" />
@@ -165,6 +167,7 @@
     <Compile Include="Items\IItemGetChildren.cs" />
     <Compile Include="Items\IItemGetter.cs" />
     <Compile Include="Items\IItemsGetter.cs" />
+    <Compile Include="Items\IItemUrlGenerator.cs" />
     <Compile Include="Items\ISitecoreItemGetter.cs" />
     <Compile Include="Items\ISitecoreItemsGetter.cs" />
     <Compile Include="Items\ISitecoreItemUrlGenerator.cs" />
@@ -178,7 +181,9 @@
     <Compile Include="Items\IItemTypeTemplateMatcher.cs" />
     <Compile Include="Items\ITemplateTypeMap.cs" />
     <Compile Include="Items\ItemsGetter.cs" />
+    <Compile Include="Items\ItemUrlGenerator.cs" />
     <Compile Include="Items\ITypesSource.cs" />
+    <Compile Include="Items\IUrlItem.cs" />
     <Compile Include="Items\SitecoreItemGetter.cs" />
     <Compile Include="Items\SitecoreItemsGetter.cs" />
     <Compile Include="Items\SitecoreItemUrlGenerator.cs" />

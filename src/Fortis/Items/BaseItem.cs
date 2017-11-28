@@ -4,19 +4,23 @@ using System.Linq;
 using Sitecore.Data.Items;
 using System.Collections.Generic;
 using Sitecore.Data;
+using Sitecore.Links;
 
 namespace Fortis.Items
 {
-	public class BaseItem : FortisDynamicObject, IBaseItem
+	public class BaseItem : FortisDynamicObject, IBaseItem, IUrlItem
 	{
 		protected readonly ISitecoreItemGetter SitecoreItemGetter;
+		protected readonly ISitecoreItemUrlGenerator SitecoreItemUrlGenerator;
 		protected readonly IItemFactory ItemFactory;
 
 		public BaseItem(
 			ISitecoreItemGetter sitecoreItemGetter,
+			ISitecoreItemUrlGenerator sitecoreItemUrlGenerator,
 			IItemFactory itemFactory)
 		{
 			SitecoreItemGetter = sitecoreItemGetter;
+			SitecoreItemUrlGenerator = sitecoreItemUrlGenerator;
 			ItemFactory = itemFactory;
 		}
 
@@ -159,6 +163,15 @@ namespace Fortis.Items
 			var parent = GetParent<IItem>();
 
 			return parent.GetChildren<T>();
+		}
+
+		public string GenerateUrl()
+		{
+			return SitecoreItemUrlGenerator.Generate(Item);
+		}
+		public string GenerateUrl(UrlOptions options)
+		{
+			return SitecoreItemUrlGenerator.Generate(Item, options);
 		}
 	}
 }

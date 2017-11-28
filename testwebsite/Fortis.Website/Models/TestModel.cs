@@ -1,9 +1,12 @@
-﻿namespace Fortis.Website.Models
+﻿using System.Collections.Generic;
+
+namespace Fortis.Website.Models
 {
 	public class TestModel
 	{
 		public string ContextItemName { get; set; }
 		public ITestTemplate TestTemplate { get; set; }
 		public ITestTemplateItem TestTemplateItem { get; set; }
+		public IEnumerable<ITestTemplateItem> Children { get; set; }
 	}
 }

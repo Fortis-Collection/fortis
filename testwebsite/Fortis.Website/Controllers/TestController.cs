@@ -24,11 +24,13 @@ namespace Fortis.Website.Controllers
 			var contextItem = ContextItem.GetItem<IItem>();
 			var testTemplate = ContextItemGetter.GetItem<ITestTemplate>(new Guid("{62ED9278-F6DE-445C-BA36-68DB1565F3B3}"));
 			var testTemplateItem = ContextItemGetter.GetItem<ITestTemplateItem>(new Guid("{62ED9278-F6DE-445C-BA36-68DB1565F3B3}"));
+			var children = contextItem.GetChildren<ITestTemplateItem>();
 			var model = new TestModel
 			{
 				ContextItemName = contextItem.ItemName,
 				TestTemplate = testTemplate,
-				TestTemplateItem = testTemplateItem
+				TestTemplateItem = testTemplateItem,
+				Children = children
 			};
 
             return View(model);

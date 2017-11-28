@@ -3,7 +3,7 @@ using Fortis.Items;
 
 namespace Fortis.Website.Models
 {
-	public interface ITestTemplateItem : IItem
+	public interface ITestTemplateItem : IItem, IUrlItem
 	{
 		// Simple
 		IBooleanField TestCheckbox { get; }

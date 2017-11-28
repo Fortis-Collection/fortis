@@ -3,6 +3,14 @@
 <h1>Test Controller</h1>
 <ul>
 	<li>Item Name: @Model.ContextItemName</li>
+	<li>Children
+		<ul>
+			@foreach (var child in Model.Children)
+			{
+				<li><a href="@child.GenerateUrl()">@child.ItemName</a></li>
+			}
+		</ul>
+	</li>
 	<li>ITestTemplate (Primitive Types):
 		<ul>
 			<li>

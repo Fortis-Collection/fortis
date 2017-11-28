@@ -13,6 +13,7 @@ namespace Fortis.Items
 	public class ItemFactory : IItemFactory
 	{
 		protected readonly ISitecoreItemGetter SitecoreItemGetter;
+		protected readonly ISitecoreItemUrlGenerator SitecoreItemUrlGenerator;
 		protected readonly IFieldFactory FieldFactory;
 		protected readonly IPropertyInfoFieldNameParser PropertyFieldNameParser;
 		protected readonly IAddFieldDynamicProperty AddFieldDynamicProperty;
@@ -21,6 +22,7 @@ namespace Fortis.Items
 
 		public ItemFactory(
 			ISitecoreItemGetter sitecoreItemGetter,
+			ISitecoreItemUrlGenerator sitecoreItemUrlGenerator,
 			IFieldFactory fieldFactory,
 			IPropertyInfoFieldNameParser propertyFieldNameParser,
 			IAddFieldDynamicProperty addFieldDynamicProperty,
@@ -28,6 +30,7 @@ namespace Fortis.Items
 			IItemTypeTemplateMatcher itemTypeTemplateMapper)
 		{
 			SitecoreItemGetter = sitecoreItemGetter;
+			SitecoreItemUrlGenerator = sitecoreItemUrlGenerator;
 			FieldFactory = fieldFactory;
 			PropertyFieldNameParser = propertyFieldNameParser;
 			AddFieldDynamicProperty = addFieldDynamicProperty;
@@ -56,7 +59,10 @@ namespace Fortis.Items
 				return default(T);
 			}
 
-			var modelledItem = new BaseItem(SitecoreItemGetter, this)
+			var modelledItem = new BaseItem(
+				SitecoreItemGetter,
+				SitecoreItemUrlGenerator,
+				this)
 			{
 				Item = item
 			};

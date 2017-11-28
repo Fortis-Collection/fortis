@@ -259,6 +259,7 @@ namespace Fortis.Test.Items
 		{
 			return new ItemFactory(
 				CreateMockSitecoreItemGetter(),
+				CreateMockSitecoreItemUrlGenerator(),
 				CreateMockFieldFactory(),
 				CreateMockPropertyInfoFieldNameParser(),
 				CreateMockAddFieldDynamicProperty(),
@@ -276,6 +277,11 @@ namespace Fortis.Test.Items
 			return new SitecoreItemGetter(
 				new SitecoreDatabaseFactory(factory)
 			);
+		}
+
+		public ISitecoreItemUrlGenerator CreateMockSitecoreItemUrlGenerator()
+		{
+			return new SitecoreItemUrlGenerator(Substitute.For<BaseLinkManager>());
 		}
 
 		public IFieldFactory CreateMockFieldFactory()
